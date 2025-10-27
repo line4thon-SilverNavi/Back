@@ -1,5 +1,6 @@
 package org.likelion._thon.silver_navi.domain.user.web.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public class SignUpReq {
     )
     private String phone;
 
+    @Schema(description = "부모/배우자 | !전부 소문자로 적기!")
     @NotNull(message = "관계는 필수값입니다.")
     private RelationRole relation;
 
