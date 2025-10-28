@@ -1,4 +1,4 @@
-package org.likelion._thon.silver_navi.domain.nursingfacility.exception;
+package org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
