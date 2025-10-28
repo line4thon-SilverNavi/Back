@@ -29,17 +29,10 @@ public class UserController implements UserApi {
     }
 
     //로그인
+    @Override
     @PostMapping("/signin")
-    public ResponseEntity<SuccessResponse<?>> signin(@RequestBody @Valid SignInReq signInReq){
+    public ResponseEntity<SuccessResponse<SignInRes>> signin(@RequestBody @Valid SignInReq signInReq){
         SignInRes signInRes = userService.signIn(signInReq);
         return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(signInRes));
-    }
-
-    // 인가 테스트용 API
-    @GetMapping("/profile")
-    public ResponseEntity<SignInRes> getProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = userDetails.getUser();
-        return ResponseEntity
-                .ok(new SignInRes(user.getRole().getStringRole()));
     }
 }

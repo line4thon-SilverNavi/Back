@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.likelion._thon.silver_navi.domain.user.web.dto.SignInReq;
+import org.likelion._thon.silver_navi.domain.user.web.dto.SignInRes;
 import org.likelion._thon.silver_navi.domain.user.web.dto.SignUpReq;
 import org.likelion._thon.silver_navi.global.response.ErrorResponse;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
@@ -59,4 +61,50 @@ public interface UserApi {
             )
     })
     public ResponseEntity<SuccessResponse<?>> signup(@RequestBody @Valid SignUpReq signupReq);
+
+    //로그인
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "사용자 로그인 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                {
+                                  "isSuccess": true,
+                                  "timestamp": "2025-10-28 21:07:37",
+                                  "code": "GLOBAL_200",
+                                  "httpStatus": 200,
+                                  "message": "호출에 성공하였습니다.",
+                                  "data": {
+                                    "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwMTA1Njc4NTY3OCIsIm5hbWUiOiLtmITtmLgiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2MTY1MzI1NywiZXhwIjoxNzYxNjU2ODU3fQ.LfQuwdovPV9uz4TJJcm5RsgA1MWlKyu_VZ7uEeJ8DBf_4s6Gy-qMSbtifLDZE0Y4L6ycXJzCe7hM2aRKezrHfA"
+                                  }
+                                }
+                                """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "아이디/비밀번호 불일치 (인증 실패)",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                {
+                                  "isSuccess": false,
+                                  "timestamp": "2025-10-28 21:13:51",
+                                  "code": "USER_401_1",
+                                  "httpStatus": 401,
+                                  "message": "아이디 또는 비밀번호를 다시 확인해주세요",
+                                  "data": null
+                                }
+                                """
+                            )
+                    )
+            )
+    })public ResponseEntity<SuccessResponse<SignInRes>> signin(@RequestBody @Valid SignInReq signInReq);
 }
