@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.nursingfacility.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.likelion._thon.silver_navi.domain.manager.entity.Manager;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.enums.FacilityCategory;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
@@ -48,6 +49,16 @@ public class NursingFacility extends BaseEntity {
 
     @Column(name = "description")
     private String description; // 시설 소개
+
+    // --- 양방향 ---
+    @OneToOne(
+            mappedBy = "nursingFacility",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,    // 시설 삭제 시 관리자도 삭제
+            orphanRemoval = true          // 관계가 끊어진 Manager 자동 삭제
+    )
+    private Manager manager;
+
 
     // '주요 서비스' 목록
     @ElementCollection(fetch = FetchType.LAZY)
