@@ -39,4 +39,8 @@ public class AffiliateCode {
                 .used(false)
                 .build();
     }
+
+    public void codeUsed() {
+        this.used = true;
+    }
 }

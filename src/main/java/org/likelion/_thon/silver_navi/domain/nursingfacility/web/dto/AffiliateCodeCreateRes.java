@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public record AffiliateCodeCreateRes(
         Long facilityId,
-        String partnershipCode,
+        String affiliateCode,
         LocalDateTime createdAt
 ) {
 }
