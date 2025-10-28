@@ -24,7 +24,8 @@ public class SignUpReq {
     @NotNull(message = "관계는 필수값입니다.")
     private RelationRole relation;
 
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d\\S]{8,20}$", message = "영문, 숫자를 포함한 8~20자리 이내로 입력해주세요.")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[^A-Za-z\\d])[A-Za-z\\d\\S]{6,20}$",
+            message = "영문, 숫자, 특수문자를 포함한 6~20자리 이내로 입력해주세요.")
     private String password;
 
     private String passwordCheck;
