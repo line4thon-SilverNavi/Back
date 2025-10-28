@@ -1,7 +1,6 @@
 package org.likelion._thon.silver_navi.global.auth.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -71,9 +70,9 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
-        String email = claims.getSubject();
+        String phone = claims.getSubject();
 
-        User user = userRepository.findByPhone(email)
+        User user = userRepository.findByPhone(phone)
                 .orElseThrow(UserNotFoundException::new);
 
         CustomUserDetails userDetails = new CustomUserDetails(user);
