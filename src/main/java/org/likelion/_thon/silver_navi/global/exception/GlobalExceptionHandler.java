@@ -7,11 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.View;
@@ -97,6 +99,17 @@ public class GlobalExceptionHandler {
         log.error("BaseException : {}",e.getBaseResponseCode().getMessage(), e);
         ErrorResponse<?> errorResponse = ErrorResponse.from(e.getBaseResponseCode());
         return  ResponseEntity.status(errorResponse.getHttpStatus()).body(errorResponse);
+    }
+
+    // Multipart 요청 자체가 아닐 때 (Content-Type 틀림 등)
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<ErrorResponse<?>> handleMultipartException(MultipartException e) {
+        log.error("MultipartException : {}", e.getMessage(), e);
+        ErrorResponse<?> errorResponse = ErrorResponse.of(
+                ErrorResponseCode.INVALID_HTTP_MESSAGE_PARAMETER,
+                "요청이 multipart/form-data 형식이 아니거나 파일이 누락되었습니다."
+        );
+        return ResponseEntity.status(errorResponse.getHttpStatus()).body(errorResponse);
     }
 
     // 나머지 예외 처리
