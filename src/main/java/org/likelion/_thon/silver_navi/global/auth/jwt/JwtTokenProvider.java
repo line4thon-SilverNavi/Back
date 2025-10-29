@@ -6,9 +6,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.manager.entity.Manager;
+import org.likelion._thon.silver_navi.domain.manager.exception.ManagerNotFoundException;
+import org.likelion._thon.silver_navi.domain.manager.repository.ManagerRepository;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.domain.user.exception.UserNotFoundException;
 import org.likelion._thon.silver_navi.domain.user.repository.UserRepository;
+import org.likelion._thon.silver_navi.global.auth.UserRole;
+import org.likelion._thon.silver_navi.global.auth.security.CustomManagerDetails;
 import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +28,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     private final UserRepository userRepository;
+    private final ManagerRepository managerRepository;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -43,6 +49,19 @@ public class JwtTokenProvider {
                 .subject(user.getPhone())
                 .claim("name", user.getName())
                 .claim("role", user.getRole())
+                .issuedAt(now)
+                .expiration(expiry)
+                .signWith(key)
+                .compact();
+    }
+    public String createToken(Manager manager) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + expiration);
+
+        return Jwts.builder()
+                .subject(String.valueOf(manager.getId()))
+                .claim("name", manager.getNursingFacility().getName())
+                .claim("role", manager.getRole())
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(key)
@@ -70,17 +89,36 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
-        String phone = claims.getSubject();
+        String role = claims.get("role", String.class);
 
-        User user = userRepository.findByPhone(phone)
-                .orElseThrow(UserNotFoundException::new);
+        if (role.equals(UserRole.USER.getStringRole())) {
+            String phone = claims.getSubject();
 
-        CustomUserDetails userDetails = new CustomUserDetails(user);
+            User user = userRepository.findByPhone(phone)
+                    .orElseThrow(UserNotFoundException::new);
 
-        return new UsernamePasswordAuthenticationToken(
-                userDetails,
-                null,
-                userDetails.getAuthorities()
-        );
+            CustomUserDetails userDetails = new CustomUserDetails(user);
+
+            return new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.getAuthorities()
+            );
+        } else if (role.equals(UserRole.ADMIN.getStringRole())) {
+            Long id = Long.parseLong(claims.getSubject());
+
+            Manager manager = managerRepository.findById(id)
+                    .orElseThrow(ManagerNotFoundException::new);
+
+            CustomManagerDetails managerDetails = new CustomManagerDetails(manager);
+
+            return new UsernamePasswordAuthenticationToken(
+                    managerDetails,
+                    null,
+                    managerDetails.getAuthorities()
+            );
+        } else {
+            return null;
+        }
     }
 }
