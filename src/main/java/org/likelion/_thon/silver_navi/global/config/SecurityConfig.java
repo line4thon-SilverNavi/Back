@@ -40,7 +40,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/code/create").permitAll()
 
                         // ---------- 여기는 권한이 필요한 곳  ----------
-                        .requestMatchers("/api/facilities/info").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/facilities/info").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/facilities/info").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                         .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)

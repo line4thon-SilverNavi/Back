@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.nursingfacility.entity.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityCategoryInvalidException;
 
 @RequiredArgsConstructor
 public enum FacilityCategory {
@@ -15,5 +16,18 @@ public enum FacilityCategory {
     @JsonValue
     public String getValue() {
         return value;
+    }
+
+    public static FacilityCategory fromValue(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        for (FacilityCategory facilityCategory : values()) {
+            if (facilityCategory.getValue().equals(value)) {
+                return facilityCategory;
+            }
+        }
+        throw new FacilityCategoryInvalidException();
     }
 }
