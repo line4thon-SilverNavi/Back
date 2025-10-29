@@ -5,6 +5,7 @@ import lombok.*;
 import org.likelion._thon.silver_navi.domain.caretarget.entity.enums.CareGrade;
 import org.likelion._thon.silver_navi.domain.caretarget.entity.enums.Gender;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
+import org.likelion._thon.silver_navi.domain.user.web.dto.UserUpdateReq;
 
 import java.time.LocalDate;
 
@@ -43,4 +44,20 @@ public class CareTarget {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public static CareTarget create(UserUpdateReq dto, User user) {
+        CareTarget careTarget = new CareTarget();
+        careTarget.updatePartial(dto);
+        careTarget.setUser(user);
+        return careTarget;
+    }
+
+    public void updatePartial(UserUpdateReq dto) {
+        if (dto.getCareTargetName() != null) this.name = dto.getCareTargetName();
+        if (dto.getCareTargetBirth() != null) this.birthDate = dto.getCareTargetBirth();
+        if (dto.getCareTargetGender() != null) this.gender = dto.getCareTargetGender();
+        if (dto.getAddress() != null) this.address = dto.getAddress();
+        if (dto.getCareNumber() != null) this.careNumber = dto.getCareNumber();
+        if (dto.getCareGrade() != null) this.careGrade = dto.getCareGrade();
+    }
 }

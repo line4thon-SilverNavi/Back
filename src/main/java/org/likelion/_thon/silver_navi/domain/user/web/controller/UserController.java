@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.domain.user.service.UserService;
-import org.likelion._thon.silver_navi.domain.user.web.dto.SignInReq;
-import org.likelion._thon.silver_navi.domain.user.web.dto.SignInRes;
-import org.likelion._thon.silver_navi.domain.user.web.dto.SignUpReq;
-import org.likelion._thon.silver_navi.domain.user.web.dto.UserDetailsRes;
+import org.likelion._thon.silver_navi.domain.user.web.dto.*;
 import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.http.HttpStatus;
@@ -44,5 +41,15 @@ public class UserController implements UserApi {
     ) {
         UserDetailsRes detailsRes = userService.userDetails(userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(detailsRes));
+    }
+
+    //유저 정보 수정
+    @PatchMapping
+    public ResponseEntity<SuccessResponse<?>> updateUser(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody UserUpdateReq userUpdateReq
+    ){
+        userService.updateUser(userDetails.getUser(),userUpdateReq);
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(null));
     }
 }

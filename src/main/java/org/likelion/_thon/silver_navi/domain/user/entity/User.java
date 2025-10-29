@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.caretarget.entity.CareTarget;
 import org.likelion._thon.silver_navi.domain.user.entity.enums.RelationRole;
+import org.likelion._thon.silver_navi.domain.user.web.dto.UserUpdateReq;
 import org.likelion._thon.silver_navi.global.auth.UserRole;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
@@ -51,5 +52,10 @@ public class User extends BaseEntity {
                 .searchRadius(5)
                 .role(UserRole.USER)
                 .build();
+    }
+
+    public void updatePartial(UserUpdateReq dto) {
+        if (dto.getUserName() != null) this.name = dto.getUserName();
+        if (dto.getRelationRole() != null) this.relation = dto.getRelationRole();
     }
 }
