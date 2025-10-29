@@ -60,8 +60,8 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .subject(String.valueOf(manager.getId()))
-                .claim("name", manager.getNursingFacility().getName())
                 .claim("role", manager.getRole())
+                .claim("facilityId", manager.getNursingFacility().getId())
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(key)
