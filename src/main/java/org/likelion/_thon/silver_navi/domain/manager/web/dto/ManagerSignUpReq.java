@@ -15,8 +15,8 @@ public class ManagerSignUpReq {
     private String affiliateCode;
 
     @Pattern(
-            regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d\\S]{8,20}$",
-            message = "영문, 숫자를 포함한 8~20자리 이내로 입력해주세요."
+            regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[^A-Za-z\\d])[A-Za-z\\d\\S]{6,20}$",
+            message = "영문, 숫자, 특수문자를 포함한 6~20자리 이내로 입력해주세요."
     )
     private String password;
 
