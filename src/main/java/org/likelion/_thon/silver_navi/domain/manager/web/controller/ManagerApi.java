@@ -6,16 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.likelion._thon.silver_navi.domain.manager.web.dto.CheckLoginIdReq;
 import org.likelion._thon.silver_navi.domain.manager.web.dto.ManagerSignInRes;
 import org.likelion._thon.silver_navi.domain.manager.web.dto.ManagerSignUpReq;
 import org.likelion._thon.silver_navi.domain.manager.web.dto.ManagerSingInReq;
-import org.likelion._thon.silver_navi.domain.user.web.dto.SignInRes;
 import org.likelion._thon.silver_navi.global.response.ErrorResponse;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "시설 관리자 API", description = "시설 관리자 관련 API")
 public interface ManagerApi {

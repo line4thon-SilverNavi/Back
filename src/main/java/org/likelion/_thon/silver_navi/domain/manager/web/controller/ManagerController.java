@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.likelion._thon.silver_navi.global.constant.StaticValue.*;
-
 @RestController
 @RequestMapping("/api/managers")
 @RequiredArgsConstructor
