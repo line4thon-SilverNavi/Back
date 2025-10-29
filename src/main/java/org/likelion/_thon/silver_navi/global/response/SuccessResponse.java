@@ -21,6 +21,12 @@ public class SuccessResponse<T> extends BaseResponse{
         this.httpStatus = baseResponseCode.getHttpStatus();
         this.data = data;
     }
+    @Builder
+    public SuccessResponse(T data, BaseResponseCode baseResponseCode, String message) {
+        super(true,baseResponseCode.getCode(),message);
+        this.httpStatus = baseResponseCode.getHttpStatus();
+        this.data = data;
+    }
 
     public static <T> SuccessResponse<T> created(T data) {
         return new SuccessResponse<>(data, SuccessResponseCode.SUCCESS_CREATED);
@@ -32,6 +38,10 @@ public class SuccessResponse<T> extends BaseResponse{
 
     public static SuccessResponse<?> empty(){
         return new SuccessResponse<>(null, SuccessResponseCode.SUCCESS_OK);
+    }
+
+    public static SuccessResponse<?> emptyCustom(String message){
+        return new SuccessResponse<>(null, SuccessResponseCode.SUCCESS_OK, message);
     }
 
     public static <T> SuccessResponse<T> of(T data, BaseResponseCode baseResponseCode){

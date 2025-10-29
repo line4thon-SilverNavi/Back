@@ -28,10 +28,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/docs", "/docs/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/users/signup","/api/users/signin").permitAll()
-                        .requestMatchers("/api/managers/signup").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // swagger
+                        .requestMatchers("/docs", "/docs/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        // 사용자
+                        .requestMatchers("/api/users/signup","/api/users/signin").permitAll()
+                        // 시설 관리자
+                        .requestMatchers("/api/managers/check-id",
+                                "/api/managers/signup", "/api/managers/signin").permitAll()
+                        // 제휴코드
                         .requestMatchers("/api/code/create").permitAll()
                         .anyRequest().authenticated()
                 )
