@@ -32,7 +32,7 @@ public class SecurityConfig {
                         // swagger
                         .requestMatchers("/docs", "/docs/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         // 사용자
-                        .requestMatchers("/api/users/signup","/api/users/*").permitAll()
+                        .requestMatchers("/api/users/signup","/api/users/signin").permitAll()
                         // 시설 관리자
                         .requestMatchers("/api/managers/check-id",
                                 "/api/managers/signup", "/api/managers/signin").permitAll()
