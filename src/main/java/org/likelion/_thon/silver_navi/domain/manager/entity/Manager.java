@@ -20,6 +20,9 @@ public class Manager extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
+    private String loginId;
+
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -29,8 +32,9 @@ public class Manager extends BaseEntity {
     @JoinColumn(name = "facility_id", nullable = false, unique = true)
     private NursingFacility nursingFacility; // FK
 
-    public static Manager toEntity(String encoded, NursingFacility nursingFacility) {
+    public static Manager toEntity(String loginId, String encoded, NursingFacility nursingFacility) {
         return Manager.builder()
+                .loginId(loginId)
                 .password(encoded)
                 .role(UserRole.ADMIN)
                 .nursingFacility(nursingFacility)

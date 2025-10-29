@@ -14,6 +14,9 @@ public class ManagerSignUpReq {
     @NotBlank(message = "제휴코드를 입력해주세요.")
     private String affiliateCode;
 
+    @NotBlank(message = "아이디를 입력해주세요.")
+    private String loginId;
+
     @Pattern(
             regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[^A-Za-z\\d])[A-Za-z\\d\\S]{6,20}$",
             message = "영문, 숫자, 특수문자를 포함한 6~20자리 이내로 입력해주세요."
