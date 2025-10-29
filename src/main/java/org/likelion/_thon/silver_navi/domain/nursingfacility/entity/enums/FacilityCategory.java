@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum FacilityCategory {
 
-    NURSING_HOME("nursing_home"),           // 요양원
-    NURSING_HOSPITAL("nursing_hospital"),   // 요양병원
-    CARE_CENTER("care_center");             // 보호센터
+    NURSING_HOSPITAL("요양병원"),
+    NURSING_HOME("요양원/요양센터"),
+    DAYCARE_CENTER("데이케어센터");
 
     private final String value;
 

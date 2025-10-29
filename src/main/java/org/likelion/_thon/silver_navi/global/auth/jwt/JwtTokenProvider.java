@@ -91,7 +91,7 @@ public class JwtTokenProvider {
         Claims claims = getClaims(token);
         String role = claims.get("role", String.class);
 
-        if (role.equals(UserRole.USER.getStringRole())) {
+        if (role.equals(UserRole.USER.name())) {
             String phone = claims.getSubject();
 
             User user = userRepository.findByPhone(phone)
@@ -104,18 +104,16 @@ public class JwtTokenProvider {
                     null,
                     userDetails.getAuthorities()
             );
-        } else if (role.equals(UserRole.ADMIN.getStringRole())) {
+        } else if (role.equals(UserRole.ADMIN.name())) {
             Long id = Long.parseLong(claims.getSubject());
+            Long facilityId = claims.get("facilityId", Long.class);
 
-            Manager manager = managerRepository.findById(id)
-                    .orElseThrow(ManagerNotFoundException::new);
-
-            CustomManagerDetails managerDetails = new CustomManagerDetails(manager);
+            ManagerPrincipal managerPrincipal = new ManagerPrincipal(id, role, facilityId);
 
             return new UsernamePasswordAuthenticationToken(
-                    managerDetails,
+                    managerPrincipal,
                     null,
-                    managerDetails.getAuthorities()
+                    managerPrincipal.getAuthorities()
             );
         } else {
             return null;
