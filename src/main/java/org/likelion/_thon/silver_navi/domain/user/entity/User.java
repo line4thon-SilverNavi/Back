@@ -3,7 +3,7 @@ package org.likelion._thon.silver_navi.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.user.entity.enums.RelationRole;
-import org.likelion._thon.silver_navi.domain.user.entity.enums.UserRole;
+import org.likelion._thon.silver_navi.global.auth.UserRole;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
 @Entity

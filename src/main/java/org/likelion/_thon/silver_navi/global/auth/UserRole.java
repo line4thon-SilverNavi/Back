@@ -1,4 +1,4 @@
-package org.likelion._thon.silver_navi.domain.user.entity.enums;
+package org.likelion._thon.silver_navi.global.auth;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -3,11 +3,11 @@ package org.likelion._thon.silver_navi.domain.manager.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
-import org.likelion._thon.silver_navi.domain.user.entity.enums.RelationRole;
+import org.likelion._thon.silver_navi.global.auth.UserRole;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
 @Entity
-@Setter
+@Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,6 +22,9 @@ public class Manager extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "facility_id", nullable = false, unique = true)
     private NursingFacility nursingFacility; // FK
@@ -29,6 +32,7 @@ public class Manager extends BaseEntity {
     public static Manager toEntity(String encoded, NursingFacility nursingFacility) {
         return Manager.builder()
                 .password(encoded)
+                .role(UserRole.ADMIN)
                 .nursingFacility(nursingFacility)
                 .build();
     }
