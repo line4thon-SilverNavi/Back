@@ -18,11 +18,12 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/caretargets")
 @RequiredArgsConstructor
-public class CareTargetController {
+public class CareTargetController implements CareTargetApi {
     private final S3Service s3Service;
     private final OcrService ocrService;
 
     // OCR
+    @Override
     @PostMapping("/ocr")
     public ResponseEntity<SuccessResponse<OcrRes>> analyzeOcr(@RequestParam MultipartFile image) throws IOException {
         String imageUrl = s3Service.uploadImage(image); // S3 업로드
