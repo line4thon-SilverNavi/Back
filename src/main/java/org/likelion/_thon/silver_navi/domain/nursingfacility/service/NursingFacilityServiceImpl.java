@@ -34,16 +34,7 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
             throw new FacilityNotFoundException();
         }
 
-        return new NursingFacilityDetailInfoRes(
-                nursingFacility.getName(),
-                nursingFacility.getCategory() != null ? nursingFacility.getCategory().getValue() : null,
-                nursingFacility.getOperatingHours(),
-                nursingFacility.getFacilityNumber(),
-                nursingFacility.getAddress(),
-                nursingFacility.getDescription(),
-                nursingFacility.getServices(),
-                nursingFacility.getImageUris()
-        );
+        return NursingFacilityDetailInfoRes.from(nursingFacility);
     }
 
     @Override
@@ -52,16 +43,16 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
             ManagerPrincipal managerPrincipal, NursingFacilityDeatailsInfoReq req
     ) {
         Long facilityId = managerPrincipal.getFacilityId();
-        NursingFacility facility = nursingFacilityRepository.findById(facilityId)
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(facilityId)
                 .orElseThrow(FacilityNotFoundException::new);
 
         Long managerId = managerPrincipal.getId();
-        if (facility.getManager() == null || !facility.getManager().getId().equals(managerId)) {
+        if (nursingFacility.getManager() == null || !nursingFacility.getManager().getId().equals(managerId)) {
             throw new FacilityAccessDeniedException();
         }
 
         // 파일 삭제할 URL 찾기
-        List<String> oldUrlsInDb = new ArrayList<>(facility.getImageUris());
+        List<String> oldUrlsInDb = new ArrayList<>(nursingFacility.getImageUris());
         List<String> urlsToKeep = (req.getExistingImageUrls() != null) ? req.getExistingImageUrls() : new ArrayList<>();
         List<String> urlsToDelete = oldUrlsInDb.stream()
                 .filter(oldUrl -> !urlsToKeep.contains(oldUrl))
@@ -88,20 +79,16 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
             }
         }
 
-        List<String> finalImageUrls = new ArrayList<>(urlsToKeep);
+        // 실제로 DB에 저장되었던 파일들인지 검증
+        List<String> actualUrlsToKeep = oldUrlsInDb.stream()
+                .filter(oldUrl -> urlsToKeep.contains(oldUrl))
+                .toList();
+        List<String> finalImageUrls = new ArrayList<>(actualUrlsToKeep);
+        // 새로 올라온 파일들 추가
         finalImageUrls.addAll(newUploadedUrls);
 
-        facility.updateDetails(req, finalImageUrls);
+        nursingFacility.updateDetails(req, finalImageUrls);
 
-        return new NursingFacilityDetailInfoRes(
-                facility.getName(),
-                facility.getCategory() != null ? facility.getCategory().getValue() : null,
-                facility.getOperatingHours(),
-                facility.getFacilityNumber(),
-                facility.getAddress(),
-                facility.getDescription(),
-                facility.getServices(),
-                facility.getImageUris()
-        );
+        return NursingFacilityDetailInfoRes.from(nursingFacility);
     }
 }
