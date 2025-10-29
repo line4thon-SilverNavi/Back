@@ -52,4 +52,13 @@ public class UserController implements UserApi {
         userService.updateUser(userDetails.getUser(),userUpdateReq);
         return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(null));
     }
+
+    //프로그램 신청 시 유저 정보 반환
+    @GetMapping
+    public ResponseEntity<SuccessResponse<UserInfoRes>> userInfo(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ){
+        UserInfoRes res = userService.userInfo(userDetails.getUser());
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
+    }
 }

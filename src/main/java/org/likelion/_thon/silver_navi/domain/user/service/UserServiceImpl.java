@@ -81,4 +81,11 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+    //프로그램 신청 시 유저 정보 반환
+    @Override
+    public UserInfoRes userInfo(User user) {
+        UserInfoRes res = UserInfoRes.from(user);
+        return res;
+    }
 }

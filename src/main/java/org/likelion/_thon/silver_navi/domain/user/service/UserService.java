@@ -11,4 +11,6 @@ public interface UserService {
      UserDetailsRes userDetails(User user);
 
      void updateUser(User user, UserUpdateReq dto);
+
+     UserInfoRes userInfo(User user);
 }
