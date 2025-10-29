@@ -4,3 +4,4 @@ public record SignInRes (
         String token
 ) {
 }
+

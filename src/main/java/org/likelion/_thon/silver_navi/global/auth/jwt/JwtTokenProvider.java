@@ -91,7 +91,7 @@ public class JwtTokenProvider {
         Claims claims = getClaims(token);
         String role = claims.get("role", String.class);
 
-        if (role.equals(UserRole.USER.getStringRole())) {
+        if (role.equals(UserRole.USER.name())) {
             String phone = claims.getSubject();
 
             User user = userRepository.findByPhone(phone)

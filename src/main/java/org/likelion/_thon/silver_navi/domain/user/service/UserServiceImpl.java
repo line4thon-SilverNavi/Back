@@ -8,6 +8,7 @@ import org.likelion._thon.silver_navi.domain.user.repository.UserRepository;
 import org.likelion._thon.silver_navi.domain.user.web.dto.SignInReq;
 import org.likelion._thon.silver_navi.domain.user.web.dto.SignInRes;
 import org.likelion._thon.silver_navi.domain.user.web.dto.SignUpReq;
+import org.likelion._thon.silver_navi.domain.user.web.dto.UserDetailsRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.JwtTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
+    //회원가입
     @Override
     public void signUp(SignUpReq signUpReq) {
         if(userRepository.existsByPhone(signUpReq.getPhone())){
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    //로그인
     @Override
     public SignInRes signIn(SignInReq signInReq) {
         // 아이디 확인
@@ -46,5 +49,12 @@ public class UserServiceImpl implements UserService {
 
         // 반환
         return new SignInRes(token);
+    }
+
+    //유저 상세 정보 반환
+    @Override
+    public UserDetailsRes userDetails(User user) {
+        UserDetailsRes res = UserDetailsRes.from(user);
+        return res;
     }
 }
