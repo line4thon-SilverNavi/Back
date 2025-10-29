@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.manager.entity.Manager;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.enums.FacilityCategory;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDeatailsInfoReq;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
 import java.util.ArrayList;
@@ -73,4 +74,24 @@ public class NursingFacility extends BaseEntity {
     @Column(name = "image_uri")
     @Builder.Default
     private List<String> imageUris = new ArrayList<>();
+
+    public void updateDetails(NursingFacilityDeatailsInfoReq dto, List<String> finalImageUrls) {
+        this.name = dto.getName();
+        this.operatingHours = dto.getOperatingHours();
+        this.facilityNumber = dto.getNumber();
+        this.address = dto.getAddress();
+        this.description = dto.getDescription();
+
+        // (String -> Enum 변환)
+        this.category = FacilityCategory.fromValue(dto.getCategory());
+
+        this.services.clear();
+        if (dto.getMainServices() != null) {
+            this.services.addAll(dto.getMainServices());
+        }
+        this.imageUris.clear();
+        if (finalImageUrls != null) {
+            this.imageUris.addAll(finalImageUrls);
+        }
+    }
 }

@@ -60,8 +60,8 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .subject(String.valueOf(manager.getId()))
-                .claim("name", manager.getNursingFacility().getName())
                 .claim("role", manager.getRole())
+                .claim("facilityId", manager.getNursingFacility().getId())
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(key)
@@ -104,18 +104,16 @@ public class JwtTokenProvider {
                     null,
                     userDetails.getAuthorities()
             );
-        } else if (role.equals(UserRole.ADMIN.getStringRole())) {
+        } else if (role.equals(UserRole.ADMIN.name())) {
             Long id = Long.parseLong(claims.getSubject());
+            Long facilityId = claims.get("facilityId", Long.class);
 
-            Manager manager = managerRepository.findById(id)
-                    .orElseThrow(ManagerNotFoundException::new);
-
-            CustomManagerDetails managerDetails = new CustomManagerDetails(manager);
+            ManagerPrincipal managerPrincipal = new ManagerPrincipal(id, role, facilityId);
 
             return new UsernamePasswordAuthenticationToken(
-                    managerDetails,
+                    managerPrincipal,
                     null,
-                    managerDetails.getAuthorities()
+                    managerPrincipal.getAuthorities()
             );
         } else {
             return null;

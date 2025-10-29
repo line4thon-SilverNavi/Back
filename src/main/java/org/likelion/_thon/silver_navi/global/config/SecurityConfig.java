@@ -38,6 +38,10 @@ public class SecurityConfig {
                                 "/api/managers/signup", "/api/managers/signin").permitAll()
                         // 제휴코드
                         .requestMatchers("/api/code/create").permitAll()
+
+                        // ---------- 여기는 권한이 필요한 곳  ----------
+                        .requestMatchers(HttpMethod.GET, "/api/facilities/info").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/facilities/info").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                         .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)

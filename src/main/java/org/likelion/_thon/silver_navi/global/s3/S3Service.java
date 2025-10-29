@@ -44,4 +44,29 @@ public class S3Service {
     private String getPublicUrl(String fileName) {
         return String.format("https://%s.s3.%s.amazonaws.com/%s", bucket, amazonS3.getRegionName(), fileName);
     }
+
+    // ----------------------------------------------------------------------------------------------------------
+
+    public void deleteImage(String fileUrl) {
+        try {
+            // S3의 파일 이름 URL에서 추출
+            String fileName = getFileNameFromUrl(fileUrl);
+            // S3에서 파일을 삭제
+            amazonS3.deleteObject(bucket, fileName);
+        } catch (Exception e) {
+            // 삭제 실패 시 로그
+        }
+    }
+
+    private String getBaseUrl() {
+        return String.format("https://%s.s3.%s.amazonaws.com/", bucket, amazonS3.getRegionName());
+    }
+
+    private String getFileNameFromUrl(String fileUrl) {
+        String baseUrl = getBaseUrl();
+        if (fileUrl != null && fileUrl.startsWith(baseUrl)) {
+            return fileUrl.substring(baseUrl.length());
+        }
+        return "";
+    }
 }
