@@ -5,7 +5,7 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacil
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityAccessDeniedException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
-import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDeatailsInfoReq;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityModifyReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDetailInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.s3.S3Service;
@@ -40,7 +40,7 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
     @Override
     @Transactional
     public NursingFacilityDetailInfoRes updateFacility(
-            ManagerPrincipal managerPrincipal, NursingFacilityDeatailsInfoReq req
+            ManagerPrincipal managerPrincipal, NursingFacilityModifyReq req
     ) {
         Long facilityId = managerPrincipal.getFacilityId();
         NursingFacility nursingFacility = nursingFacilityRepository.findById(facilityId)
