@@ -1,10 +1,7 @@
 package org.likelion._thon.silver_navi.domain.user.service;
 
 import org.likelion._thon.silver_navi.domain.user.entity.User;
-import org.likelion._thon.silver_navi.domain.user.web.dto.SignInReq;
-import org.likelion._thon.silver_navi.domain.user.web.dto.SignInRes;
-import org.likelion._thon.silver_navi.domain.user.web.dto.SignUpReq;
-import org.likelion._thon.silver_navi.domain.user.web.dto.UserDetailsRes;
+import org.likelion._thon.silver_navi.domain.user.web.dto.*;
 
 public interface UserService {
      void signUp(SignUpReq signUpReq);
@@ -12,4 +9,8 @@ public interface UserService {
      SignInRes signIn(SignInReq signInReq);
 
      UserDetailsRes userDetails(User user);
+
+     void updateUser(User user, UserUpdateReq dto);
+
+     UserInfoRes userInfo(User user);
 }
