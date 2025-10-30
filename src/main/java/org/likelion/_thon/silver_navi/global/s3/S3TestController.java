@@ -17,7 +17,7 @@ public class S3TestController {
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-            String imageUrl = s3Service.uploadImage(file);
+            String imageUrl = s3Service.uploadFile(file);
             return "File uploaded successfully! imageUrl: " + imageUrl;
         } catch (Exception e) {
             e.printStackTrace();

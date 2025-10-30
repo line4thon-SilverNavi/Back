@@ -70,7 +70,7 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
             for (MultipartFile img : req.getNewImages()) {
                 if (img != null && !img.isEmpty()) {
                     try {
-                        String newUrl = s3Service.uploadImage(img);
+                        String newUrl = s3Service.uploadFile(img);
                         newUploadedUrls.add(newUrl);
                     } catch (IOException e) {
                         System.out.println(e.getMessage());
