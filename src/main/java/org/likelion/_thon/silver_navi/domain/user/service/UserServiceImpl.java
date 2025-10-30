@@ -1,5 +1,6 @@
 package org.likelion._thon.silver_navi.domain.user.service;
 
+import org.likelion._thon.silver_navi.domain.caretarget.entity.enums.CareGrade;
 import org.likelion._thon.silver_navi.domain.caretarget.repository.CareTargetRepository;
 import org.likelion._thon.silver_navi.domain.user.exception.UserNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,8 @@ import org.likelion._thon.silver_navi.domain.user.web.dto.*;
 import org.likelion._thon.silver_navi.global.auth.jwt.JwtTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,8 +54,13 @@ public class UserServiceImpl implements UserService {
         // 토큰 생성
         String token = jwtTokenProvider.createToken(user);
 
+        // null 반환을 위한 Optional
+        CareGrade careGrade = Optional.ofNullable(user.getCareTarget())
+                .map(CareTarget::getCareGrade)
+                .orElse(null);
+
         // 반환
-        return new SignInRes(token);
+        return new SignInRes(token,careGrade);
     }
 
     //유저 상세 정보 반환

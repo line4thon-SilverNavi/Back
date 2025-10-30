@@ -10,7 +10,7 @@ public enum CareGrade {
     LEVEL_3("3등급"),
     LEVEL_4("4등급"),
     LEVEL_5("5등급"),
-    NOT_APPLICABLE("등급외");
+    COGNITIVE_SUPPORT("인지지원등급");
 
     private final String label;
 
