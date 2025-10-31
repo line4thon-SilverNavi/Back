@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/facilities").hasRole("ADMIN")
                         // 프로그램
                         .requestMatchers(HttpMethod.POST, "/api/programs").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/programs").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                         .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)

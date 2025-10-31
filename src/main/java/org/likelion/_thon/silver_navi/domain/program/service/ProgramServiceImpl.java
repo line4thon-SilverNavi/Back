@@ -7,15 +7,22 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingF
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes.PageInfo;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramSummaryInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.s3.S3Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -61,5 +68,23 @@ public class ProgramServiceImpl implements ProgramService {
         Program program = Program.toEntity(programCreateReq, nursingFacility, proposalUrl, imageUrls);
 
         programRepository.save(program);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProgramListRes getPrograms(ManagerPrincipal managerPrincipal, Pageable pageable) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        Page<Program> programPage = programRepository.findByNursingFacility(nursingFacility, pageable);
+
+        Page<ProgramSummaryInfoRes> summaryPage = programPage.map(ProgramSummaryInfoRes::from);
+
+        PageInfo pageInfo = PageInfo.from(summaryPage);
+
+        return new ProgramListRes(
+                summaryPage.getContent(),
+                pageInfo
+        );
     }
 }
