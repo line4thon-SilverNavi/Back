@@ -3,6 +3,7 @@ package org.likelion._thon.silver_navi.domain.nursingfacility.web.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.nursingfacility.service.NursingFacilityService;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDeatailsInfoReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDetailInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
@@ -13,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,11 +53,10 @@ public class NursingFacilityController implements NursingFacilityApi {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<SuccessResponse<NursingFacilityDetailInfoRes>> listNursingFacility(
+    public ResponseEntity<SuccessResponse<List<NearbyFacilityRes>>> findNearbyFacilities(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-
-
-        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(nfdir));
+        List<NearbyFacilityRes> res = nursingFacilityService.findNearbyFacilities(userDetails.getUser());
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
     }
 }
