@@ -5,6 +5,7 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacil
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
+import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
@@ -72,11 +73,19 @@ public class ProgramServiceImpl implements ProgramService {
 
     @Override
     @Transactional(readOnly = true)
-    public ProgramListRes getPrograms(ManagerPrincipal managerPrincipal, Pageable pageable) {
+    public ProgramListRes getPrograms(
+            ManagerPrincipal managerPrincipal, ProgramCategory programCategory, Pageable pageable
+    ) {
         NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
                 .orElseThrow(FacilityNotFoundException::new);
 
-        Page<Program> programPage = programRepository.findByNursingFacility(nursingFacility, pageable);
+        Page<Program> programPage;
+
+        if (programCategory == null) {
+            programPage = programRepository.findByNursingFacility(nursingFacility, pageable);
+        } else {
+            programPage = programRepository.findByNursingFacilityAndCategory(nursingFacility, programCategory, pageable);
+        }
 
         Page<ProgramSummaryInfoRes> summaryPage = programPage.map(ProgramSummaryInfoRes::from);
 

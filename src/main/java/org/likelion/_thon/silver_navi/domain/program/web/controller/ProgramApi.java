@@ -103,52 +103,6 @@ public interface ProgramApi {
             ),
     })
     public ResponseEntity<SuccessResponse<ProgramListRes>> getPrograms(
-            ManagerPrincipal managerPrincipal, Pageable pageable
+            ManagerPrincipal managerPrincipal, String categoryStr, Pageable pageable
     );
 }
-
-/*
-{
-    "isSuccess": true,
-    "timestamp": "2025-10-31 11:44:30",
-    "code": "GLOBAL_201",
-    "httpStatus": 201,
-    "message": "호출에 성공하였습니다.",
-    "data": {
-        "programs": [
-            {
-                "programId": 2,
-                "programName": "활기찬 아침 치료",
-                "location": "서울시 성북구 정릉동 123-45",
-                "category": "치료",
-                "date": "2025-11-28",
-                "dayOfWeek": "금",
-                "startTime": "09:30",
-                "endTime": "10:30",
-                "currentApplicants": 0,
-                "capacity": 30,
-                "fee": "무료"
-            },
-            {
-                "programId": 1,
-                "programName": "활기찬 아침 체조",
-                "location": "3층 대강당",
-                "category": "건강",
-                "date": "2025-11-28",
-                "dayOfWeek": "금",
-                "startTime": "09:30",
-                "endTime": "10:30",
-                "currentApplicants": 0,
-                "capacity": 30,
-                "fee": "무료"
-            }
-        ],
-        "pageInfo": {
-            "totalPages": 1,
-            "totalElements": 2,
-            "currentPage": 1,
-            "pageSize": 6
-        }
-    }
-}
-* */
