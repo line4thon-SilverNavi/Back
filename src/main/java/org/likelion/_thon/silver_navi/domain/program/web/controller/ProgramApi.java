@@ -55,8 +55,8 @@ public interface ProgramApi {
                                             {
                                                 "isSuccess": true,
                                                 "timestamp": "2025-10-31 11:44:30",
-                                                "code": "GLOBAL_201",
-                                                "httpStatus": 201,
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
                                                 "message": "호출에 성공하였습니다.",
                                                 "data": {
                                                     "programs": [
@@ -116,8 +116,8 @@ public interface ProgramApi {
                                             {
                                                  "isSuccess": true,
                                                  "timestamp": "2025-10-31 19:16:44",
-                                                 "code": "GLOBAL_201",
-                                                 "httpStatus": 201,
+                                                 "code": "GLOBAL_200",
+                                                 "httpStatus": 200,
                                                  "message": "호출에 성공하였습니다.",
                                                  "data": {
                                                      "programId": 1,

@@ -54,7 +54,7 @@ public class ProgramController implements ProgramApi {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.created(programListRes));
+                .body(SuccessResponse.from(programListRes));
     }
 
     @GetMapping("/{programId}")
@@ -66,6 +66,6 @@ public class ProgramController implements ProgramApi {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.created(programDetailInfoRes));
+                .body(SuccessResponse.from(programDetailInfoRes));
     }
 }
