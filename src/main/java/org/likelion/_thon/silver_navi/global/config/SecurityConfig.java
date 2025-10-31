@@ -41,8 +41,8 @@ public class SecurityConfig {
 
                         // ---------- 여기는 권한이 필요한 곳  ----------
                         // 시설
-                        .requestMatchers(HttpMethod.GET, "/api/facilities/info").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/facilities/info").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/facilities").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/facilities").hasRole("ADMIN")
                         // 프로그램
                         .requestMatchers(HttpMethod.POST, "/api/programs").hasRole("ADMIN")
                         .anyRequest().authenticated()

@@ -21,7 +21,7 @@ public class NursingFacilityController implements NursingFacilityApi {
 
     private final NursingFacilityService nursingFacilityService;
 
-    @GetMapping("/info")
+    @GetMapping
     public ResponseEntity<SuccessResponse<NursingFacilityDetailInfoRes>> getNursingFacility(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal
     ) {
@@ -34,7 +34,7 @@ public class NursingFacilityController implements NursingFacilityApi {
                 body(SuccessResponse.from(nfdir));
     }
 
-    @PutMapping(value = "/info", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SuccessResponse<NursingFacilityDetailInfoRes>> updateNursingFacility(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
             @ParameterObject @ModelAttribute @Valid NursingFacilityModifyReq nursingFacilityDeatailsInfoReq
