@@ -6,6 +6,7 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.service.NursingFaci
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDeatailsInfoReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDetailInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
+import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,5 +47,14 @@ public class NursingFacilityController implements NursingFacilityApi {
         return ResponseEntity.
                 status(HttpStatus.OK).
                 body(SuccessResponse.from(nfdir));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<SuccessResponse<NursingFacilityDetailInfoRes>> listNursingFacility(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(nfdir));
     }
 }

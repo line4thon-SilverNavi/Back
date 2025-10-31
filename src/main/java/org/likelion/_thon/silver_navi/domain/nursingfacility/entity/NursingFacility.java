@@ -5,6 +5,7 @@ import lombok.*;
 import org.likelion._thon.silver_navi.domain.manager.entity.Manager;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.enums.FacilityCategory;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDeatailsInfoReq;
+import org.likelion._thon.silver_navi.domain.review.entity.Review;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
 import java.util.ArrayList;
@@ -59,6 +60,14 @@ public class NursingFacility extends BaseEntity {
             orphanRemoval = true          // 관계가 끊어진 Manager 자동 삭제
     )
     private Manager manager;
+
+    @OneToMany(
+            mappedBy = "nursingFacility",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Review> reviews = new ArrayList<>();
 
 
     // '주요 서비스' 목록
