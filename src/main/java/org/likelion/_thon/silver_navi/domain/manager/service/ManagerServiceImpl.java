@@ -56,7 +56,6 @@ public class ManagerServiceImpl implements ManagerService {
 
         String loginId = managerSignUpReq.getLoginId();
         checkLoginId(loginId);
-        nursingFacility.update();
 
         String encoded = passwordEncoder.encode(managerSignUpReq.getPassword());
         Manager manager = Manager.toEntity(loginId, encoded, nursingFacility);
@@ -64,6 +63,7 @@ public class ManagerServiceImpl implements ManagerService {
         managerRepository.save(manager);
 
         affiliateCode.codeUsed();
+        nursingFacility.update();
     }
 
     @Override
