@@ -6,8 +6,10 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfa
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
+import org.likelion._thon.silver_navi.domain.program.exception.ProgramNotFoundException;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramDetailInfoRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes.PageInfo;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramSummaryInfoRes;
@@ -95,5 +97,21 @@ public class ProgramServiceImpl implements ProgramService {
                 summaryPage.getContent(),
                 pageInfo
         );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProgramDetailInfoRes getProgram(ManagerPrincipal managerPrincipal, Long programId) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        Program program = programRepository.findById(programId)
+                .orElseThrow(ProgramNotFoundException::new);
+
+        if (!program.getNursingFacility().getId().equals(nursingFacility.getId())) {
+            throw new ProgramNotFoundException();
+        }
+
+        return ProgramDetailInfoRes.from(program);
     }
 }

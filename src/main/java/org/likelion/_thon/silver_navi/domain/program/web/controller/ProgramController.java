@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
 import org.likelion._thon.silver_navi.domain.program.service.ProgramService;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramDetailInfoRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramSummaryInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
@@ -26,6 +27,7 @@ public class ProgramController implements ProgramApi {
 
     private final ProgramService programService;
 
+    @Override
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SuccessResponse<?>> createProgram(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
@@ -38,6 +40,7 @@ public class ProgramController implements ProgramApi {
                 .body(SuccessResponse.created(null));
     }
 
+    @Override
     @GetMapping
     public ResponseEntity<SuccessResponse<ProgramListRes>> getPrograms(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
@@ -52,5 +55,17 @@ public class ProgramController implements ProgramApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.created(programListRes));
+    }
+
+    @GetMapping("/{programId}")
+    public ResponseEntity<SuccessResponse<ProgramDetailInfoRes>> getProgram(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long programId
+    ) {
+        ProgramDetailInfoRes programDetailInfoRes = programService.getProgram(managerPrincipal, programId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.created(programDetailInfoRes));
     }
 }

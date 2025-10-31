@@ -7,14 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramDetailInfoRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Tag(name = "프로그램 API", description = "프로그램 관련 API")
 public interface ProgramApi {
@@ -48,7 +46,7 @@ public interface ProgramApi {
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "프로그램 조회 성공",
+                    description = "프로그램 전체 조회 성공",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = SuccessResponse.class),
@@ -104,5 +102,67 @@ public interface ProgramApi {
     })
     public ResponseEntity<SuccessResponse<ProgramListRes>> getPrograms(
             ManagerPrincipal managerPrincipal, String categoryStr, Pageable pageable
+    );
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "프로그램 단일 조회 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                 "isSuccess": true,
+                                                 "timestamp": "2025-10-31 19:16:44",
+                                                 "code": "GLOBAL_201",
+                                                 "httpStatus": 201,
+                                                 "message": "호출에 성공하였습니다.",
+                                                 "data": {
+                                                     "programId": 1,
+                                                     "name": "활기찬 아침 체조",
+                                                     "category": "건강",
+                                                     "instructorName": "김건강",
+                                                     "date": "2025-11-28",
+                                                     "startTime": "09:30",
+                                                     "endTime": "10:30",
+                                                     "location": "3층 대강당",
+                                                     "capacity": 30,
+                                                     "fee": "무료",
+                                                     "number": "02-1234-5678",
+                                                     "description": "아침을 깨우는 즐거운 체조 시간입니다.",
+                                                     "supplies": [
+                                                         "개인 물통"
+                                                     ]
+                                                 }
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "프로그램 존재 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-10-31 19:14:07",
+                                                "code": "PROGRAM_404_1",
+                                                "httpStatus": 404,
+                                                "message": "해당 프로그램을 찾을 수 없습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<ProgramDetailInfoRes>> getProgram(
+            ManagerPrincipal managerPrincipal, Long programId
     );
 }
