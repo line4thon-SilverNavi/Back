@@ -1,11 +1,11 @@
 package org.likelion._thon.silver_navi.domain.program.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -30,18 +30,18 @@ public class ProgramCreateReq {
     private String instructorName;      // 강사명
 
     @NotNull(message = "날짜를 입력해주세요.")
-    @FutureOrPresent(message = "프로그램 날짜는 오늘 또는 미래의 날짜여야 합니다.")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Future(message = "프로그램 날짜는 미래의 날짜여야 합니다.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;             // 일정
 
     @Schema(description = "프로그램 시작 시간 (HH:mm 형식)", example = "13:30")
     @NotNull(message = "시작 시간을 입력해주세요.")
-    @JsonFormat(pattern = "HH:mm")
+    @DateTimeFormat(pattern = "HH:mm")
     private LocalTime startTime;        // 시작 시간
 
     @Schema(description = "프로그램 시작 시간 (HH:mm 형식)", example = "17:30")
     @NotNull(message = "종료 시간을 입력해주세요.")
-    @JsonFormat(pattern = "HH:mm")
+    @DateTimeFormat(pattern = "HH:mm")
     private LocalTime endTime;          // 종료 시간
 
     private String location;            // 장소
@@ -53,7 +53,7 @@ public class ProgramCreateReq {
 
     @Pattern(
             regexp = "^\\d{2,4}-\\d{3,4}-\\d{4}$",
-            message = "전화번호 형식이 올바르지 않습니다 (예: 010-1234-5678 또는 02-123-4567)."
+            message = "전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678 또는 02-123-4567)"
     )
     private String number;              // 문의 전화
 
