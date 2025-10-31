@@ -5,17 +5,27 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacil
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
+import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
+import org.likelion._thon.silver_navi.domain.program.exception.ProgramNotFoundException;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramDetailInfoRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes.PageInfo;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramSummaryInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.s3.S3Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -61,5 +71,47 @@ public class ProgramServiceImpl implements ProgramService {
         Program program = Program.toEntity(programCreateReq, nursingFacility, proposalUrl, imageUrls);
 
         programRepository.save(program);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProgramListRes getPrograms(
+            ManagerPrincipal managerPrincipal, ProgramCategory programCategory, Pageable pageable
+    ) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        Page<Program> programPage;
+
+        if (programCategory == null) {
+            programPage = programRepository.findByNursingFacility(nursingFacility, pageable);
+        } else {
+            programPage = programRepository.findByNursingFacilityAndCategory(nursingFacility, programCategory, pageable);
+        }
+
+        Page<ProgramSummaryInfoRes> summaryPage = programPage.map(ProgramSummaryInfoRes::from);
+
+        PageInfo pageInfo = PageInfo.from(summaryPage);
+
+        return new ProgramListRes(
+                summaryPage.getContent(),
+                pageInfo
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProgramDetailInfoRes getProgram(ManagerPrincipal managerPrincipal, Long programId) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        Program program = programRepository.findById(programId)
+                .orElseThrow(ProgramNotFoundException::new);
+
+        if (!program.getNursingFacility().getId().equals(nursingFacility.getId())) {
+            throw new ProgramNotFoundException();
+        }
+
+        return ProgramDetailInfoRes.from(program);
     }
 }
