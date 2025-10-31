@@ -26,7 +26,7 @@ public class CareTargetController implements CareTargetApi {
     @Override
     @PostMapping("/ocr")
     public ResponseEntity<SuccessResponse<OcrRes>> analyzeOcr(@RequestParam MultipartFile image) throws IOException {
-        String imageUrl = s3Service.uploadImage(image); // S3 업로드
+        String imageUrl = s3Service.uploadFile(image); // S3 업로드
         OcrRes result = ocrService.requestClovaOcr(imageUrl); // URL로 OCR 요청
         return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.created(result));
     }

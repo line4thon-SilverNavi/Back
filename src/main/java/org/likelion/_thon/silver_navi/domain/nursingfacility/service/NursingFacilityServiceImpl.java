@@ -6,7 +6,7 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfa
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
-import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDeatailsInfoReq;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityModifyReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDetailInfoRes;
 import org.likelion._thon.silver_navi.domain.review.repository.ReviewRepository;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
@@ -47,7 +47,7 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
     @Override
     @Transactional
     public NursingFacilityDetailInfoRes updateFacility(
-            ManagerPrincipal managerPrincipal, NursingFacilityDeatailsInfoReq req
+            ManagerPrincipal managerPrincipal, NursingFacilityModifyReq req
     ) {
         Long facilityId = managerPrincipal.getFacilityId();
         NursingFacility nursingFacility = nursingFacilityRepository.findById(facilityId)
@@ -77,7 +77,7 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
             for (MultipartFile img : req.getNewImages()) {
                 if (img != null && !img.isEmpty()) {
                     try {
-                        String newUrl = s3Service.uploadImage(img);
+                        String newUrl = s3Service.uploadFile(img);
                         newUploadedUrls.add(newUrl);
                     } catch (IOException e) {
                         System.out.println(e.getMessage());

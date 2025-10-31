@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.manager.entity.Manager;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.enums.FacilityCategory;
-import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDeatailsInfoReq;
 import org.likelion._thon.silver_navi.domain.review.entity.Review;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityModifyReq;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
 import java.math.BigDecimal;
@@ -93,7 +93,7 @@ public class NursingFacility extends BaseEntity {
     @Builder.Default
     private List<String> imageUris = new ArrayList<>();
 
-    public void updateDetails(NursingFacilityDeatailsInfoReq dto, List<String> finalImageUrls) {
+    public void updateDetails(NursingFacilityModifyReq dto, List<String> finalImageUrls) {
         this.name = dto.getName();
         this.operatingHours = dto.getOperatingHours();
         this.facilityNumber = dto.getNumber();

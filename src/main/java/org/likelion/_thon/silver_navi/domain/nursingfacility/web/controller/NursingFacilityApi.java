@@ -6,13 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDeatailsInfoReq;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityModifyReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDetailInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 
-@Tag(name = "시설 관련 API", description = "시설 관련 API")
+@Tag(name = "시설 API", description = "시설 관련 API")
 public interface NursingFacilityApi {
 
     @ApiResponses({
@@ -110,6 +110,6 @@ public interface NursingFacilityApi {
     })
     public ResponseEntity<SuccessResponse<NursingFacilityDetailInfoRes>> updateNursingFacility(
             ManagerPrincipal managerPrincipal,
-            NursingFacilityDeatailsInfoReq nursingFacilityDeatailsInfoReq
+            NursingFacilityModifyReq nursingFacilityDeatailsInfoReq
     );
 }

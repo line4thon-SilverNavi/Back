@@ -22,18 +22,18 @@ public class S3Service {
     }
 
     /**
-     * S3에 이미지 업로드 하기
+     * S3에 파일 업로드 하기
      */
-    public String uploadImage(MultipartFile image) throws IOException {
-        String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename(); // 고유한 파일 이름 생성
+    public String uploadFile(MultipartFile file) throws IOException {
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename(); // 고유한 파일 이름 생성
 
         // 메타데이터 설정
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(image.getContentType());
-        metadata.setContentLength(image.getSize());
+        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(file.getSize());
 
         // S3에 파일 업로드 요청 생성
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, fileName, image.getInputStream(), metadata);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
 
         // S3에 파일 업로드
         amazonS3.putObject(putObjectRequest);
