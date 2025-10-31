@@ -3,10 +3,14 @@ package org.likelion._thon.silver_navi.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.caretarget.entity.CareTarget;
+import org.likelion._thon.silver_navi.domain.review.entity.Review;
 import org.likelion._thon.silver_navi.domain.user.entity.enums.RelationRole;
 import org.likelion._thon.silver_navi.domain.user.web.dto.UserUpdateReq;
 import org.likelion._thon.silver_navi.global.auth.UserRole;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,8 +44,22 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Column(nullable = true)
+    private Double latitude;
+
+    @Column(nullable = true)
+    private Double longitude;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
     private CareTarget careTarget;
+
+    @OneToMany(
+            mappedBy = "user",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Review> reviews = new ArrayList<>();
 
     public static User toEntity(String name, String phone, RelationRole relation, String encoded){
         return User.builder()

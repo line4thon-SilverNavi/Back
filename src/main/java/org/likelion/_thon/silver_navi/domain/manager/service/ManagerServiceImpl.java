@@ -63,6 +63,7 @@ public class ManagerServiceImpl implements ManagerService {
         managerRepository.save(manager);
 
         affiliateCode.codeUsed();
+        nursingFacility.update();
     }
 
     @Override

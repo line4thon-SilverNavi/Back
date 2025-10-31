@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.manager.entity.Manager;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.enums.FacilityCategory;
+import org.likelion._thon.silver_navi.domain.review.entity.Review;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityModifyReq;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +53,14 @@ public class NursingFacility extends BaseEntity {
     @Column(name = "description")
     private String description; // 시설 소개
 
+    // 평균 별점 (리뷰 등록 시마다 업데이트)
+    @Column(name = "average_rating", precision = 3, scale = 2, nullable = true)
+    private BigDecimal averageRating;
+
+    // 리뷰 수 (리뷰 등록 시마다 증가/감소)
+    @Column(name = "review_count", nullable = true)
+    private Long reviewCount;
+
     // --- 양방향 ---
     @OneToOne(
             mappedBy = "nursingFacility",
@@ -59,6 +69,14 @@ public class NursingFacility extends BaseEntity {
             orphanRemoval = true          // 관계가 끊어진 Manager 자동 삭제
     )
     private Manager manager;
+
+    @OneToMany(
+            mappedBy = "nursingFacility",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Review> reviews = new ArrayList<>();
 
 
     // '주요 서비스' 목록
@@ -93,5 +111,10 @@ public class NursingFacility extends BaseEntity {
         if (finalImageUrls != null) {
             this.imageUris.addAll(finalImageUrls);
         }
+    }
+
+    public void update(){
+        this.averageRating = BigDecimal.ZERO;
+        this.reviewCount = 0L;
     }
 }

@@ -1,8 +1,12 @@
 package org.likelion._thon.silver_navi.domain.nursingfacility.service;
 
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityModifyReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDetailInfoRes;
+import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
+
+import java.util.List;
 
 public interface NursingFacilityService {
 
@@ -11,4 +15,6 @@ public interface NursingFacilityService {
     NursingFacilityDetailInfoRes updateFacility(
             ManagerPrincipal managerPrincipal, NursingFacilityModifyReq req
     );
+
+    List<NearbyFacilityRes> findNearbyFacilities(User user);
 }
