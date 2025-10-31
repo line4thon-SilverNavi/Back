@@ -30,8 +30,6 @@ public class NursingFacilityInitializer implements ApplicationRunner {
                     .facilityNumber("0507-1335-8538")
                     .latitude(37.6021)
                     .longitude(127.0045)
-                    .averageRating(BigDecimal.ZERO)
-                    .reviewCount(0L)
                     .build();
             nursingFacilityRepository.save(facility1);
 
@@ -43,8 +41,6 @@ public class NursingFacilityInitializer implements ApplicationRunner {
                     .facilityNumber("02-1234-5678")
                     .latitude(37.6100)
                     .longitude(126.9300)
-                    .averageRating(BigDecimal.ZERO)
-                    .reviewCount(0L)
                     .build();
             nursingFacilityRepository.save(facility2);
 
@@ -56,8 +52,6 @@ public class NursingFacilityInitializer implements ApplicationRunner {
                     .facilityNumber("02-9876-5432")
                     .latitude(37.5000)
                     .longitude(127.0300)
-                    .averageRating(BigDecimal.ZERO)
-                    .reviewCount(0L)
                     .build();
             nursingFacilityRepository.save(facility3);
 
@@ -68,8 +62,6 @@ public class NursingFacilityInitializer implements ApplicationRunner {
                     .facilityNumber("02-3333-1111")
                     .latitude(37.5480)
                     .longitude(126.9200)
-                    .averageRating(BigDecimal.ZERO)
-                    .reviewCount(0L)
                     .build();
             nursingFacilityRepository.save(facility4);
 
@@ -80,8 +72,6 @@ public class NursingFacilityInitializer implements ApplicationRunner {
                     .facilityNumber("02-5555-8888")
                     .latitude(37.4900)
                     .longitude(127.0100)
-                    .averageRating(BigDecimal.ZERO)
-                    .reviewCount(0L)
                     .build();
             nursingFacilityRepository.save(facility5);
 
@@ -92,8 +82,6 @@ public class NursingFacilityInitializer implements ApplicationRunner {
                     .facilityNumber("0507-1300-2000")
                     .latitude(37.5100)
                     .longitude(127.0800)
-                    .averageRating(BigDecimal.ZERO)
-                    .reviewCount(0L)
                     .build();
             nursingFacilityRepository.save(facility6);
 
@@ -104,8 +92,6 @@ public class NursingFacilityInitializer implements ApplicationRunner {
                     .facilityNumber("02-7777-9999")
                     .latitude(37.5250)
                     .longitude(126.9250)
-                    .averageRating(BigDecimal.ZERO)
-                    .reviewCount(0L)
                     .build();
             nursingFacilityRepository.save(facility7);
 
@@ -116,8 +102,6 @@ public class NursingFacilityInitializer implements ApplicationRunner {
                     .facilityNumber("02-6666-3456")
                     .latitude(37.6100)
                     .longitude(126.9700)
-                    .averageRating(BigDecimal.ZERO)
-                    .reviewCount(0L)
                     .build();
             nursingFacilityRepository.save(facility8);
 
@@ -128,8 +112,6 @@ public class NursingFacilityInitializer implements ApplicationRunner {
                     .facilityNumber("0507-1400-5000")
                     .latitude(37.6600)
                     .longitude(127.0700)
-                    .averageRating(BigDecimal.ZERO)
-                    .reviewCount(0L)
                     .build();
             nursingFacilityRepository.save(facility9);
 
@@ -140,8 +122,6 @@ public class NursingFacilityInitializer implements ApplicationRunner {
                     .facilityNumber("02-4000-8282")
                     .latitude(37.5300)
                     .longitude(127.1300)
-                    .averageRating(BigDecimal.ZERO)
-                    .reviewCount(0L)
                     .build();
             nursingFacilityRepository.save(facility10);
         }

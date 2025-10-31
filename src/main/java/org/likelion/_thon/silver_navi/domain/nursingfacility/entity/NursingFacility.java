@@ -54,11 +54,11 @@ public class NursingFacility extends BaseEntity {
     private String description; // 시설 소개
 
     // 평균 별점 (리뷰 등록 시마다 업데이트)
-    @Column(name = "average_rating", precision = 3, scale = 2, nullable = false)
+    @Column(name = "average_rating", precision = 3, scale = 2, nullable = true)
     private BigDecimal averageRating;
 
     // 리뷰 수 (리뷰 등록 시마다 증가/감소)
-    @Column(name = "review_count", nullable = false)
+    @Column(name = "review_count", nullable = true)
     private Long reviewCount;
 
     // --- 양방향 ---
