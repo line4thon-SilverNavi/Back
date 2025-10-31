@@ -2,7 +2,8 @@ package org.likelion._thon.silver_navi.domain.consult.web.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.likelion._thon.silver_navi.domain.consult.service.GeneralConsultService;
+import org.likelion._thon.silver_navi.domain.consult.service.ConsultService;
+import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultApplyReq;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.GeneralApplyReq;
 import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
@@ -18,22 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/consultation")
 @RequiredArgsConstructor
 public class ConsultController {
-    private final GeneralConsultService generalConsultService;
+    private final ConsultService consultService;
 
     // 일반 상담 신청
     @PostMapping("/general")
     public ResponseEntity<SuccessResponse<?>> applyGeneralConsult(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody @Valid GeneralApplyReq req) {
-        generalConsultService.apply(userDetails.getUser(),req);
+        consultService.applyGeneral(userDetails.getUser(),req);
         return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.created(null));
     }
 
-    // 상세 상담 신청
-//    @PostMapping("/detail")
-//    public ResponseEntity<SuccessResponse<?>> applyDetailConsult(
-//            @RequestBody @Valid DetailApplyReq req) {
-//        detailConsultService.apply(req);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.created(null));
-//    }
+    // 상담 신청
+    @PostMapping
+    public ResponseEntity<SuccessResponse<?>> applyConsult(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody @Valid ConsultApplyReq req) {
+        consultService.apply(userDetails.getUser(), req);
+        return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.created(null));
+    }
 }
