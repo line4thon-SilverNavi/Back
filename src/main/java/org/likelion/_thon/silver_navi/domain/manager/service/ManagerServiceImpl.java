@@ -56,6 +56,7 @@ public class ManagerServiceImpl implements ManagerService {
 
         String loginId = managerSignUpReq.getLoginId();
         checkLoginId(loginId);
+        nursingFacility.update();
 
         String encoded = passwordEncoder.encode(managerSignUpReq.getPassword());
         Manager manager = Manager.toEntity(loginId, encoded, nursingFacility);

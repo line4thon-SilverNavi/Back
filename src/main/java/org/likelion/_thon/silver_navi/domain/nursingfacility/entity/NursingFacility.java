@@ -112,4 +112,9 @@ public class NursingFacility extends BaseEntity {
             this.imageUris.addAll(finalImageUrls);
         }
     }
+
+    public void update(){
+        this.averageRating = BigDecimal.ZERO;
+        this.reviewCount = 0L;
+    }
 }
