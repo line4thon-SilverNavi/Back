@@ -3,6 +3,7 @@ package org.likelion._thon.silver_navi.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.caretarget.entity.CareTarget;
+import org.likelion._thon.silver_navi.domain.consult.entity.GeneralConsult;
 import org.likelion._thon.silver_navi.domain.review.entity.Review;
 import org.likelion._thon.silver_navi.domain.user.entity.enums.RelationRole;
 import org.likelion._thon.silver_navi.domain.user.web.dto.UserUpdateReq;
@@ -60,6 +61,9 @@ public class User extends BaseEntity {
             orphanRemoval = true
     )
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GeneralConsult> generalConsults = new ArrayList<>();
 
     public static User toEntity(String name, String phone, RelationRole relation, String encoded){
         return User.builder()

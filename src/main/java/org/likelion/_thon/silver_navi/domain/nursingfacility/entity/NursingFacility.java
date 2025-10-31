@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.nursingfacility.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.likelion._thon.silver_navi.domain.consult.entity.GeneralConsult;
 import org.likelion._thon.silver_navi.domain.manager.entity.Manager;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.enums.FacilityCategory;
 import org.likelion._thon.silver_navi.domain.review.entity.Review;
@@ -78,6 +79,8 @@ public class NursingFacility extends BaseEntity {
     )
     private List<Review> reviews = new ArrayList<>();
 
+    @OneToMany(mappedBy = "facility", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GeneralConsult> generalConsults = new ArrayList<>();
 
     // '주요 서비스' 목록
     @ElementCollection(fetch = FetchType.LAZY)
