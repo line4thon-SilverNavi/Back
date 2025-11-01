@@ -27,13 +27,13 @@ public class ProgramApply extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ApplicationStatus status;
+    private ApplicationStatus status;       //관리자에서 보여지는 상태 {대기중, 승인, 거부}
 
     @Column(nullable = true)
-    private String content;
+    private String content;                 //특이사항
 
     @Column(nullable = true)
-    private String rejectReason;
+    private String rejectReason;            //거부 사유
 
     public static ProgramApply create(User user, Program program, String content) {
         String finalContent = content != null && !content.trim().isEmpty() ? content.trim() : null;

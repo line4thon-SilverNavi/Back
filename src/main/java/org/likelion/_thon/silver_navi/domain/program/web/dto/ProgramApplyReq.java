@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class ProgramApplyReq {
-    private String content;
+    private String content;             //특이 사항
 }
