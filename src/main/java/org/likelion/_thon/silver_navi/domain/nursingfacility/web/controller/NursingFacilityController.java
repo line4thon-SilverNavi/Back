@@ -6,6 +6,7 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.service.NursingFaci
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityModifyReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDetailInfoRes;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.UserByFacilityInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
@@ -58,6 +59,15 @@ public class NursingFacilityController implements NursingFacilityApi {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         List<NearbyFacilityRes> res = nursingFacilityService.findNearbyFacilities(userDetails.getUser());
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
+    }
+
+    @GetMapping("/{facilityId}")
+    public ResponseEntity<SuccessResponse<UserByFacilityInfoRes>> facilityDetail(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long facilityId
+    ) {
+        UserByFacilityInfoRes res = nursingFacilityService.facilityDetail(facilityId,userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
     }
 }

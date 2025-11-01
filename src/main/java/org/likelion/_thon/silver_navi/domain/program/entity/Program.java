@@ -89,6 +89,9 @@ public class Program extends BaseEntity {
     @JoinColumn(name = "facility_id", nullable = false)
     private NursingFacility nursingFacility;            // FK
 
+    @OneToMany(mappedBy = "program",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProgramApply> applies = new ArrayList<>();
+
     // ------------------------------ 메서드 ------------------------------
     public static Program toEntity(
             ProgramCreateReq req,
