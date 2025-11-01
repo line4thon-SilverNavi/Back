@@ -138,7 +138,7 @@ public class Program extends BaseEntity {
     }
 
     public Program updateEntity(
-            ProgramModifyReq req, String proposalUrl, List<String> imageUrls
+            ProgramModifyReq req, String finalProposalUrl, List<String> finalImageUrls
     ) {
         if (StringUtils.hasText(req.getName())) {
             this.name = req.getName();
@@ -187,12 +187,12 @@ public class Program extends BaseEntity {
 
         // 기획서
         if (req.getIsDeleteProposal()) {
-            this.proposalUrl = proposalUrl;
+            this.proposalUrl = finalProposalUrl;
         }
         // 사진
         this.imageUrls.clear();
         if (imageUrls != null) {
-            this.imageUrls.addAll(imageUrls);
+            this.imageUrls.addAll(finalImageUrls);
         }
 
         return this;

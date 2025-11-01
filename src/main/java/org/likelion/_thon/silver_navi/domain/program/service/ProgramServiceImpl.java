@@ -127,7 +127,7 @@ public class ProgramServiceImpl implements ProgramService {
         }
 
         // 첨부파일 url
-        String finalProposalUrls = null;
+        String finalProposalUrl = null;
         if (programModifyReq.getIsDeleteProposal() != null && programModifyReq.getIsDeleteProposal()) {
             // 기존 파일이 있었다면 S3에서 삭제
             if (program.getProposalUrl() != null) {
@@ -136,7 +136,7 @@ public class ProgramServiceImpl implements ProgramService {
 
             if (programModifyReq.getProposal() != null && !programModifyReq.getProposal().isEmpty()) {
                 try {
-                    finalProposalUrls = s3Service.uploadFile(programModifyReq.getProposal());
+                    finalProposalUrl = s3Service.uploadFile(programModifyReq.getProposal());
                 } catch (IOException e) {
                     throw new RuntimeException("S3 파일 업로드 중 오류가 발생했습니다.", e);
                 }
@@ -157,7 +157,7 @@ public class ProgramServiceImpl implements ProgramService {
             throw new RuntimeException("S3 파일 업로드 중 오류가 발생했습니다.", e);
         }
 
-        Program updatedProgram = program.updateEntity(programModifyReq, finalProposalUrls, finalImageUrls);
+        Program updatedProgram = program.updateEntity(programModifyReq, finalProposalUrl, finalImageUrls);
 
         return ProgramDetailInfoRes.from(updatedProgram);
     }
