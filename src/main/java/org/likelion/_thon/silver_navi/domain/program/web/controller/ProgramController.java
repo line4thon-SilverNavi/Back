@@ -3,12 +3,11 @@ package org.likelion._thon.silver_navi.domain.program.web.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
+import org.likelion._thon.silver_navi.domain.program.service.ProgramApplyService;
 import org.likelion._thon.silver_navi.domain.program.service.ProgramService;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramDetailInfoRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramSummaryInfoRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.*;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
+import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProgramController implements ProgramApi {
 
     private final ProgramService programService;
+    private final ProgramApplyService programApplyService;
 
     @Override
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -67,5 +67,16 @@ public class ProgramController implements ProgramApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.from(programDetailInfoRes));
+    }
+
+    // 프로그램 참여 신청
+    @PostMapping("{programId}/apply")
+    public ResponseEntity<SuccessResponse<?>> applyProgram(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long programId,
+            @RequestBody ProgramApplyReq req
+    ){
+        programApplyService.applyProgram(userDetails.getUser(), programId, req);
+        return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.created(null));
     }
 }

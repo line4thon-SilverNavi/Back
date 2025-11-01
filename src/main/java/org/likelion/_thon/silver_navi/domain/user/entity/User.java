@@ -5,6 +5,7 @@ import lombok.*;
 import org.likelion._thon.silver_navi.domain.caretarget.entity.CareTarget;
 import org.likelion._thon.silver_navi.domain.consult.entity.Consult;
 import org.likelion._thon.silver_navi.domain.consult.entity.GeneralConsult;
+import org.likelion._thon.silver_navi.domain.program.entity.ProgramApply;
 import org.likelion._thon.silver_navi.domain.review.entity.Review;
 import org.likelion._thon.silver_navi.domain.user.entity.enums.RelationRole;
 import org.likelion._thon.silver_navi.domain.user.web.dto.UserUpdateReq;
@@ -68,6 +69,10 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consult> consults = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<ProgramApply> applies = new ArrayList<>();
 
     public static User toEntity(String name, String phone, RelationRole relation, String encoded){
         return User.builder()
