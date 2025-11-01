@@ -68,7 +68,7 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
         // S3 파일 삭제
         if (!urlsToDelete.isEmpty()) {
             for (String url : urlsToDelete) {
-                s3Service.deleteImage(url);
+                s3Service.deleteFile(url);
             }
         }
         // S3 파일 업로드

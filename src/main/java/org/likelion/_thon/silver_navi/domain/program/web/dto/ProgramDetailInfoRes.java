@@ -25,23 +25,27 @@ public record ProgramDetailInfoRes(
         String fee,                 // 참가비
         String number,              // 문의 전화
         String description,         // 프로그램 설명
-        List<String> supplies       // 준비물
+        List<String> supplies,      // 준비물
+        String proposal,            // 기획서 파일 URL
+        List<String> images         // 사진 URL
 ) {
         public static ProgramDetailInfoRes from(Program program) {
                 return new ProgramDetailInfoRes(
                         program.getId(),
                         program.getName(),
                         program.getCategory().getValue(),
-                        program.getInstructorName() != null ? program.getInstructorName() : null,
+                        program.getInstructorName(),
                         program.getDate(),
                         program.getStartTime(),
                         program.getEndTime(),
                         program.getLocation() != null ? program.getLocation() : program.getNursingFacility().getAddress(),
                         program.getCapacity(),
-                        program.getFee() != null ? program.getFee() : null,
-                        program.getContactPhone() != null ? program.getContactPhone() : null,
-                        program.getDescription() != null ? program.getDescription() : null,
-                        program.getSupplies().isEmpty() ? null : program.getSupplies()
+                        program.getFee(),
+                        program.getContactPhone(),
+                        program.getDescription(),
+                        program.getSupplies(),
+                        program.getProposalUrl(),
+                        program.getImageUrls()
                 );
         }
 }

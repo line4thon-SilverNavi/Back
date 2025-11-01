@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
 import org.likelion._thon.silver_navi.domain.program.service.ProgramService;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramDetailInfoRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramSummaryInfoRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.*;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springdoc.core.annotations.ParameterObject;
@@ -63,6 +60,19 @@ public class ProgramController implements ProgramApi {
             @PathVariable Long programId
     ) {
         ProgramDetailInfoRes programDetailInfoRes = programService.getProgram(managerPrincipal, programId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.from(programDetailInfoRes));
+    }
+
+    @PatchMapping("/{programId}")
+    public ResponseEntity<SuccessResponse<ProgramDetailInfoRes>> modifyProgram(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long programId,
+            @ParameterObject @ModelAttribute @Valid ProgramModifyReq programModifyReq
+    ) {
+        ProgramDetailInfoRes programDetailInfoRes = programService.modifyProgram(managerPrincipal, programId, programModifyReq);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

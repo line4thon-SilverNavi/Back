@@ -46,6 +46,7 @@ public class SecurityConfig {
                         // 프로그램
                         .requestMatchers(HttpMethod.POST, "/api/programs").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/programs").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/programs").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/programs").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

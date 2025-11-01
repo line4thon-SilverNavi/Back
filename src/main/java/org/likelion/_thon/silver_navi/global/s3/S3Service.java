@@ -47,7 +47,7 @@ public class S3Service {
 
     // ----------------------------------------------------------------------------------------------------------
 
-    public void deleteImage(String fileUrl) {
+    public void deleteFile(String fileUrl) {
         try {
             // S3의 파일 이름 URL에서 추출
             String fileName = getFileNameFromUrl(fileUrl);
