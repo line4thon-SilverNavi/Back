@@ -231,4 +231,50 @@ public interface ProgramApi {
     public ResponseEntity<SuccessResponse<ProgramDetailInfoRes>> modifyProgram(
             ManagerPrincipal managerPrincipal, Long programId, ProgramModifyReq programModifyReq
     );
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "프로그램 삭제 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "timestamp": "2025-11-01 13:46:06",
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
+                                                "message": "프로그램이 성공적으로 삭제되었습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "프로그램 존재 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-10-31 19:14:07",
+                                                "code": "PROGRAM_404_1",
+                                                "httpStatus": 404,
+                                                "message": "해당 프로그램을 찾을 수 없습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<?>> deleteProgram(
+            ManagerPrincipal managerPrincipal, Long programId
+    );
 }

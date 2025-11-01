@@ -54,6 +54,7 @@ public class ProgramController implements ProgramApi {
                 .body(SuccessResponse.from(programListRes));
     }
 
+    @Override
     @GetMapping("/{programId}")
     public ResponseEntity<SuccessResponse<ProgramDetailInfoRes>> getProgram(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
@@ -66,6 +67,7 @@ public class ProgramController implements ProgramApi {
                 .body(SuccessResponse.from(programDetailInfoRes));
     }
 
+    @Override
     @PatchMapping("/{programId}")
     public ResponseEntity<SuccessResponse<ProgramDetailInfoRes>> modifyProgram(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
@@ -79,6 +81,7 @@ public class ProgramController implements ProgramApi {
                 .body(SuccessResponse.from(programDetailInfoRes));
     }
 
+    @Override
     @DeleteMapping("/{programId}")
     public ResponseEntity<SuccessResponse<?>> deleteProgram(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
