@@ -23,7 +23,7 @@ public record NursingFacilityDetailInfoRes(
                 nursingFacility.getAddress(),
                 nursingFacility.getDescription(),
                 nursingFacility.getServices(),
-                nursingFacility.getImageUris()
+                nursingFacility.getImageUrls()
         );
     }
 }
