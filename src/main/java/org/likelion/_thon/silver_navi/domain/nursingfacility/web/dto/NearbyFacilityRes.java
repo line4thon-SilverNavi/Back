@@ -16,15 +16,14 @@ public record NearbyFacilityRes(
         String phoneNumber,
         FacilityCategory category
 ) {
-    public static NearbyFacilityRes of(NursingFacility facility, double distanceKm,
-                                       BigDecimal avgRating, long reviewCount) {
+    public static NearbyFacilityRes of(NursingFacility facility, double distanceKm) {
         return new NearbyFacilityRes(
                 facility.getId(),
                 facility.getName(),
                 facility.getImageUris().isEmpty() ? null : facility.getImageUris().get(0),
                 Math.round(distanceKm * 10) / 10.0,
-                avgRating,
-                reviewCount,
+                facility.getAverageRating(),
+                facility.getReviewCount(),
                 facility.getOperatingHours(),
                 facility.getFacilityNumber(),
                 facility.getCategory()

@@ -126,10 +126,7 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
 
                     return NearbyFacilityRes.of(
                             facility,
-                            distanceKm,
-                            facility.getAverageRating(),
-                            facility.getReviewCount()
-                    );
+                            distanceKm);
                 })
                 .sorted(Comparator.comparingDouble(NearbyFacilityRes::distanceKm))
                 .toList();
