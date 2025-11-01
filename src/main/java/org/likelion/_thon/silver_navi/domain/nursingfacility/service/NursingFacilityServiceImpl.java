@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static org.likelion._thon.silver_navi.global.util.geo.UpdateImagesUtils.updateImageFiles;
+
 @Service
 @RequiredArgsConstructor
 public class NursingFacilityServiceImpl implements NursingFacilityService {
@@ -59,40 +61,17 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
         }
 
         // 파일 삭제할 URL 찾기
-        List<String> oldUrlsInDb = new ArrayList<>(nursingFacility.getImageUris());
+        List<String> oldUrlsInDb = new ArrayList<>(nursingFacility.getImageUrls());
         List<String> urlsToKeep = (req.getExistingImageUrls() != null) ? req.getExistingImageUrls() : new ArrayList<>();
-        List<String> urlsToDelete = oldUrlsInDb.stream()
-                .filter(oldUrl -> !urlsToKeep.contains(oldUrl))
-                .toList();
-
-        // S3 파일 삭제
-        if (!urlsToDelete.isEmpty()) {
-            for (String url : urlsToDelete) {
-                s3Service.deleteFile(url);
-            }
+        List<String> finalImageUrls;
+        try {
+            finalImageUrls = updateImageFiles(
+                    s3Service, oldUrlsInDb, urlsToKeep,
+                    req.getNewImages()
+            );
+        } catch (IOException e) {
+            throw new RuntimeException("S3 파일 업로드 중 오류가 발생했습니다.", e);
         }
-        // S3 파일 업로드
-        List<String> newUploadedUrls = new ArrayList<>();
-        if (req.getNewImages() != null && !req.getNewImages().isEmpty()) {
-            for (MultipartFile img : req.getNewImages()) {
-                if (img != null && !img.isEmpty()) {
-                    try {
-                        String newUrl = s3Service.uploadFile(img);
-                        newUploadedUrls.add(newUrl);
-                    } catch (IOException e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-            }
-        }
-
-        // 실제로 DB에 저장되었던 파일들인지 검증
-        List<String> actualUrlsToKeep = oldUrlsInDb.stream()
-                .filter(oldUrl -> urlsToKeep.contains(oldUrl))
-                .toList();
-        List<String> finalImageUrls = new ArrayList<>(actualUrlsToKeep);
-        // 새로 올라온 파일들 추가
-        finalImageUrls.addAll(newUploadedUrls);
 
         nursingFacility.updateDetails(req, finalImageUrls);
 
