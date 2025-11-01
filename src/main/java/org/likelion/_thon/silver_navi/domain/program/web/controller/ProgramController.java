@@ -57,6 +57,7 @@ public class ProgramController implements ProgramApi {
                 .body(SuccessResponse.from(programListRes));
     }
 
+    @Override
     @GetMapping("/{programId}")
     public ResponseEntity<SuccessResponse<ProgramDetailInfoRes>> getProgram(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
@@ -67,6 +68,33 @@ public class ProgramController implements ProgramApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.from(programDetailInfoRes));
+    }
+
+    @Override
+    @PatchMapping("/{programId}")
+    public ResponseEntity<SuccessResponse<ProgramDetailInfoRes>> modifyProgram(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long programId,
+            @ParameterObject @ModelAttribute @Valid ProgramModifyReq programModifyReq
+    ) {
+        ProgramDetailInfoRes programDetailInfoRes = programService.modifyProgram(managerPrincipal, programId, programModifyReq);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.from(programDetailInfoRes));
+    }
+
+    @Override
+    @DeleteMapping("/{programId}")
+    public ResponseEntity<SuccessResponse<?>> deleteProgram(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long programId
+    ) {
+        programService.deleteProgram(managerPrincipal, programId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.emptyCustom("프로그램이 성공적으로 삭제되었습니다."));
     }
 
     // 프로그램 참여 신청

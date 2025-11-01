@@ -4,6 +4,7 @@ import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategor
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramDetailInfoRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramModifyReq;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.data.domain.Pageable;
 
@@ -14,4 +15,8 @@ public interface ProgramService {
     ProgramListRes getPrograms(ManagerPrincipal managerPrincipal, ProgramCategory programCategory, Pageable pageable);
     // 단일 조회
     ProgramDetailInfoRes getProgram(ManagerPrincipal managerPrincipal, Long programId);
+    // 프로그램 수정
+    ProgramDetailInfoRes modifyProgram(ManagerPrincipal managerPrincipal, Long programId, ProgramModifyReq programModifyReq);
+    // 프로그램 삭제
+    void deleteProgram(ManagerPrincipal managerPrincipal, Long programId);
 }

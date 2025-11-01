@@ -6,7 +6,9 @@ import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategor
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramStatus;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramModifyReq;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -136,5 +138,66 @@ public class Program extends BaseEntity {
                 .currentParticipant(0)
                 .status(ProgramStatus.RECRUITING)
                 .build();
+    }
+
+    public Program updateEntity(
+            ProgramModifyReq req, String finalProposalUrl, List<String> finalImageUrls
+    ) {
+        if (StringUtils.hasText(req.getName())) {
+            this.name = req.getName();
+        }
+        if (StringUtils.hasText(req.getCategory())) {
+            this.category = ProgramCategory.fromValue(req.getCategory());
+        }
+        if (req.getInstructorName() != null) {
+            this.instructorName = req.getInstructorName().isBlank() ? null : req.getInstructorName();
+        }
+        if (req.getDate() != null) {
+            this.date = req.getDate();
+        }
+        if (req.getStartTime() != null) {
+            this.startTime = req.getStartTime();
+        }
+        if (req.getEndTime() != null) {
+            this.endTime = req.getEndTime();
+        }
+        if (req.getLocation() != null) {
+            this.location = req.getLocation().isBlank() ? null : req.getLocation();
+        }
+        if (req.getCapacity() != null) {
+            if (req.getCapacity() == -1) {
+                this.capacity = null; // -1이면 제거
+            } else if (req.getCapacity() >= 1) { // 1 이상이면 수정
+                this.capacity = req.getCapacity();
+            }
+        }
+        if (req.getFee() != null) {
+            this.fee = req.getFee().isBlank() ? null : req.getFee();
+        }
+        if (req.getNumber() != null) {
+            this.contactPhone = req.getNumber().isBlank() ? null : req.getNumber();
+        }
+        if (req.getDescription() != null) {
+            this.description = req.getDescription().isBlank() ? null : req.getDescription();
+        }
+        if (req.getSupplies() != null) {
+            this.supplies.clear();
+            List<String> validSupplies = req.getSupplies().stream()
+                    .filter(StringUtils::hasText) // null, "", " " 필터링
+                    .toList();
+            this.supplies.addAll(validSupplies);
+        }
+
+        // 기획서
+        if (req.getIsDeleteProposal()) {
+            this.proposalUrl = finalProposalUrl;
+        }
+        // 사진
+        this.imageUrls.clear();
+        if (imageUrls != null) {
+            this.imageUrls.addAll(finalImageUrls);
+        }
+
+        return this;
     }
 }

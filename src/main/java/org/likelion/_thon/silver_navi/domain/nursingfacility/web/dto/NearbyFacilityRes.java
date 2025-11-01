@@ -20,7 +20,7 @@ public record NearbyFacilityRes(
         return new NearbyFacilityRes(
                 facility.getId(),
                 facility.getName(),
-                facility.getImageUris().isEmpty() ? null : facility.getImageUris().get(0),
+                facility.getImageUrls().isEmpty() ? null : facility.getImageUrls().get(0),
                 Math.round(distanceKm * 10) / 10.0,
                 facility.getAverageRating(),
                 facility.getReviewCount(),

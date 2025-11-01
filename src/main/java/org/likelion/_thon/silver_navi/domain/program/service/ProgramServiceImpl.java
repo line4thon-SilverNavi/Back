@@ -8,11 +8,8 @@ import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
 import org.likelion._thon.silver_navi.domain.program.exception.ProgramNotFoundException;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramDetailInfoRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.*;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes.PageInfo;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramSummaryInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.s3.S3Service;
 import org.springframework.data.domain.Page;
@@ -22,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
+import static org.likelion._thon.silver_navi.global.util.geo.UpdateImagesUtils.updateImageFiles;
 
 @Service
 @RequiredArgsConstructor
@@ -113,5 +110,70 @@ public class ProgramServiceImpl implements ProgramService {
         }
 
         return ProgramDetailInfoRes.from(program);
+    }
+
+    @Override
+    public ProgramDetailInfoRes modifyProgram(
+            ManagerPrincipal managerPrincipal, Long programId, ProgramModifyReq programModifyReq
+    ) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        Program program = programRepository.findById(programId)
+                .orElseThrow(ProgramNotFoundException::new);
+
+        if (!program.getNursingFacility().getId().equals(nursingFacility.getId())) {
+            throw new ProgramNotFoundException();
+        }
+
+        // 첨부파일 url
+        String finalProposalUrl = null;
+        if (programModifyReq.getIsDeleteProposal() != null && programModifyReq.getIsDeleteProposal()) {
+            // 기존 파일이 있었다면 S3에서 삭제
+            if (program.getProposalUrl() != null) {
+                s3Service.deleteFile(program.getProposalUrl());
+            }
+
+            if (programModifyReq.getProposal() != null && !programModifyReq.getProposal().isEmpty()) {
+                try {
+                    finalProposalUrl = s3Service.uploadFile(programModifyReq.getProposal());
+                } catch (IOException e) {
+                    throw new RuntimeException("S3 파일 업로드 중 오류가 발생했습니다.", e);
+                }
+            }
+        }
+
+        // 파일 url
+        List<String> oldUrlsInDb = new ArrayList<>(program.getImageUrls());
+        List<String> urlsToKeep = (programModifyReq.getExistingImageUrls() != null)
+                ? programModifyReq.getExistingImageUrls() : new ArrayList<>();
+        List<String> finalImageUrls;
+        try {
+            finalImageUrls = updateImageFiles(
+                    s3Service, oldUrlsInDb, urlsToKeep,
+                    programModifyReq.getNewImages()
+            );
+        } catch (IOException e) {
+            throw new RuntimeException("S3 파일 업로드 중 오류가 발생했습니다.", e);
+        }
+
+        Program updatedProgram = program.updateEntity(programModifyReq, finalProposalUrl, finalImageUrls);
+
+        return ProgramDetailInfoRes.from(updatedProgram);
+    }
+
+    @Override
+    public void deleteProgram(ManagerPrincipal managerPrincipal, Long programId) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        Program program = programRepository.findById(programId)
+                .orElseThrow(ProgramNotFoundException::new);
+
+        if (!program.getNursingFacility().getId().equals(nursingFacility.getId())) {
+            throw new ProgramNotFoundException();
+        }
+
+        programRepository.delete(program);
     }
 }
