@@ -95,6 +95,7 @@ public class ProgramController implements ProgramApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.emptyCustom("프로그램이 성공적으로 삭제되었습니다."));
+    }
 
     // 프로그램 참여 신청
     @PostMapping("{programId}/apply")
