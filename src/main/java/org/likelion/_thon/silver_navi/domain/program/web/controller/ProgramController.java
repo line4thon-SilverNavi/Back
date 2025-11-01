@@ -68,4 +68,16 @@ public class ProgramController implements ProgramApi {
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.from(programDetailInfoRes));
     }
+
+    @DeleteMapping("/{programId}")
+    public ResponseEntity<SuccessResponse<?>> deleteProgram(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long programId
+    ) {
+        programService.deleteProgram(managerPrincipal, programId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.emptyCustom("프로그램이 성공적으로 삭제되었습니다."));
+    }
 }

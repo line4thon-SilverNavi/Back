@@ -14,4 +14,6 @@ public interface ProgramService {
     ProgramListRes getPrograms(ManagerPrincipal managerPrincipal, ProgramCategory programCategory, Pageable pageable);
     // 단일 조회
     ProgramDetailInfoRes getProgram(ManagerPrincipal managerPrincipal, Long programId);
+    // 프로그램 삭제
+    void deleteProgram(ManagerPrincipal managerPrincipal, Long programId);
 }

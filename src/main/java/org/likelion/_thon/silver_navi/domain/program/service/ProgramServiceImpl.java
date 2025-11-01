@@ -114,4 +114,19 @@ public class ProgramServiceImpl implements ProgramService {
 
         return ProgramDetailInfoRes.from(program);
     }
+
+    @Override
+    public void deleteProgram(ManagerPrincipal managerPrincipal, Long programId) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        Program program = programRepository.findById(programId)
+                .orElseThrow(ProgramNotFoundException::new);
+
+        if (!program.getNursingFacility().getId().equals(nursingFacility.getId())) {
+            throw new ProgramNotFoundException();
+        }
+
+        programRepository.delete(program);
+    }
 }
