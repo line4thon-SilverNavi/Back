@@ -26,6 +26,7 @@ public class NursingFacilityController implements NursingFacilityApi {
 
     private final NursingFacilityService nursingFacilityService;
 
+    @Override
     @GetMapping
     public ResponseEntity<SuccessResponse<NursingFacilityDetailInfoRes>> getNursingFacility(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal
@@ -39,19 +40,20 @@ public class NursingFacilityController implements NursingFacilityApi {
                 body(SuccessResponse.from(nfdir));
     }
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<SuccessResponse<NursingFacilityDetailInfoRes>> updateNursingFacility(
+    @Override
+    @PatchMapping
+    public ResponseEntity<SuccessResponse<NursingFacilityDetailInfoRes>> modifyNursingFacility(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
-            @ParameterObject @ModelAttribute @Valid NursingFacilityModifyReq nursingFacilityDeatailsInfoReq
+            @ParameterObject @ModelAttribute @Valid NursingFacilityModifyReq nursingFacilityModifyReq
     ) {
-        NursingFacilityDetailInfoRes nfdir = nursingFacilityService.updateFacility(
+        NursingFacilityDetailInfoRes nursingFacilityDetailInfoRes = nursingFacilityService.modifyFacility(
                 managerPrincipal,
-                nursingFacilityDeatailsInfoReq
+                nursingFacilityModifyReq
         );
 
         return ResponseEntity.
                 status(HttpStatus.OK).
-                body(SuccessResponse.from(nfdir));
+                body(SuccessResponse.from(nursingFacilityDetailInfoRes));
     }
 
     @GetMapping("/list")

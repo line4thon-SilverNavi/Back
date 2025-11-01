@@ -54,7 +54,7 @@ public class ProgramModifyReq {
 
     @Schema(description = "null이면 유지, 빈 문자열(\"\")이면 제거")
     @Pattern(
-            regexp = "^(|\\d{2,4}-\\d{3,4}-\\d{4})$",
+            regexp = "^(|\\d{2,3}-\\d{3,4}-\\d{4})$",
             message = "전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678 또는 02-123-4567)"
     )
     private String number;              // 문의 전화 - null이면 유지, 빈 문자열("")이면 제거

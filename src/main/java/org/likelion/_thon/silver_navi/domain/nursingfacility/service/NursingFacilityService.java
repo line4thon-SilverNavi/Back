@@ -13,7 +13,7 @@ public interface NursingFacilityService {
 
     NursingFacilityDetailInfoRes getFacility(Long managerId, Long facilityId);
 
-    NursingFacilityDetailInfoRes updateFacility(
+    NursingFacilityDetailInfoRes modifyFacility(
             ManagerPrincipal managerPrincipal, NursingFacilityModifyReq req
     );
 

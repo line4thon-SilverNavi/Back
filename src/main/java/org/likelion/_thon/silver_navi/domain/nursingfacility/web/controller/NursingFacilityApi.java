@@ -61,26 +61,21 @@ public interface NursingFacilityApi {
                                     value = """
                                             {
                                                 "isSuccess": true,
-                                                "timestamp": "2025-10-29 17:39:28",
+                                                "timestamp": "2025-11-02 03:21:18",
                                                 "code": "GLOBAL_200",
                                                 "httpStatus": 200,
                                                 "message": "호출에 성공하였습니다.",
                                                 "data": {
                                                     "name": "성신노인요양원",
                                                     "category": "요양원/요양센터",
-                                                    "operatingHours": "오전 10:30 ~ 저녁 08:00",
-                                                    "number": "0507-1335-8538",
+                                                    "operatingHours": "오전 10:30 ~ 오후 02:00",
+                                                    "number": "02-1335-8538",
                                                     "address": "서울시 성북구 정릉동 123-45",
                                                     "description": null,
                                                     "mainServices": [
-                                                        "A",
-                                                        "B",
-                                                        "C"
+                                                        "치료"
                                                     ],
-                                                    "images": [
-                                                        "img1",
-                                                        "img2"
-                                                    ]
+                                                    "images": []
                                                 }
                                             }
                                             """
@@ -108,8 +103,8 @@ public interface NursingFacilityApi {
                     )
             ),
     })
-    public ResponseEntity<SuccessResponse<NursingFacilityDetailInfoRes>> updateNursingFacility(
+    public ResponseEntity<SuccessResponse<NursingFacilityDetailInfoRes>> modifyNursingFacility(
             ManagerPrincipal managerPrincipal,
-            NursingFacilityModifyReq nursingFacilityDeatailsInfoReq
+            NursingFacilityModifyReq nursingFacilityModifyReq
     );
 }
