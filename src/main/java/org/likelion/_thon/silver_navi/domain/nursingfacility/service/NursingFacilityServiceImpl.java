@@ -8,6 +8,7 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingF
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityModifyReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityDetailInfoRes;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.UserByFacilityInfoRes;
 import org.likelion._thon.silver_navi.domain.review.repository.ReviewRepository;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
@@ -104,12 +105,17 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
 
                     return NearbyFacilityRes.of(
                             facility,
-                            distanceKm,
-                            facility.getAverageRating(),
-                            facility.getReviewCount()
-                    );
+                            distanceKm);
                 })
                 .sorted(Comparator.comparingDouble(NearbyFacilityRes::distanceKm))
                 .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserByFacilityInfoRes facilityDetail(Long facilityId, User user) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(facilityId)
+                .orElseThrow(FacilityNotFoundException::new);
+        return UserByFacilityInfoRes.from(nursingFacility,user.getLatitude(),user.getLongitude());
     }
 }
