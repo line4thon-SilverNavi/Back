@@ -9,16 +9,18 @@ import java.util.List;
 
 public record UserByFacilityInfoRes (
         @JsonUnwrapped NursingFacilityDetailInfoRes info,
-        double distanceKm,
-        BigDecimal averageRating,
-        long reviewCount,
-        List<ReviewRes> reviews
+        boolean bookmarked,         //좋아요 여부
+        double distanceKm,          //사용자-시설 간에 거리(km)
+        BigDecimal averageRating,   //평균 별점
+        long reviewCount,           //리뷰 수
+        List<ReviewRes> reviews     //리뷰 항목
 ) {
-    public static UserByFacilityInfoRes from(NursingFacility facility, double userLat, double userLng) {
+    public static UserByFacilityInfoRes from(NursingFacility facility, double userLat, double userLng, boolean bookmarked) {
         double distance = GeoUtils.calculateDistance(userLat, userLng, facility.getLatitude(), facility.getLongitude());
         double distanceKm = Math.round(distance * 10.0) / 10.0;
         return new UserByFacilityInfoRes(
                 NursingFacilityDetailInfoRes.from(facility),
+                bookmarked,
                 distanceKm,
                 facility.getAverageRating(),
                 facility.getReviewCount(),

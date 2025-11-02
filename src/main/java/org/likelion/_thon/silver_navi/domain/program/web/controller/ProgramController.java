@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.program.web.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.UserByFacilityInfoRes;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
 import org.likelion._thon.silver_navi.domain.program.service.ProgramApplyService;
 import org.likelion._thon.silver_navi.domain.program.service.ProgramService;
@@ -106,5 +107,15 @@ public class ProgramController implements ProgramApi {
     ){
         programApplyService.applyProgram(userDetails.getUser(), programId, req);
         return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.created(null));
+    }
+
+    // [사용자]프로그램 상세 정보 반환
+    @GetMapping("/details/{programId}")
+    public ResponseEntity<SuccessResponse<UserByProgramInfoRes>> programDetails(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long programId
+    ) {
+        UserByProgramInfoRes res = programService.programDetails(userDetails.getUser(), programId);
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
     }
 }

@@ -1,6 +1,7 @@
 package org.likelion._thon.silver_navi.domain.nursingfacility.service;
 
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.bookmark.repository.FacilityBookmarkRepository;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityAccessDeniedException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
@@ -30,6 +31,7 @@ import static org.likelion._thon.silver_navi.global.util.s3.UpdateImagesUtils.up
 public class NursingFacilityServiceImpl implements NursingFacilityService {
 
     private final NursingFacilityRepository nursingFacilityRepository;
+    private final FacilityBookmarkRepository facilityBookmarkRepository;
     private final ReviewRepository reviewRepository;
     private final S3Service s3Service;
 
@@ -110,6 +112,9 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
     public UserByFacilityInfoRes facilityDetail(Long facilityId, User user) {
         NursingFacility nursingFacility = nursingFacilityRepository.findById(facilityId)
                 .orElseThrow(FacilityNotFoundException::new);
-        return UserByFacilityInfoRes.from(nursingFacility,user.getLatitude(),user.getLongitude());
+
+        boolean bookmarked = facilityBookmarkRepository.existsByUser_IdAndFacility_Id(user.getId(),nursingFacility.getId());
+
+        return UserByFacilityInfoRes.from(nursingFacility,user.getLatitude(),user.getLongitude(),bookmarked);
     }
 }

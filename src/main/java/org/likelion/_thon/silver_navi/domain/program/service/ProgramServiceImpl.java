@@ -1,6 +1,7 @@
 package org.likelion._thon.silver_navi.domain.program.service;
 
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.bookmark.repository.ProgramBookmarkRepository;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
@@ -10,6 +11,7 @@ import org.likelion._thon.silver_navi.domain.program.exception.ProgramNotFoundEx
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
 import org.likelion._thon.silver_navi.domain.program.web.dto.*;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes.PageInfo;
+import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.s3.S3Service;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,7 @@ public class ProgramServiceImpl implements ProgramService {
 
     private final ProgramRepository programRepository;
     private final NursingFacilityRepository nursingFacilityRepository;
+    private final ProgramBookmarkRepository programBookmarkRepository;
 
     private final S3Service s3Service;
 
@@ -169,5 +172,14 @@ public class ProgramServiceImpl implements ProgramService {
         }
 
         programRepository.delete(program);
+    }
+
+    @Override
+    public UserByProgramInfoRes programDetails(User user, Long programId) {
+        Program program = programRepository.findById(programId)
+                .orElseThrow(ProgramNotFoundException::new);
+        boolean bookmarked = programBookmarkRepository.existsByUser_IdAndProgram_Id(user.getId(), program.getId());
+
+        return UserByProgramInfoRes.from(program, bookmarked);
     }
 }
