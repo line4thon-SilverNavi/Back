@@ -74,8 +74,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(User user, UserUpdateReq dto) {
+        // 인증된 user를 영속성 컨텍스트에 attach하기 위해 다시 조회
         User targetUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow();
 
         targetUser.updatePartial(dto);
 
