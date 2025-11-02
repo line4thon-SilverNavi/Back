@@ -194,7 +194,7 @@ public class Program extends BaseEntity {
         }
         // 사진
         this.imageUrls.clear();
-        if (imageUrls != null) {
+        if (finalImageUrls != null) {
             this.imageUrls.addAll(finalImageUrls);
         }
 

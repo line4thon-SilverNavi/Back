@@ -9,6 +9,7 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.entity.enums.Facili
 import org.likelion._thon.silver_navi.domain.review.entity.Review;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NursingFacilityModifyReq;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -100,24 +101,42 @@ public class NursingFacility extends BaseEntity {
     @Builder.Default
     private List<String> imageUrls = new ArrayList<>();
 
-    public void updateDetails(NursingFacilityModifyReq dto, List<String> finalImageUrls) {
-        this.name = dto.getName();
-        this.operatingHours = dto.getOperatingHours();
-        this.facilityNumber = dto.getNumber();
-        this.address = dto.getAddress();
-        this.description = dto.getDescription();
-
-        // (String -> Enum 변환)
-        this.category = FacilityCategory.fromValue(dto.getCategory());
-
-        this.services.clear();
-        if (dto.getMainServices() != null) {
-            this.services.addAll(dto.getMainServices());
+    public NursingFacility updateEntity(
+            NursingFacilityModifyReq req, List<String> finalImageUrls
+    ) {
+        if (StringUtils.hasText(req.getName())) {
+            this.name = req.getName();
         }
+        if (StringUtils.hasText(req.getCategory())) {
+            this.category = FacilityCategory.fromValue(req.getCategory());
+        }
+        if (req.getOperatingHours() != null) {
+            this.operatingHours = req.getOperatingHours().isBlank() ? null : req.getOperatingHours();
+        }
+        if (req.getNumber() != null) {
+            this.facilityNumber = req.getNumber().isBlank() ? null : req.getNumber();
+        }
+        if (StringUtils.hasText(req.getAddress())) {
+            this.address = req.getAddress();
+        }
+        if (req.getDescription() != null) {
+            this.description = req.getDescription().isBlank() ? null : req.getDescription();
+        }
+        if (req.getMainServices() != null) {
+            this.services.clear();
+            List<String> mainServices = req.getMainServices().stream()
+                    .filter(StringUtils::hasText) // null, "", " " 필터링
+                    .toList();
+            this.services.addAll(mainServices);
+        }
+
+        // 사진
         this.imageUrls.clear();
         if (finalImageUrls != null) {
             this.imageUrls.addAll(finalImageUrls);
         }
+
+        return this;
     }
 
     public void update(){

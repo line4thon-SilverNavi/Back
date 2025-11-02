@@ -1,4 +1,4 @@
-package org.likelion._thon.silver_navi.global.util.geo;
+package org.likelion._thon.silver_navi.global.util.s3;
 
 import org.likelion._thon.silver_navi.global.s3.S3Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,9 +12,12 @@ public class UpdateImagesUtils {
     public static List<String> updateImageFiles(
             S3Service s3Service,
             List<String> oldUrlsInDb,
-            List<String> urlsToKeep,
+            List<String> urlsToKeepFromDto,
             List<MultipartFile> images
-    ) throws IOException {
+    ) {
+        List<String> urlsToKeep = (urlsToKeepFromDto != null)
+                ? urlsToKeepFromDto : new ArrayList<>();
+
         List<String> urlsToDelete = oldUrlsInDb.stream()
                 .filter(oldUrl -> !urlsToKeep.contains(oldUrl))
                 .toList();
@@ -31,8 +34,12 @@ public class UpdateImagesUtils {
         if (images != null && !images.isEmpty()) {
             for (MultipartFile img : images) {
                 if (img != null && !img.isEmpty()) {
-                    String newUrl = s3Service.uploadFile(img);
-                    newUploadedUrls.add(newUrl);
+                    try {
+                        String newUrl = s3Service.uploadFile(img);
+                        newUploadedUrls.add(newUrl);
+                    } catch (IOException e) {
+                        throw new RuntimeException("S3 파일 업로드 중 오류가 발생했습니다.", e);
+                    }
                 }
             }
         }

@@ -17,14 +17,13 @@ import org.likelion._thon.silver_navi.global.util.geo.BoundingBox;
 import org.likelion._thon.silver_navi.global.util.geo.GeoUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static org.likelion._thon.silver_navi.global.util.geo.UpdateImagesUtils.updateImageFiles;
+import static org.likelion._thon.silver_navi.global.util.s3.UpdateImagesUtils.updateImageFiles;
 
 @Service
 @RequiredArgsConstructor
@@ -49,8 +48,8 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
 
     @Override
     @Transactional
-    public NursingFacilityDetailInfoRes updateFacility(
-            ManagerPrincipal managerPrincipal, NursingFacilityModifyReq req
+    public NursingFacilityDetailInfoRes modifyFacility(
+            ManagerPrincipal managerPrincipal, NursingFacilityModifyReq nursingFacilityModifyReq
     ) {
         Long facilityId = managerPrincipal.getFacilityId();
         NursingFacility nursingFacility = nursingFacilityRepository.findById(facilityId)
@@ -61,22 +60,17 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
             throw new FacilityAccessDeniedException();
         }
 
-        // 파일 삭제할 URL 찾기
-        List<String> oldUrlsInDb = new ArrayList<>(nursingFacility.getImageUrls());
-        List<String> urlsToKeep = (req.getExistingImageUrls() != null) ? req.getExistingImageUrls() : new ArrayList<>();
-        List<String> finalImageUrls;
-        try {
-            finalImageUrls = updateImageFiles(
-                    s3Service, oldUrlsInDb, urlsToKeep,
-                    req.getNewImages()
-            );
-        } catch (IOException e) {
-            throw new RuntimeException("S3 파일 업로드 중 오류가 발생했습니다.", e);
-        }
+        // 파일 url
+        List<String> finalImageUrls = updateImageFiles(
+                s3Service,
+                nursingFacility.getImageUrls(),
+                nursingFacilityModifyReq.getExistingImageUrls(),
+                nursingFacilityModifyReq.getNewImages()
+        );
 
-        nursingFacility.updateDetails(req, finalImageUrls);
+        NursingFacility updatedNursingFacility = nursingFacility.updateEntity(nursingFacilityModifyReq, finalImageUrls);
 
-        return NursingFacilityDetailInfoRes.from(nursingFacility);
+        return NursingFacilityDetailInfoRes.from(updatedNursingFacility);
     }
 
     @Override
