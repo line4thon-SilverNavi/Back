@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.program.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.likelion._thon.silver_navi.domain.bookmark.entity.ProgramBookmark;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramStatus;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
@@ -93,6 +94,9 @@ public class Program extends BaseEntity {
 
     @OneToMany(mappedBy = "program",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProgramApply> applies = new ArrayList<>();
+
+    @OneToMany(mappedBy = "program",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProgramBookmark> bookmarks = new ArrayList<>();
 
     // ------------------------------ 메서드 ------------------------------
     public static Program toEntity(
