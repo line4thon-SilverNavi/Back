@@ -89,4 +89,8 @@ public class User extends BaseEntity {
         if (dto.getUserName() != null) this.name = dto.getUserName();
         if (dto.getRelationRole() != null) this.relation = dto.getRelationRole();
     }
+
+    public void updateRadius(Integer searchRadius) {
+        this.searchRadius = searchRadius;
+    }
 }
