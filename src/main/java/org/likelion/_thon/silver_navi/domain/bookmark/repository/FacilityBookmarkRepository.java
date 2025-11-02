@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface FacilityBookmarkRepository extends JpaRepository<FacilityBookmark, Long> {
     Optional<FacilityBookmark> findByUser_IdAndFacility_Id(Long userId, Long facilityId);
+
+    boolean existsByUser_IdAndFacility_Id(Long userId, Long facilityId);
 }
