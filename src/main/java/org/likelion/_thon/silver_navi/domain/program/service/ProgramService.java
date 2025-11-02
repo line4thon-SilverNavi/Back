@@ -6,6 +6,8 @@ import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface ProgramService {
 
     void programCreate(ManagerPrincipal managerPrincipal, ProgramCreateReq programCreateReq);
@@ -19,4 +21,6 @@ public interface ProgramService {
     void deleteProgram(ManagerPrincipal managerPrincipal, Long programId);
 
     UserByProgramInfoRes programDetails(User user, Long programId);
+
+    List<UserByProgramListRes> findPrograms(User user);
 }

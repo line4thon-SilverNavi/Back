@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.program.web.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.UserByFacilityInfoRes;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
 import org.likelion._thon.silver_navi.domain.program.service.ProgramApplyService;
@@ -19,6 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -116,6 +119,15 @@ public class ProgramController implements ProgramApi {
             @PathVariable Long programId
     ) {
         UserByProgramInfoRes res = programService.programDetails(userDetails.getUser(), programId);
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
+    }
+
+    // [사용자]프로그램 목록 반환
+    @GetMapping("/list")
+    public ResponseEntity<SuccessResponse<List<UserByProgramListRes>>> findPrograms(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        List<UserByProgramListRes> res = programService.findPrograms(userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
     }
 }
