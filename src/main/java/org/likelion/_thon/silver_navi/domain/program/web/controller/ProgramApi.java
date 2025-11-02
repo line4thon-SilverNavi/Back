@@ -277,4 +277,6 @@ public interface ProgramApi {
     public ResponseEntity<SuccessResponse<?>> deleteProgram(
             ManagerPrincipal managerPrincipal, Long programId
     );
+
+    // -------------------------------------------------- 사용자 API --------------------------------------------------
 }
