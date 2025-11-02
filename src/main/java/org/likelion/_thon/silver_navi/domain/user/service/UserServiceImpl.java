@@ -74,8 +74,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(User user, UserUpdateReq dto) {
+        // 인증된 user를 영속성 컨텍스트에 attach하기 위해 다시 조회
         User targetUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow();
 
         targetUser.updatePartial(dto);
 
@@ -95,5 +96,16 @@ public class UserServiceImpl implements UserService {
     public UserInfoRes userInfo(User user) {
         UserInfoRes res = UserInfoRes.from(user);
         return res;
+    }
+
+    //사용자 탐색 반경 수정
+    @Override
+    @Transactional
+    public void updateRadius(User user, RadiusUpdateReq req) {
+        // 인증된 user를 영속성 컨텍스트에 attach하기 위해 다시 조회
+        User targetUser = userRepository.findById(user.getId())
+                .orElseThrow();
+
+        targetUser.updateRadius(req.getSearchRadius());
     }
 }

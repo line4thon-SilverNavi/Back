@@ -61,4 +61,14 @@ public class UserController implements UserApi {
         UserInfoRes res = userService.userInfo(userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
     }
+
+    //사용자 탐색 거리 반경 수정
+    @PatchMapping("/radius")
+    public ResponseEntity<SuccessResponse<?>> updateRadius(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody @Valid RadiusUpdateReq req
+    ){
+        userService.updateRadius(userDetails.getUser(),req);
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(null));
+    }
 }

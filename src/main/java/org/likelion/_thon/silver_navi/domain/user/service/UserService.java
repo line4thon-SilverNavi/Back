@@ -13,4 +13,6 @@ public interface UserService {
      void updateUser(User user, UserUpdateReq dto);
 
      UserInfoRes userInfo(User user);
+
+    void updateRadius(User user, RadiusUpdateReq req);
 }
