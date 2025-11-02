@@ -212,7 +212,7 @@ public class ProgramServiceImpl implements ProgramService {
                     boolean bookmarked = bookmarkedProgramIds.contains(program.getId());
                     String thumbnail = program.getImageUrls().isEmpty()
                             ? null
-                            : program.getImageUrls().get(0);
+                            : program.getImageUrls().getFirst();
                     return UserByProgramListRes.from(program, thumbnail, bookmarked);
                 })
                 .toList();

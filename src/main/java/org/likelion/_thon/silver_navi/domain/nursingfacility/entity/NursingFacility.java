@@ -101,9 +101,9 @@ public class NursingFacility extends BaseEntity {
     // '시설 이미지' URL 목록
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "facility_images", joinColumns = @JoinColumn(name = "facility_id"))
-    @Column(name = "image_url")
+    @Column(name = "image_uri")
     @Builder.Default
-    private List<String> imageUrls = new ArrayList<>();
+    private List<String> imageUris = new ArrayList<>();
 
     public NursingFacility updateEntity(
             NursingFacilityModifyReq req, List<String> finalImageUrls
@@ -135,9 +135,9 @@ public class NursingFacility extends BaseEntity {
         }
 
         // 사진
-        this.imageUrls.clear();
+        this.imageUris.clear();
         if (finalImageUrls != null) {
-            this.imageUrls.addAll(finalImageUrls);
+            this.imageUris.addAll(finalImageUrls);
         }
 
         return this;
