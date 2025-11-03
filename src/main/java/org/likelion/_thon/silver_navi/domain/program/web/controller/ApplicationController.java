@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
 import org.likelion._thon.silver_navi.domain.program.service.ApplicationService;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationStatusUpdateReq;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationUserInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
@@ -54,5 +55,18 @@ public class ApplicationController implements ApplicationApi {
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.from(applicationUserInfoRes));
 
+    }
+
+    @PatchMapping("/{applicationId}")
+    public ResponseEntity<SuccessResponse<?>> updateApplicationInfo(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long applicationId,
+            @RequestBody ApplicationStatusUpdateReq applicationStatusUpdateReq
+    ) {
+        applicationService.updateApplicationStatus(managerPrincipal, applicationId, applicationStatusUpdateReq);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.emptyCustom("신청 상태가 변경되었습니다."));
     }
 }
