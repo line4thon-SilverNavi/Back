@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.consult.service;
 
 import org.likelion._thon.silver_navi.domain.consult.entity.Consult;
 import org.likelion._thon.silver_navi.domain.consult.entity.GeneralConsult;
+import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
 import org.likelion._thon.silver_navi.domain.consult.repository.ConsultRepository;
 import org.likelion._thon.silver_navi.domain.consult.repository.GeneralConsultRepository;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultApplyReq;
@@ -58,10 +59,15 @@ public class ConsultServiceImpl implements ConsultService {
                 .toList();
 
         long total = combined.size();
-        long waiting = combined.stream().filter(c -> c.consultStatus().equals("대기중")).count();
-        long confirmed = combined.stream().filter(c -> c.consultStatus().equals("확인됨")).count();
-        long completed = combined.stream().filter(c -> c.consultStatus().equals("완료")).count();
-
+        long waiting = combined.stream()
+                .filter(c -> c.consultStatus().equals(ConsultStatus.WAITING.getValue()))
+                .count();
+        long confirmed = combined.stream()
+                .filter(c -> c.consultStatus().equals(ConsultStatus.CONFIRMED.getValue()))
+                .count();
+        long completed = combined.stream()
+                .filter(c -> c.consultStatus().equals(ConsultStatus.COMPLETED.getValue()))
+                .count();
         return new ConsultHistorySummaryRes(total, waiting, confirmed, completed, combined);
     }
 }
