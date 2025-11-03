@@ -6,8 +6,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum RelationRole {
+    SELF("self"),       // 본인
     PARENT("parent"),   // 부모
-    SPOUSE("spouse"),    // 배우자
+    SPOUSE("spouse"),   // 배우자
     CHILD("child"),     // 자녀
     SIBLING("sibling"); // 형제/자매
 
