@@ -78,6 +78,7 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<NearbyFacilityRes> findNearbyFacilities(User user) {
         double lat = user.getLatitude();
         double lng = user.getLongitude();
