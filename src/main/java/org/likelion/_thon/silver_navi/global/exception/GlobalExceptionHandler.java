@@ -1,5 +1,6 @@
 package org.likelion._thon.silver_navi.global.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.likelion._thon.silver_navi.global.response.ErrorResponse;
 import org.likelion._thon.silver_navi.global.response.code.ErrorResponseCode;
@@ -118,6 +119,37 @@ public class GlobalExceptionHandler {
         ErrorResponse<?> errorResponse = ErrorResponse.of(
                 ErrorResponseCode.INVALID_HTTP_MESSAGE_PARAMETER,
                 "요청이 multipart/form-data 형식이 아니거나 파일이 누락되었습니다."
+        );
+        return ResponseEntity.status(errorResponse.getHttpStatus()).body(errorResponse);
+    }
+
+    // RequestParam 누락 시 발생
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse<?>> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        log.error("MissingServletRequestParameterException : {}", e.getMessage(), e);
+        String parameterName = e.getParameterName();
+
+        ErrorResponse<?> errorResponse = ErrorResponse.of(
+                ErrorResponseCode.INVALID_HTTP_MESSAGE_PARAMETER,
+                String.format("필수 요청 파라미터 '%s'가 누락되었습니다.", parameterName)
+        );
+        return ResponseEntity.status(errorResponse.getHttpStatus()).body(errorResponse);
+    }
+
+    // RequestParam, PathVariable 등 검증(@Validated) 실패 시 발생
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse<?>> handleConstraintViolationException(ConstraintViolationException e) {
+        log.error("ConstraintViolationException : {}", e.getMessage(), e);
+
+        // 여러 위반 중 첫 번째 메시지 선택
+        String message = e.getConstraintViolations().stream()
+                .findFirst()
+                .map(v -> v.getMessage())
+                .orElse("유효하지 않은 요청 파라미터입니다.");
+
+        ErrorResponse<?> errorResponse = ErrorResponse.of(
+                ErrorResponseCode.INVALID_HTTP_MESSAGE_PARAMETER,
+                message
         );
         return ResponseEntity.status(errorResponse.getHttpStatus()).body(errorResponse);
     }
