@@ -67,7 +67,7 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
         // 파일 url
         List<String> finalImageUrls = updateImageFiles(
                 s3Service,
-                nursingFacility.getImageUris(),
+                nursingFacility.getImageUrls(),
                 nursingFacilityModifyReq.getExistingImageUrls(),
                 nursingFacilityModifyReq.getNewImages()
         );
