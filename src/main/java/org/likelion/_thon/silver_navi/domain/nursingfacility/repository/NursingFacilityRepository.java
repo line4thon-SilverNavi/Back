@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface NursingFacilityRepository extends JpaRepository<NursingFacility, Long> {
 
     Optional<NursingFacility> findByName(String name);
+    
+    List<NursingFacility> findByNameContaining(String name);
 
     @Query(value = """
         SELECT DISTINCT nf.*
