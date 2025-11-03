@@ -49,7 +49,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/programs").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/programs").hasRole("ADMIN")
                         // 프로그램 신청
-                        .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/applications").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                         .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
