@@ -2,14 +2,18 @@ package org.likelion._thon.silver_navi.domain.program.service;
 
 import lombok.RequiredArgsConstructor;
 
+import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.entity.ProgramApply;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
+import org.likelion._thon.silver_navi.domain.program.exception.ApplicationNotFoundException;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramApplyRepository;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes.ApplicationInfoRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes.ApplicationSummaryInfoRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes.PageInfo;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationUserInfoRes;
+import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,5 +58,13 @@ public class ApplicationServiceImpl implements ApplicationService {
                 infoPage.getContent(),
                 pageInfo
         );
+    }
+
+    @Override
+    public ApplicationUserInfoRes getApplicationInfo(ManagerPrincipal managerPrincipal, Long applicationId) {
+        ProgramApply programApply = programApplyRepository.findById(applicationId)
+                .orElseThrow(ApplicationNotFoundException::new);
+
+        return ApplicationUserInfoRes.from(programApply);
     }
 }

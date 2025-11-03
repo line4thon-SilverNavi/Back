@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationUserInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.data.domain.Pageable;
@@ -64,4 +65,87 @@ public interface ApplicationApi {
             ManagerPrincipal managerPrincipal, String statusStr, Pageable pageable
     );
 
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "신청자 상세 정보 조회 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "관계가 \"본인\"일 때",
+                                            value = """
+                                            {
+                                                 "isSuccess": true,
+                                                 "timestamp": "2025-11-03 16:26:13",
+                                                 "code": "GLOBAL_200",
+                                                 "httpStatus": 200,
+                                                 "message": "호출에 성공하였습니다.",
+                                                 "data": {
+                                                     "programName": "활기찬 아침 체조",
+                                                     "applicationDate": "2025-11-03T16:22:23.475421",
+                                                     "applicantName": "이본인",
+                                                     "applicantPhone": "01012345678",
+                                                     "careName": null,
+                                                     "carePhone": null,
+                                                     "age": 75,
+                                                     "careGrade": "3등급",
+                                                     "content": "a",
+                                                     "status": "대기중"
+                                                 }
+                                            }
+                                            """
+                                    ),
+                                    @ExampleObject(
+                                            name = "관계가 \"본인이 아닐\" 때",
+                                            value = """
+                                                    {
+                                                        "isSuccess": true,
+                                                        "timestamp": "2025-11-03 16:33:53",
+                                                        "code": "GLOBAL_200",
+                                                        "httpStatus": 200,
+                                                        "message": "호출에 성공하였습니다.",
+                                                        "data": {
+                                                            "programName": "활기찬 아침 체조",
+                                                            "applicationDate": "2025-11-03T16:32:17.985844",
+                                                            "applicantName": "이영희",
+                                                            "applicantPhone": "3024-123555",
+                                                            "careName": "누구누구",
+                                                            "carePhone": "01056781234",
+                                                            "age": 75,
+                                                            "careGrade": "3등급",
+                                                            "content": "a",
+                                                            "status": "대기중"
+                                                        }
+                                                    }
+                                            """
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "신청 존재 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                 "isSuccess": false,
+                                                 "timestamp": "2025-11-03 16:26:50",
+                                                 "code": "APPLICATION_404_1",
+                                                 "httpStatus": 404,
+                                                 "message": "해당 신청을 찾을 수 없습니다.",
+                                                 "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<ApplicationUserInfoRes>> getApplicationInfo(
+            ManagerPrincipal managerPrincipal, Long applicationId
+    );
 }

@@ -8,7 +8,8 @@ import org.likelion._thon.silver_navi.global.response.code.BaseResponseCode;
 @AllArgsConstructor
 public enum ApplicationErrorCode implements BaseResponseCode {
 
-    APPLICATION_STATUS_INVALID("APPLICATION_400_1", 400, "유효하지 않은 상태 값입니다.");
+    APPLICATION_STATUS_INVALID("APPLICATION_400_1", 400, "유효하지 않은 상태 값입니다."),
+    APPLICATION_NOT_FOUND("APPLICATION_404_1", 404, "해당 신청을 찾을 수 없습니다.");
 
     private final String code;
     private final int httpStatus;
