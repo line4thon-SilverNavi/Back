@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.consult.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.GeneralApplyReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
@@ -34,6 +35,10 @@ public class GeneralConsult extends BaseEntity {
     @Column(nullable = true)
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "consult_status")
+    private ConsultStatus consultStatus;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -48,6 +53,7 @@ public class GeneralConsult extends BaseEntity {
                 .phone(req.getPhone())
                 .email(req.getEmail())           // null 가능
                 .inquiryType(req.getInquiryType())
+                .consultStatus(ConsultStatus.WAITING)
                 .content(req.getContent())       // null 가능
                 .user(user)
                 .facility(facility)

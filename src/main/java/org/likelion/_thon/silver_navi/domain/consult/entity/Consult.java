@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.consult.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultTime;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultType;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultApplyReq;
@@ -45,6 +46,10 @@ public class Consult extends BaseEntity {
     @Column(nullable = false, name = "consult_type")
     private ConsultType consultType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "consult_status")
+    private ConsultStatus consultStatus;
+
     @Column(nullable = false)
     private String content;
 
@@ -64,6 +69,7 @@ public class Consult extends BaseEntity {
                 .hopeDate(req.getHopeDate())
                 .hopeTime(req.getHopeTime())
                 .consultType(req.getConsultType())
+                .consultStatus(ConsultStatus.WAITING)
                 .content(req.getContent())
                 .user(user)
                 .facility(facility)
