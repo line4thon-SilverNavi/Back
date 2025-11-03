@@ -38,4 +38,6 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
             @Param("minLng") double minLng,
             @Param("maxLng") double maxLng
     );
+    @Query("SELECT p.id FROM Program p WHERE p.nursingFacility.id = :facilityId")
+    List<Long> findIdsByNursingFacilityId(@Param("facilityId") Long facilityId);
 }
