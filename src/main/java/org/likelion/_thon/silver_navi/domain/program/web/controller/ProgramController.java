@@ -29,7 +29,7 @@ public class ProgramController implements ProgramApi {
     private final ProgramApplyService programApplyService;
 
     @Override
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping
     public ResponseEntity<SuccessResponse<?>> createProgram(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
             @ParameterObject @ModelAttribute @Valid ProgramCreateReq programCreateReq
@@ -97,6 +97,9 @@ public class ProgramController implements ProgramApi {
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.emptyCustom("프로그램이 성공적으로 삭제되었습니다."));
     }
+
+
+    // -------------------------------------------------- 사용자 API --------------------------------------------------
 
     // 프로그램 참여 신청
     @PostMapping("{programId}/apply")
