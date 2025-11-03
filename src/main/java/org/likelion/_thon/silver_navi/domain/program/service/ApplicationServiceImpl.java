@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.entity.ProgramApply;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
+import org.likelion._thon.silver_navi.domain.program.exception.ApplicationAccessDeniedException;
+import org.likelion._thon.silver_navi.domain.program.exception.ApplicationAlreadyProcessedException;
 import org.likelion._thon.silver_navi.domain.program.exception.ApplicationNotFoundException;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramApplyRepository;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
@@ -12,6 +14,7 @@ import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManageme
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes.ApplicationInfoRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes.ApplicationSummaryInfoRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes.PageInfo;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationStatusUpdateReq;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationUserInfoRes;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
@@ -61,10 +64,30 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApplicationUserInfoRes getApplicationInfo(ManagerPrincipal managerPrincipal, Long applicationId) {
         ProgramApply programApply = programApplyRepository.findById(applicationId)
                 .orElseThrow(ApplicationNotFoundException::new);
 
         return ApplicationUserInfoRes.from(programApply);
+    }
+
+    @Override
+    @Transactional
+    public void updateApplicationStatus(
+            ManagerPrincipal managerPrincipal, Long applicationId, ApplicationStatusUpdateReq applicationStatusUpdateReq
+    ) {
+        ProgramApply programApply = programApplyRepository.findById(applicationId)
+                .orElseThrow(ApplicationNotFoundException::new);
+
+        if (!programApply.getProgram().getNursingFacility().getId().equals(managerPrincipal.getFacilityId())) {
+            throw new ApplicationAccessDeniedException();
+        }
+
+        if (!programApply.getStatus().equals(ApplicationStatus.PENDING)) {
+            throw new ApplicationAlreadyProcessedException();
+        }
+
+        programApply.updateStatus(applicationStatusUpdateReq.getIsApproved(), applicationStatusUpdateReq.getReason());
     }
 }

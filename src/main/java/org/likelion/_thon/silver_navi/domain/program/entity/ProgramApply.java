@@ -3,8 +3,10 @@ package org.likelion._thon.silver_navi.domain.program.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
+import org.likelion._thon.silver_navi.domain.program.exception.ApplicationReasonRequiredException;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
+import org.springframework.util.StringUtils;
 
 @Entity
 @Getter
@@ -44,5 +46,18 @@ public class ProgramApply extends BaseEntity {
                 .status(ApplicationStatus.PENDING)
                 .content(finalContent)
                 .build();
+    }
+
+    public void updateStatus(Boolean isApproved, String reason) {
+        if (isApproved) {
+            this.status = ApplicationStatus.APPROVED;
+
+        } else {
+            if (!StringUtils.hasText(reason)) {
+                throw new ApplicationReasonRequiredException();
+            }
+            this.status = ApplicationStatus.REJECTED;
+            this.rejectReason = reason;
+        }
     }
 }

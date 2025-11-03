@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationStatusUpdateReq;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationUserInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
@@ -147,5 +148,91 @@ public interface ApplicationApi {
     })
     public ResponseEntity<SuccessResponse<ApplicationUserInfoRes>> getApplicationInfo(
             ManagerPrincipal managerPrincipal, Long applicationId
+    );
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "신청 상태 변경 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                 "isSuccess": true,
+                                                 "timestamp": "2025-11-03 20:17:04",
+                                                 "code": "GLOBAL_200",
+                                                 "httpStatus": 200,
+                                                 "message": "신청 상태가 변경되었습니다.",
+                                                 "data": null
+                                             }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "신청 거부했지만, 거부 사유 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                 "isSuccess": false,
+                                                 "timestamp": "2025-11-03 20:14:00",
+                                                 "code": "APPLICATION_400_2",
+                                                 "httpStatus": 400,
+                                                 "message": "거부 사유를 입력해주세요.",
+                                                 "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "신청 존재 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-03 20:15:01",
+                                                "code": "APPLICATION_404_1",
+                                                "httpStatus": 404,
+                                                "message": "해당 신청을 찾을 수 없습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "이미 처리된 신청",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-03 20:18:16",
+                                                "code": "APPLICATION_409_1",
+                                                "httpStatus": 409,
+                                                "message": "이미 처리된(승인 또는 거절된) 신청입니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<?>> updateApplicationInfo(
+            ManagerPrincipal managerPrincipal, Long applicationId, ApplicationStatusUpdateReq applicationStatusUpdateReq
     );
 }
