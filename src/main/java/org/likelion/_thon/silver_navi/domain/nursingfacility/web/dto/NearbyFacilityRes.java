@@ -14,19 +14,21 @@ public record NearbyFacilityRes(
         long reviewCount,
         String operatingHours,
         String phoneNumber,
-        FacilityCategory category
+        FacilityCategory category,
+        boolean bookmarked
 ) {
-    public static NearbyFacilityRes of(NursingFacility facility, double distanceKm) {
+    public static NearbyFacilityRes of(NursingFacility facility, double distanceKm, boolean bookmarked) {
         return new NearbyFacilityRes(
                 facility.getId(),
                 facility.getName(),
-                facility.getImageUrls().isEmpty() ? null : facility.getImageUrls().get(0),
+                facility.getImageUrls().isEmpty() ? null : facility.getImageUrls().getFirst(),
                 Math.round(distanceKm * 10) / 10.0,
                 facility.getAverageRating(),
                 facility.getReviewCount(),
                 facility.getOperatingHours(),
                 facility.getFacilityNumber(),
-                facility.getCategory()
+                facility.getCategory(),
+                bookmarked
         );
     }
 }

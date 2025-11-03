@@ -12,7 +12,14 @@ import org.likelion._thon.silver_navi.domain.user.entity.User;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "program_bookmark")
+@Table(
+        name = "program_bookmark",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = {"user_id", "program_id"}
+                )
+        }
+)
 public class ProgramBookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

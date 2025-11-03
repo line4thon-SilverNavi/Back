@@ -14,6 +14,8 @@ import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes.Page
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.s3.S3Service;
+import org.likelion._thon.silver_navi.global.util.geo.BoundingBox;
+import org.likelion._thon.silver_navi.global.util.geo.GeoUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.likelion._thon.silver_navi.global.util.s3.UpdateImagesUtils.updateImageFiles;
 
@@ -181,5 +183,38 @@ public class ProgramServiceImpl implements ProgramService {
         boolean bookmarked = programBookmarkRepository.existsByUser_IdAndProgram_Id(user.getId(), program.getId());
 
         return UserByProgramInfoRes.from(program, bookmarked);
+    }
+
+    @Override
+    public List<UserByProgramListRes> findPrograms(User user) {
+        double userLat = user.getLatitude();
+        double userLng = user.getLongitude();
+        double radius = user.getSearchRadius(); // km 단위
+
+        // Bounding Box 계산
+        BoundingBox bbox = GeoUtils.calculateBoundingBox(userLat, userLng, radius);
+
+        // 반경 내 시설에 속한 프로그램 조회
+        List<Program> programs = programRepository.findNearbyPrograms(
+                userLat, userLng, radius,
+                bbox.minLat(), bbox.maxLat(),
+                bbox.minLng(), bbox.maxLng()
+        );
+
+        // 사용자 북마크 조회
+        Set<Long> bookmarkedProgramIds = programBookmarkRepository.findAllByUser(user)
+                .stream()
+                .map(bookmark -> bookmark.getProgram().getId())
+                .collect(Collectors.toSet());
+
+        return programs.stream()
+                .map(program -> {
+                    boolean bookmarked = bookmarkedProgramIds.contains(program.getId());
+                    String thumbnail = program.getImageUrls().isEmpty()
+                            ? null
+                            : program.getImageUrls().getFirst();
+                    return UserByProgramListRes.from(program, thumbnail, bookmarked);
+                })
+                .toList();
     }
 }

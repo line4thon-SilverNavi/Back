@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.likelion._thon.silver_navi.global.util.s3.UpdateImagesUtils.updateImageFiles;
 
@@ -76,6 +78,7 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<NearbyFacilityRes> findNearbyFacilities(User user) {
         double lat = user.getLatitude();
         double lng = user.getLongitude();
@@ -91,7 +94,13 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
                 bbox.minLng(), bbox.maxLng()
         );
 
-        // 각 시설별 리뷰 통계 및 거리 계산
+        // 사용자 북마크된 시설 목록 미리 조회
+        Set<Long> bookmarkedFacilityIds = facilityBookmarkRepository.findAllByUser(user)
+                .stream()
+                .map(bookmark -> bookmark.getFacility().getId())
+                .collect(Collectors.toSet());
+
+        // 각 시설별 거리 + 북마크 여부 매핑
         return facilities.stream()
                 .map(facility -> {
                     double distanceKm = GeoUtils.calculateDistance(
@@ -99,9 +108,8 @@ public class NursingFacilityServiceImpl implements NursingFacilityService {
                             facility.getLatitude(), facility.getLongitude()
                     );
 
-                    return NearbyFacilityRes.of(
-                            facility,
-                            distanceKm);
+                    boolean bookmarked = bookmarkedFacilityIds.contains(facility.getId());
+                    return NearbyFacilityRes.of(facility, distanceKm, bookmarked);
                 })
                 .sorted(Comparator.comparingDouble(NearbyFacilityRes::distanceKm))
                 .toList();
