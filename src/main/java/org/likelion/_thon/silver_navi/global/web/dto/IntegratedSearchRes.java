@@ -1,15 +1,15 @@
-package org.likelion._thon.silver_navi.domain.search.web.dto;
+package org.likelion._thon.silver_navi.global.web.dto;
 
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
 import org.likelion._thon.silver_navi.domain.program.web.dto.UserByProgramListRes;
 
 import java.util.List;
 
-public record SearchResultRes(
+public record IntegratedSearchRes(
         List<UserByProgramListRes> programs,
         List<NearbyFacilityRes> facilities
 ) {
-    public static SearchResultRes of(List<UserByProgramListRes> programs, List<NearbyFacilityRes> facilities) {
-        return new SearchResultRes(programs, facilities);
+    public static IntegratedSearchRes of(List<UserByProgramListRes> programs, List<NearbyFacilityRes> facilities) {
+        return new IntegratedSearchRes(programs, facilities);
     }
 }
