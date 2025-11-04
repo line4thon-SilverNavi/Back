@@ -3,6 +3,7 @@ package org.likelion._thon.silver_navi.domain.program.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
+import org.likelion._thon.silver_navi.domain.program.entity.enums.AttendanceStatus;
 import org.likelion._thon.silver_navi.domain.program.exception.ApplicationReasonRequiredException;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
@@ -37,6 +38,10 @@ public class ProgramApply extends BaseEntity {
     @Column(nullable = true)
     private String rejectReason;            //거부 사유
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private AttendanceStatus attendanceStatus; // 출결 상태
+
     public static ProgramApply create(User user, Program program, String content) {
         String finalContent = content != null && !content.trim().isEmpty() ? content.trim() : null;
 
@@ -51,6 +56,7 @@ public class ProgramApply extends BaseEntity {
     public void updateStatus(Boolean isApproved, String reason) {
         if (isApproved) {
             this.status = ApplicationStatus.APPROVED;
+            this.attendanceStatus = AttendanceStatus.ABSENT;
 
         } else {
             if (!StringUtils.hasText(reason)) {
@@ -58,6 +64,7 @@ public class ProgramApply extends BaseEntity {
             }
             this.status = ApplicationStatus.REJECTED;
             this.rejectReason = reason;
+            this.attendanceStatus = null;
         }
     }
 }
