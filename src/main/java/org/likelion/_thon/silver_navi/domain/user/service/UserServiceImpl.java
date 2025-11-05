@@ -108,4 +108,13 @@ public class UserServiceImpl implements UserService {
 
         targetUser.updateRadius(req.getSearchRadius());
     }
+
+    //사용자 위치 수정
+    @Override
+    @Transactional
+    public void updateLocation(User user, LocationUpdateReq req) {
+        User targetUser = userRepository.findById(user.getId())
+                .orElseThrow();
+        targetUser.updateLocation(req);
+    }
 }
