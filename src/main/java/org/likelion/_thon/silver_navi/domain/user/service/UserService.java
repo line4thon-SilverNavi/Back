@@ -18,4 +18,6 @@ public interface UserService {
     void updateRadius(User user, RadiusUpdateReq req);
 
     void updateLocation(User user, LocationUpdateReq req);
+
+    UserMypageInfoRes userMypageInfo(User user);
 }

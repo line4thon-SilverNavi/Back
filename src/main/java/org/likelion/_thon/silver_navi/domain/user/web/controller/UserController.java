@@ -81,4 +81,13 @@ public class UserController implements UserApi {
         userService.updateLocation(userDetails.getUser(), req);
         return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(null));
     }
+
+    //사용자 마이페이지 정보 반환
+    @GetMapping("/mypage")
+    public ResponseEntity<SuccessResponse<UserMypageInfoRes>> userMypageInfo(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ){
+        UserMypageInfoRes res = userService.userMypageInfo(userDetails.getUser());
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
+    }
 }

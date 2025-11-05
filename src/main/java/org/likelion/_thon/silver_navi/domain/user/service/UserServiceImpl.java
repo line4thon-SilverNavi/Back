@@ -117,4 +117,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow();
         targetUser.updateLocation(req);
     }
+
+    @Override
+    public UserMypageInfoRes userMypageInfo(User user) {
+        User found = userRepository.findById(user.getId())
+                .orElseThrow(UserNotFoundException::new);
+        return UserMypageInfoRes.from(found);
+    }
 }
