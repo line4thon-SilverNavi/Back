@@ -4,19 +4,20 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.bookmark.service.FacilityBookmarkService;
 import org.likelion._thon.silver_navi.domain.bookmark.service.ProgramBookmarkService;
+import org.likelion._thon.silver_navi.domain.bookmark.web.dto.BookmarkSummaryRes;
 import org.likelion._thon.silver_navi.domain.bookmark.web.dto.BookmarkToggleReq;
 import org.likelion._thon.silver_navi.domain.bookmark.web.dto.BookmarkToggleRes;
-import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
-import org.likelion._thon.silver_navi.domain.user.web.dto.SignUpReq;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.UserByProgramListRes;
 import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
+import org.likelion._thon.silver_navi.global.web.dto.IntegratedSearchRes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bookmarks")
@@ -37,5 +38,17 @@ public class BookmarkController {
 
         BookmarkToggleRes res = new BookmarkToggleRes(isOn ? "on" : "off");
         return ResponseEntity.status(HttpStatus.CREATED).body(SuccessResponse.created(res));
+    }
+
+    @GetMapping
+    public ResponseEntity<SuccessResponse<BookmarkSummaryRes>> getBookmark(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ){
+        List<UserByProgramListRes> programList = programBookmarkService.getBookmarks(userDetails.getUser());
+        List<NearbyFacilityRes> facilityList = facilityBookmarkService.getBookmarks(userDetails.getUser());
+
+        BookmarkSummaryRes res = BookmarkSummaryRes.of(programList, facilityList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
     }
 }

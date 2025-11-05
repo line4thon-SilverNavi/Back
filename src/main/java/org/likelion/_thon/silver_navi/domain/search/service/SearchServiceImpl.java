@@ -9,7 +9,7 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacil
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
 import org.likelion._thon.silver_navi.domain.program.web.dto.UserByProgramListRes;
-import org.likelion._thon.silver_navi.domain.search.web.dto.SearchResultRes;
+import org.likelion._thon.silver_navi.global.web.dto.IntegratedSearchRes;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.util.geo.GeoUtils;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class SearchServiceImpl implements SearchService {
     private final ProgramBookmarkRepository programBookmarkRepository;
 
     @Override
-    public SearchResultRes search(String keyword, User user) {
+    public IntegratedSearchRes search(String keyword, User user) {
         // 프로그램 검색
         List<Program> programs = programRepository.findByNameContaining(keyword);
         List<UserByProgramListRes> programResList = programs.stream()
@@ -57,6 +57,6 @@ public class SearchServiceImpl implements SearchService {
                 })
                 .toList();
 
-        return SearchResultRes.of(programResList, facilityResList);
+        return IntegratedSearchRes.of(programResList, facilityResList);
     }
 }
