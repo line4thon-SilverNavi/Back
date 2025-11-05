@@ -2,7 +2,6 @@ package org.likelion._thon.silver_navi.domain.program.service;
 
 import lombok.RequiredArgsConstructor;
 
-import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.entity.ProgramApply;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
 import org.likelion._thon.silver_navi.domain.program.exception.ApplicationAccessDeniedException;
@@ -16,7 +15,6 @@ import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManageme
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes.PageInfo;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationStatusUpdateReq;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationUserInfoRes;
-import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
