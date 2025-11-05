@@ -7,6 +7,7 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfa
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
+import org.likelion._thon.silver_navi.domain.program.exception.ProgramAccessDeniedException;
 import org.likelion._thon.silver_navi.domain.program.exception.ProgramNotFoundException;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
 import org.likelion._thon.silver_navi.domain.program.web.dto.*;
@@ -170,7 +171,7 @@ public class ProgramServiceImpl implements ProgramService {
                 .orElseThrow(ProgramNotFoundException::new);
 
         if (!program.getNursingFacility().getId().equals(nursingFacility.getId())) {
-            throw new ProgramNotFoundException();
+            throw new ProgramAccessDeniedException();
         }
 
         programRepository.delete(program);
