@@ -318,5 +318,31 @@ public interface ProgramApi {
             ManagerPrincipal managerPrincipal, Long programId
     );
 
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "출결 상태 변경 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "timestamp": "2025-11-01 13:46:06",
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
+                                                "message": "출결이 성공적으로 변경되었습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<?>> updateAttendanceStatus(
+            ManagerPrincipal managerPrincipal, Long programId, AttendanceUpdateReq attendanceUpdateReq
+    );
+
     // -------------------------------------------------- 사용자 API --------------------------------------------------
 }

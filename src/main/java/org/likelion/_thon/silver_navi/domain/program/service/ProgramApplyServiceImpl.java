@@ -9,10 +9,7 @@ import org.likelion._thon.silver_navi.domain.program.exception.ProgramAlreadyApp
 import org.likelion._thon.silver_navi.domain.program.exception.ProgramNotFoundException;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramApplyRepository;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramApplicantsRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramApplicationInfoRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramApplicationSummaryRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramApplyReq;
+import org.likelion._thon.silver_navi.domain.program.web.dto.*;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.stereotype.Service;
@@ -67,5 +64,22 @@ public class ProgramApplyServiceImpl implements ProgramApplyService {
                 summary,
                 applicantList
         );
+    }
+
+    @Override
+    @Transactional
+    public void updateAttendanceStatus(
+            ManagerPrincipal managerPrincipal, Long programId, AttendanceUpdateReq attendanceUpdateReq
+    ) {
+        Program program = programRepository.findById(programId)
+                .orElseThrow(ProgramNotFoundException::new);
+
+        if (!program.getNursingFacility().getId().equals(managerPrincipal.getFacilityId())) {
+            throw new ProgramAccessDeniedException();
+        }
+
+        List<ProgramApply> applies = programApplyRepository.findByIdIn(attendanceUpdateReq.getApplicantIds());
+
+        applies.forEach(ProgramApply::updateAttendanceStatus);
     }
 }

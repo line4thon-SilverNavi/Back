@@ -67,4 +67,12 @@ public class ProgramApply extends BaseEntity {
             this.attendanceStatus = null;
         }
     }
+
+    public void updateAttendanceStatus() {
+        if (this.attendanceStatus.equals(AttendanceStatus.ABSENT)){
+            this.attendanceStatus = AttendanceStatus.ATTENDANCE;
+        } else if (this.attendanceStatus.equals(AttendanceStatus.ATTENDANCE)){
+            this.attendanceStatus = AttendanceStatus.ABSENT;
+        }
+    }
 }
