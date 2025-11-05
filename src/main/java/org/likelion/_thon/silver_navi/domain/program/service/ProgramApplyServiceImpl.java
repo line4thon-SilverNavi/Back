@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.entity.ProgramApply;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
-import org.likelion._thon.silver_navi.domain.program.exception.ProgramAccessDeniedException;
-import org.likelion._thon.silver_navi.domain.program.exception.ProgramAlreadyAppliedException;
-import org.likelion._thon.silver_navi.domain.program.exception.ProgramNotFoundException;
+import org.likelion._thon.silver_navi.domain.program.exception.*;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramApplyRepository;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
 import org.likelion._thon.silver_navi.domain.program.web.dto.*;
@@ -78,7 +76,19 @@ public class ProgramApplyServiceImpl implements ProgramApplyService {
             throw new ProgramAccessDeniedException();
         }
 
-        List<ProgramApply> applies = programApplyRepository.findByIdIn(attendanceUpdateReq.getApplicantIds());
+        List<ProgramApply> applies = programApplyRepository.findByIdIn(attendanceUpdateReq.getApplicantIds())
+                .stream()
+                .filter(apply -> ApplicationStatus.APPROVED.equals(apply.getStatus()))
+                .toList();
+        if (applies.size() != attendanceUpdateReq.getApplicantIds().size()) {
+            throw new ProgramApplicantNotFoundException();
+        }
+
+        for (ProgramApply apply : applies) {
+            if (!apply.getProgram().getId().equals(programId)) {
+                throw new ProgramApplicantInvalidException();
+            }
+        }
 
         applies.forEach(ProgramApply::updateAttendanceStatus);
     }
