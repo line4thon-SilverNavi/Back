@@ -1,12 +1,13 @@
 package org.likelion._thon.silver_navi.domain.program.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.bookmark.web.dto.BookmarkSummaryRes;
+import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
 import org.likelion._thon.silver_navi.domain.program.service.ApplicationService;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationStatusUpdateReq;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationUserInfoRes;
+import org.likelion._thon.silver_navi.domain.program.web.dto.*;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
+import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -68,5 +71,14 @@ public class ApplicationController implements ApplicationApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.emptyCustom("신청 상태가 변경되었습니다."));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<SuccessResponse<ApplicationSummaryRes>> getUserByApplications(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ){
+        ApplicationSummaryRes res = applicationService.getUserByApplications(userDetails.getUser());
+
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
     }
 }

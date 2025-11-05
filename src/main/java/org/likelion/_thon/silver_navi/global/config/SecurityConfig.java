@@ -40,6 +40,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/code/create").permitAll()
 
                         // ---------- 여기는 권한이 필요한 곳  ----------
+                        // --- USER ---
+                        .requestMatchers(HttpMethod.GET, "/api/applications/list").hasRole("USER")
+
+                        // --- ADMIN ---
                         // 시설
                         .requestMatchers(HttpMethod.GET, "/api/facilities").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/facilities").hasRole("ADMIN")
@@ -52,8 +56,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/programs/{programId}/applications").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/programs/{programId}/applications").hasRole("ADMIN")
                         // 프로그램 신청
-                        .requestMatchers(HttpMethod.GET, "/api/applications").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/applications/{applications}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/applications/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/applications/{applications}").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

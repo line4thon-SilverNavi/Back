@@ -17,6 +17,8 @@ import java.util.List;
 @Repository
 public interface ProgramApplyRepository extends JpaRepository<ProgramApply, Long> {
     boolean existsByUserAndProgram(User user, Program program);
+    
+    List<ProgramApply> findByUser(User user);
 
     // 이번 달 상태별 신청 건수
     long countByProgramIdInAndStatusAndCreatedAtBetween(
