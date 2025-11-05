@@ -17,6 +17,7 @@ import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManageme
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes.PageInfo;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationStatusUpdateReq;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationUserInfoRes;
+import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
