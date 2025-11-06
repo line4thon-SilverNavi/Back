@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramCreateReq;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramDetailInfoRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes;
-import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramModifyReq;
+import org.likelion._thon.silver_navi.domain.program.web.dto.*;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.data.domain.Pageable;
@@ -276,6 +273,75 @@ public interface ProgramApi {
     })
     public ResponseEntity<SuccessResponse<?>> deleteProgram(
             ManagerPrincipal managerPrincipal, Long programId
+    );
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "프로그램 신청 요약 정보 및 신청자 리스트 조회 성공(신청 승인된 사람들만)",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "timestamp": "2025-11-05 13:09:55",
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
+                                                "message": "호출에 성공하였습니다.",
+                                                "data": {
+                                                    "summary": {
+                                                        "totalApplicants": 1,
+                                                        "attendanceCount": 0,
+                                                        "attendanceRate": 0.0
+                                                    },
+                                                    "applicants": [
+                                                        {
+                                                            "applicantId": 1,
+                                                            "name": "김보호",
+                                                            "gender": "male",
+                                                            "age": 60,
+                                                            "careName": null,
+                                                            "phone": "01011112222",
+                                                            "attendanceStatus": "결석"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<ProgramApplicationInfoRes>> getProgramApplicants(
+            ManagerPrincipal managerPrincipal, Long programId
+    );
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "출결 상태 변경 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "timestamp": "2025-11-01 13:46:06",
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
+                                                "message": "출결이 성공적으로 변경되었습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<?>> updateAttendanceStatus(
+            ManagerPrincipal managerPrincipal, Long programId, AttendanceUpdateReq attendanceUpdateReq
     );
 
     // -------------------------------------------------- 사용자 API --------------------------------------------------

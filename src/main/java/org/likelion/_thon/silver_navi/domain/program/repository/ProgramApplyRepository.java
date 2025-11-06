@@ -45,4 +45,7 @@ public interface ProgramApplyRepository extends JpaRepository<ProgramApply, Long
             @Param("programIds") List<Long> programIds,
             @Param("status") ApplicationStatus status,
             Pageable pageable);
+
+    // 출결 상태 변경 신청자들 찾기
+    List<ProgramApply> findByIdIn(List<Long> ids);
 }

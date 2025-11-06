@@ -50,8 +50,11 @@ public class SecurityConfig {
                         // 프로그램
                         .requestMatchers(HttpMethod.POST, "/api/programs").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/programs").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/programs").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/programs").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/programs/{programId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/programs/{programId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/programs/{programId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/programs/{programId}/applications").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/programs/{programId}/applications").hasRole("ADMIN")
                         // 프로그램 신청
                         .requestMatchers(HttpMethod.GET, "/api/applications/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/applications/{applications}").hasRole("ADMIN")

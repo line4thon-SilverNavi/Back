@@ -101,6 +101,32 @@ public class ProgramController implements ProgramApi {
                 .body(SuccessResponse.emptyCustom("프로그램이 성공적으로 삭제되었습니다."));
     }
 
+    @Override
+    @GetMapping("/{programId}/applications")
+    public ResponseEntity<SuccessResponse<ProgramApplicationInfoRes>> getProgramApplicants(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long programId
+    ) {
+        ProgramApplicationInfoRes res = programApplyService.getProgramApplicants(managerPrincipal, programId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.from(res));
+    }
+
+    @PatchMapping("/{programId}/applications")
+    public ResponseEntity<SuccessResponse<?>> updateAttendanceStatus(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long programId,
+            @RequestBody AttendanceUpdateReq attendanceUpdateReq
+    ) {
+        programApplyService.updateAttendanceStatus(managerPrincipal, programId, attendanceUpdateReq);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.emptyCustom("출결이 성공적으로 변경되었습니다."));
+    }
+
 
     // -------------------------------------------------- 사용자 API --------------------------------------------------
 
