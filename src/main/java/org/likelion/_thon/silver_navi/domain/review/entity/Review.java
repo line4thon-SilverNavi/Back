@@ -3,6 +3,7 @@ package org.likelion._thon.silver_navi.domain.review.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
+import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewCreateReq;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
@@ -35,12 +36,12 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "facility_id")
     private NursingFacility nursingFacility;
 
-    public static Review create(User user, NursingFacility facility, BigDecimal rating, String content) {
+    public static Review create(User user, NursingFacility facility, ReviewCreateReq req) {
         return Review.builder()
                 .user(user)
                 .nursingFacility(facility)
-                .rating(rating)
-                .content(content)
+                .rating(req.getRating())
+                .content(req.getContent())
                 .build();
     }
 }
