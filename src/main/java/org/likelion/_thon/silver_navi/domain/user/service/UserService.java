@@ -1,5 +1,6 @@
 package org.likelion._thon.silver_navi.domain.user.service;
 
+import jakarta.validation.Valid;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.domain.user.web.dto.*;
 
@@ -15,4 +16,8 @@ public interface UserService {
      UserInfoRes userInfo(User user);
 
     void updateRadius(User user, RadiusUpdateReq req);
+
+    void updateLocation(User user, LocationUpdateReq req);
+
+    UserMypageInfoRes userMypageInfo(User user);
 }

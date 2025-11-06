@@ -1,6 +1,8 @@
 package org.likelion._thon.silver_navi.domain.program.service;
 
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.caretarget.entity.CareTarget;
+import org.likelion._thon.silver_navi.domain.caretarget.exception.InvalidCareTargetException;
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.entity.ProgramApply;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
@@ -15,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +35,16 @@ public class ProgramApplyServiceImpl implements ProgramApplyService {
         //중복 신청 확인
         if (programApplyRepository.existsByUserAndProgram(user, program)) {
             throw new ProgramAlreadyAppliedException();
+        }
+
+        //돌봄 대상자 정보 확인
+        CareTarget careTarget = Optional.ofNullable(user.getCareTarget())
+                .orElseThrow(InvalidCareTargetException::new);
+
+        if (careTarget.getBirthDate() == null ||
+                careTarget.getGender() == null ||
+                careTarget.getCareGrade() == null) {
+            throw new InvalidCareTargetException();
         }
 
         ProgramApply apply = ProgramApply.create(user, program, req.getContent());

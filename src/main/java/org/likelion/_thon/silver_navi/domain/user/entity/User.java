@@ -10,6 +10,7 @@ import org.likelion._thon.silver_navi.domain.consult.entity.GeneralConsult;
 import org.likelion._thon.silver_navi.domain.program.entity.ProgramApply;
 import org.likelion._thon.silver_navi.domain.review.entity.Review;
 import org.likelion._thon.silver_navi.domain.user.entity.enums.RelationRole;
+import org.likelion._thon.silver_navi.domain.user.web.dto.LocationUpdateReq;
 import org.likelion._thon.silver_navi.domain.user.web.dto.UserUpdateReq;
 import org.likelion._thon.silver_navi.global.auth.UserRole;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
@@ -99,5 +100,10 @@ public class User extends BaseEntity {
 
     public void updateRadius(Integer searchRadius) {
         this.searchRadius = searchRadius;
+    }
+
+    public void updateLocation(LocationUpdateReq req) {
+        this.latitude = req.getLatitude();
+        this.longitude = req.getLongitude();
     }
 }
