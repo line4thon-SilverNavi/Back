@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "http://localhost:5173", "http://localhost:5173/", // 프론트엔드 개발 서버 주소
                         "https://silvernavi.netlify.app" // 프론트엔드 배포 서버 주소
                 )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                 .allowCredentials(true);
     }
 
