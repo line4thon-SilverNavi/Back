@@ -42,6 +42,7 @@ public class SecurityConfig {
                         // ---------- 여기는 권한이 필요한 곳  ----------
                         // --- USER ---
                         .requestMatchers(HttpMethod.GET, "/api/applications/list").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/programs/list").hasRole("USER")
 
                         // --- ADMIN ---
                         // 시설
