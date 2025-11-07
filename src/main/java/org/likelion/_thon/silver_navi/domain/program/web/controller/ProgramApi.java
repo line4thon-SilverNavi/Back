@@ -140,6 +140,26 @@ public interface ProgramApi {
                     )
             ),
             @ApiResponse(
+                    responseCode = "403",
+                    description = "소속된 시설의 프로그램 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-07 19:41:28",
+                                                "code": "PROGRAM_403_1",
+                                                "httpStatus": 403,
+                                                "message": "소속된 시설의 프로그램만 조작할 수 있습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "404",
                     description = "프로그램 존재 X",
                     content = @Content(
@@ -205,6 +225,26 @@ public interface ProgramApi {
                     )
             ),
             @ApiResponse(
+                    responseCode = "403",
+                    description = "소속된 시설의 프로그램 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-07 19:41:28",
+                                                "code": "PROGRAM_403_1",
+                                                "httpStatus": 403,
+                                                "message": "소속된 시설의 프로그램만 조작할 수 있습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "404",
                     description = "프로그램 존재 X",
                     content = @Content(
@@ -244,6 +284,26 @@ public interface ProgramApi {
                                                 "code": "GLOBAL_200",
                                                 "httpStatus": 200,
                                                 "message": "프로그램이 성공적으로 삭제되었습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "소속된 시설의 프로그램 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-07 19:41:28",
+                                                "code": "PROGRAM_403_1",
+                                                "httpStatus": 403,
+                                                "message": "소속된 시설의 프로그램만 조작할 수 있습니다.",
                                                 "data": null
                                             }
                                             """
