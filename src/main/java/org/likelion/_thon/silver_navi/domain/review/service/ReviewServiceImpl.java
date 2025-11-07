@@ -5,7 +5,9 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacil
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
 import org.likelion._thon.silver_navi.domain.review.entity.Review;
+import org.likelion._thon.silver_navi.domain.review.exception.ReviewAccessDeniedException;
 import org.likelion._thon.silver_navi.domain.review.exception.ReviewAlreadyExistsException;
+import org.likelion._thon.silver_navi.domain.review.exception.ReviewNotFoundException;
 import org.likelion._thon.silver_navi.domain.review.repository.ReviewRepository;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewCreateReq;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewInfoRes;
@@ -81,5 +83,17 @@ public class ReviewServiceImpl implements ReviewService {
                 reviewInfoPage.getContent(),
                 pageInfo
         );
+    }
+
+    @Override
+    public ReviewInfoRes getReview(ManagerPrincipal managerPrincipal, Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(ReviewNotFoundException::new);
+
+        if (!review.getNursingFacility().getId().equals(managerPrincipal.getFacilityId())) {
+            throw new ReviewAccessDeniedException();
+        }
+
+        return ReviewInfoRes.from(review);
     }
 }

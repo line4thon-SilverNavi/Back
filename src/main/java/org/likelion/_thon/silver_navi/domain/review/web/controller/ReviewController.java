@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.review.service.ReviewService;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewCreateReq;
+import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewInfoRes;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewPageRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
@@ -48,5 +49,19 @@ public class ReviewController implements ReviewApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.from(reviewPageRes));
+    }
+
+    @Override
+    @GetMapping("/{reviewId}")
+    public ResponseEntity<SuccessResponse<ReviewInfoRes>> getReview(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long reviewId
+    ) {
+
+        ReviewInfoRes reviewInfoRes = reviewService.getReview(managerPrincipal, reviewId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.from(reviewInfoRes));
     }
 }
