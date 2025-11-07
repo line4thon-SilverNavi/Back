@@ -36,6 +36,9 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "facility_id")
     private NursingFacility nursingFacility;
 
+    @OneToOne(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
+    private ReviewReply reply;
+
     public static Review create(User user, NursingFacility facility, ReviewCreateReq req) {
         return Review.builder()
                 .user(user)
@@ -43,5 +46,14 @@ public class Review extends BaseEntity {
                 .rating(req.getRating())
                 .content(req.getContent())
                 .build();
+    }
+
+    // 연관관계 편의 메서드
+    public void setReply(ReviewReply reply) {
+        this.reply = reply;
+
+        if (reply != null) {
+            reply.setReview(this);
+        }
     }
 }

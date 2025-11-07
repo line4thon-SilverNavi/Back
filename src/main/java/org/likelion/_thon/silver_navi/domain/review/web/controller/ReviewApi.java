@@ -8,10 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewInfoRes;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewPageRes;
+import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewReplyCreateReq;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Tag(name = "리뷰 API", description = "리뷰 관련 API")
 public interface ReviewApi {
@@ -208,5 +210,91 @@ public interface ReviewApi {
     })
     public ResponseEntity<SuccessResponse<?>> deleteReview(
             ManagerPrincipal managerPrincipal, Long reviewId
+    );
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "리뷰 답변 생성 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "timestamp": "2025-11-07 22:21:52",
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
+                                                "message": "리뷰 답변이 성공적으로 추가되었습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "소속된 시설의 리뷰 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-07 19:41:28",
+                                                "code": "REVIEW_403_1",
+                                                "httpStatus": 403,
+                                                "message": "소속된 시설의 리뷰만 조작할 수 있습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "리뷰 존재 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                 "isSuccess": false,
+                                                 "timestamp": "2025-11-07 19:37:29",
+                                                 "code": "REVIEW_404_1",
+                                                 "httpStatus": 404,
+                                                 "message": "해당 리뷰를 찾을 수 없습니다.",
+                                                 "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "리뷰 답변은 1번만!",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-07 22:19:13",
+                                                "code": "REVIEW_409_2",
+                                                "httpStatus": 409,
+                                                "message": "이미 해당 리뷰에 답변을 작성하였습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<?>> createReviewReply(
+            ManagerPrincipal managerPrincipal, Long reviewId, ReviewReplyCreateReq reviewReplyCreateReq
     );
 }

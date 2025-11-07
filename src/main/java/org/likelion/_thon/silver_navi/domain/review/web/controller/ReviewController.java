@@ -6,6 +6,7 @@ import org.likelion._thon.silver_navi.domain.review.service.ReviewService;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewCreateReq;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewInfoRes;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewPageRes;
+import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewReplyCreateReq;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
@@ -65,6 +66,7 @@ public class ReviewController implements ReviewApi {
                 .body(SuccessResponse.from(reviewInfoRes));
     }
 
+    @Override
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<SuccessResponse<?>> deleteReview(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
@@ -75,5 +77,18 @@ public class ReviewController implements ReviewApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.emptyCustom("리뷰가 성공적으로 삭제되었습니다."));
+    }
+
+    @PostMapping("/{reviewId}/reply")
+    public ResponseEntity<SuccessResponse<?>> createReviewReply(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long reviewId,
+            @RequestBody @Valid ReviewReplyCreateReq reviewReplyCreateReq
+    ) {
+        reviewService.createReviewReply(managerPrincipal, reviewId, reviewReplyCreateReq);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.emptyCustom("리뷰 답변이 성공적으로 추가되었습니다."));
     }
 }

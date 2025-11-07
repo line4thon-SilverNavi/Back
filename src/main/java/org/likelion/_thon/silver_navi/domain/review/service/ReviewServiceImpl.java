@@ -5,15 +5,14 @@ import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacil
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
 import org.likelion._thon.silver_navi.domain.review.entity.Review;
+import org.likelion._thon.silver_navi.domain.review.entity.ReviewReply;
 import org.likelion._thon.silver_navi.domain.review.exception.ReviewAccessDeniedException;
 import org.likelion._thon.silver_navi.domain.review.exception.ReviewAlreadyExistsException;
 import org.likelion._thon.silver_navi.domain.review.exception.ReviewNotFoundException;
+import org.likelion._thon.silver_navi.domain.review.exception.ReviewReplyAlreadyExistsException;
 import org.likelion._thon.silver_navi.domain.review.repository.ReviewRepository;
-import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewCreateReq;
-import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewInfoRes;
-import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewPageRes;
+import org.likelion._thon.silver_navi.domain.review.web.dto.*;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewPageRes.PageInfo;
-import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewSummaryRes;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.data.domain.Page;
@@ -108,5 +107,26 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         reviewRepository.delete(review);
+    }
+
+    @Override
+    @Transactional
+    public void createReviewReply(
+            ManagerPrincipal managerPrincipal, Long reviewId, ReviewReplyCreateReq reviewReplyCreateReq
+    ) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(ReviewNotFoundException::new);
+
+        if (!review.getNursingFacility().getId().equals(managerPrincipal.getFacilityId())) {
+            throw new ReviewAccessDeniedException();
+        }
+
+        if (review.getReply() != null) {
+            throw new ReviewReplyAlreadyExistsException();
+        }
+
+        ReviewReply newReply = ReviewReply.create(reviewReplyCreateReq.getContent());
+
+        review.setReply(newReply);
     }
 }
