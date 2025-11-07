@@ -61,6 +61,7 @@ public class SecurityConfig {
                         // 리뷰
                         .requestMatchers(HttpMethod.GET, "/api/reviews").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                         .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)

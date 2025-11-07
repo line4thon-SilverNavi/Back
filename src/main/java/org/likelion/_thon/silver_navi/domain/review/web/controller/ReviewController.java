@@ -64,4 +64,16 @@ public class ReviewController implements ReviewApi {
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.from(reviewInfoRes));
     }
+
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<SuccessResponse<?>> deleteReview(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long reviewId
+    ) {
+        reviewService.deleteReview(managerPrincipal, reviewId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.emptyCustom("리뷰가 성공적으로 삭제되었습니다."));
+    }
 }

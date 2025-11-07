@@ -15,4 +15,7 @@ public interface ReviewService {
 
     // 리뷰 단일 조회
     ReviewInfoRes getReview(ManagerPrincipal managerPrincipal, Long reviewId);
+
+    // 리뷰 삭제
+    void deleteReview(ManagerPrincipal managerPrincipal, Long reviewId);
 }

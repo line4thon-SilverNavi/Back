@@ -143,4 +143,70 @@ public interface ReviewApi {
     public ResponseEntity<SuccessResponse<ReviewInfoRes>> getReview(
             ManagerPrincipal managerPrincipal, Long reviewId
     );
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "리뷰 삭제 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "timestamp": "2025-11-01 13:46:06",
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
+                                                "message": "리뷰가 성공적으로 삭제되었습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "소속된 시설의 리뷰 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-07 19:41:28",
+                                                "code": "REVIEW_403_1",
+                                                "httpStatus": 403,
+                                                "message": "소속된 시설의 리뷰만 조작할 수 있습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "리뷰 존재 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                 "isSuccess": false,
+                                                 "timestamp": "2025-11-07 19:37:29",
+                                                 "code": "REVIEW_404_1",
+                                                 "httpStatus": 404,
+                                                 "message": "해당 리뷰를 찾을 수 없습니다.",
+                                                 "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<?>> deleteReview(
+            ManagerPrincipal managerPrincipal, Long reviewId
+    );
 }

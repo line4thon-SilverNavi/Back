@@ -96,4 +96,17 @@ public class ReviewServiceImpl implements ReviewService {
 
         return ReviewInfoRes.from(review);
     }
+
+    @Override
+    @Transactional
+    public void deleteReview(ManagerPrincipal managerPrincipal, Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(ReviewNotFoundException::new);
+
+        if (!review.getNursingFacility().getId().equals(managerPrincipal.getFacilityId())) {
+            throw new ReviewAccessDeniedException();
+        }
+
+        reviewRepository.delete(review);
+    }
 }
