@@ -22,10 +22,10 @@ public class Review extends BaseEntity {
     @Column(name = "review_id")
     private Long id;
 
-    @Column(nullable = false, precision = 2, scale = 1)
-    private BigDecimal rating; // 별점 (0.0 ~ 5.0)
+    @Column(nullable = false)
+    private int rating; // 별점 (0 ~ 5)
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false, length = 150)
     private String content; // 후기 내용
 
     @ManyToOne(fetch = FetchType.LAZY)

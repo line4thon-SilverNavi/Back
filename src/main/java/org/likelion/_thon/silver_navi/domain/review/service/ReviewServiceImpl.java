@@ -12,6 +12,10 @@ import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -31,5 +35,23 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review review = Review.create(user, facility, req);
         reviewRepository.save(review);
+
+        updateFacilityReviewStats(facility, req.getRating());
+    }
+
+    private void updateFacilityReviewStats(NursingFacility facility, Integer newRate) {
+        long oldCount = facility.getReviewCount() == null ? 0L : facility.getReviewCount();
+        BigDecimal oldAvg = facility.getAverageRating() == null ? BigDecimal.ZERO : facility.getAverageRating();
+
+        long newCount = oldCount + 1;
+
+        BigDecimal newTotal = oldAvg.multiply(BigDecimal.valueOf(oldCount))
+                .add(BigDecimal.valueOf(newRate));
+
+        BigDecimal newAvg = newTotal
+                .divide(BigDecimal.valueOf(newCount), 2, RoundingMode.HALF_UP);
+
+        facility.updateReviewStats(newCount, newAvg);
+        nursingFacilityRepository.save(facility);
     }
 }
