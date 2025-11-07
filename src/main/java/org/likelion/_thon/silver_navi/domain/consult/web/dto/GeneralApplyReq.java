@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import org.likelion._thon.silver_navi.domain.consult.entity.enums.InquiryType;
 
 @Getter
 public class GeneralApplyReq {
@@ -24,8 +25,8 @@ public class GeneralApplyReq {
     @Email(message = "이메일 형식이 올바르지 않습니다.")
     private String email;
 
-    @NotBlank(message = "문의 유형은 필수 입력 항목입니다.")
-    private String inquiryType;
+    @NotNull(message = "문의 유형은 필수 입력 항목입니다.")
+    private InquiryType inquiryType;
 
     private String content;
 

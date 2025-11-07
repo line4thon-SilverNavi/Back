@@ -3,6 +3,7 @@ package org.likelion._thon.silver_navi.domain.consult.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
+import org.likelion._thon.silver_navi.domain.consult.entity.enums.InquiryType;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.GeneralApplyReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
@@ -30,7 +31,8 @@ public class GeneralConsult extends BaseEntity {
     private String email;
 
     @Column(nullable = false, name = "inquiry_type")
-    private String inquiryType;
+    @Enumerated(EnumType.STRING)
+    private InquiryType inquiryType;
 
     @Column(nullable = true)
     private String content;
