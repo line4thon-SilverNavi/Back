@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public record ReviewRes(
         Long id,
         String authorName,
-        BigDecimal rating,
+        Integer rating,
         String content,
         LocalDateTime createdAt
 ) {

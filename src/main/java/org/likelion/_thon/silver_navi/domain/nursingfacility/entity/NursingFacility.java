@@ -147,4 +147,9 @@ public class NursingFacility extends BaseEntity {
         this.averageRating = BigDecimal.ZERO;
         this.reviewCount = 0L;
     }
+
+    public void updateReviewStats(long count, BigDecimal averageRating) {
+        this.reviewCount = count;
+        this.averageRating = averageRating;
+    }
 }
