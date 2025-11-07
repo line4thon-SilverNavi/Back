@@ -112,13 +112,14 @@ public class ProgramServiceImpl implements ProgramService {
                 .orElseThrow(ProgramNotFoundException::new);
 
         if (!program.getNursingFacility().getId().equals(nursingFacility.getId())) {
-            throw new ProgramNotFoundException();
+            throw new ProgramAccessDeniedException();
         }
 
         return ProgramDetailInfoRes.from(program);
     }
 
     @Override
+    @Transactional
     public ProgramDetailInfoRes modifyProgram(
             ManagerPrincipal managerPrincipal, Long programId, ProgramModifyReq programModifyReq
     ) {
@@ -129,7 +130,7 @@ public class ProgramServiceImpl implements ProgramService {
                 .orElseThrow(ProgramNotFoundException::new);
 
         if (!program.getNursingFacility().getId().equals(nursingFacility.getId())) {
-            throw new ProgramNotFoundException();
+            throw new ProgramAccessDeniedException();
         }
 
         // 첨부파일 url
