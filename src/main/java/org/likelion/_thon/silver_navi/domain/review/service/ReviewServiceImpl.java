@@ -8,7 +8,14 @@ import org.likelion._thon.silver_navi.domain.review.entity.Review;
 import org.likelion._thon.silver_navi.domain.review.exception.ReviewAlreadyExistsException;
 import org.likelion._thon.silver_navi.domain.review.repository.ReviewRepository;
 import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewCreateReq;
+import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewInfoRes;
+import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewPageRes;
+import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewPageRes.PageInfo;
+import org.likelion._thon.silver_navi.domain.review.web.dto.ReviewSummaryRes;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
+import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,5 +60,26 @@ public class ReviewServiceImpl implements ReviewService {
 
         facility.updateReviewStats(newCount, newAvg);
         nursingFacilityRepository.save(facility);
+    }
+
+    @Override
+    @Transactional
+    public ReviewPageRes getReviews(ManagerPrincipal managerPrincipal, Integer rating, Pageable pageable) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        List<Review> reviews = reviewRepository.findByNursingFacility(nursingFacility);
+        ReviewSummaryRes summary = ReviewSummaryRes.from(reviews);
+
+        Page<Review> reviewPage = reviewRepository.findReviews(nursingFacility, rating, pageable);
+        Page<ReviewInfoRes> reviewInfoPage = reviewPage.map(ReviewInfoRes::from);
+
+        PageInfo pageInfo = PageInfo.from(reviewInfoPage);
+
+        return new ReviewPageRes(
+                summary,
+                reviewInfoPage.getContent(),
+                pageInfo
+        );
     }
 }
