@@ -100,7 +100,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         // 알림 생성
         Notification notification = Notification.createProgramStatusChanged(
                 programApply.getUser(),
-                programApply.getProgram().getId(),
+                programApply.getId(),
                 applicationStatusUpdateReq.getIsApproved()
         );
         notificationRepository.save(notification);

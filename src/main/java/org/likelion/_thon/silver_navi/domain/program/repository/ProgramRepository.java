@@ -44,6 +44,6 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
     @Query("SELECT p.id FROM Program p WHERE p.nursingFacility.id = :facilityId")
     List<Long> findIdsByNursingFacilityId(@Param("facilityId") Long facilityId);
 
-    @Query("SELECT p FROM Program p WHERE p.date = :targetDate")
-    List<Program> findAllByDate(@Param("targetDate") LocalDate targetDate);
+    @Query("SELECT p FROM Program p WHERE p.date IN :dates")
+    List<Program> findAllByDateIn(@Param("dates") List<LocalDate> dates);
 }

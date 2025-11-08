@@ -233,16 +233,18 @@ public class ProgramServiceImpl implements ProgramService {
     @Scheduled(cron = "0 0 5 * * *")  // 초 분 시 일 월 요일 (매일 05:00)
     @Transactional
     public void createProgramReminders() {
-        LocalDate tomorrow = LocalDate.now().plusDays(1);
-        List<Program> programs = programRepository.findAllByDate(tomorrow);
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+
+        List<Program> programs = programRepository.findAllByDateIn(List.of(today, tomorrow));
+
 
         if (programs.isEmpty()) {
-            log.info("[Program Reminder] 내일 진행 예정인 프로그램 없습니다.");
+            log.info("[Program Reminder] 오늘 및 내일 진행 예정인 프로그램 없습니다.");
             return;
         }
 
         for (Program program : programs) {
-            // 해당 프로그램 신청자 목록 조회
             List<ProgramApply> applies = programApplyRepository.findAllByProgram(program);
 
             for (ProgramApply apply : applies) {
@@ -252,6 +254,6 @@ public class ProgramServiceImpl implements ProgramService {
             }
         }
 
-        log.info("[Program Reminder] {}개의 프로그램에 대한 알림 생성 완료.", programs.size());
+        log.info("[Program Reminder] 오늘 및 내일 총 {}개의 프로그램에 대한 알림 생성 완료.", programs.size());
     }
 }

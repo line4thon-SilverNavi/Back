@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.notification.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultCategory;
 import org.likelion._thon.silver_navi.domain.notification.entity.enums.NotificationStatus;
 import org.likelion._thon.silver_navi.domain.notification.entity.enums.NotificationType;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
@@ -26,6 +27,10 @@ public class Notification extends BaseEntity {
     @Column(nullable = true)
     private NotificationStatus status;    // 프로그램/상담 상태 변경 시 "승인" 또는 "거부"
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private ConsultCategory consultCategory; //시설상담, 일반상담 구분 저장
+
     @Column(nullable = false)
     private Long referenceId;             // 알림 관련 대상 (예: 프로그램 ID)
 
@@ -37,12 +42,12 @@ public class Notification extends BaseEntity {
     private User user;
 
     //프로그램 상태 변경 시
-    public static Notification createProgramStatusChanged(User user, Long programId, boolean isApproved) {
+    public static Notification createProgramStatusChanged(User user, Long programApplyId, boolean isApproved) {
         return Notification.builder()
                 .user(user)
                 .type(NotificationType.PROGRAM)
                 .status(isApproved ? NotificationStatus.APPROVED : NotificationStatus.REJECTED)
-                .referenceId(programId)
+                .referenceId(programApplyId)
                 .isRead(false)
                 .build();
     }
