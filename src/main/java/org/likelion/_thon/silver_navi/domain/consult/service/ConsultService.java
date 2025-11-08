@@ -21,4 +21,9 @@ public interface ConsultService {
 
     // 상담 정보 상세 보기
     ConsultDetailInfoRes getConsult(ManagerPrincipal managerPrincipal, Long consultId, ConsultCategory consultCategory);
+
+    // 상담 확정일 또는 상태 변경
+    void updateConsult(
+            ManagerPrincipal managerPrincipal, Long consultId, ConsultCategory consultCategory, ConsultConfirmReq consultConfirmReq
+    );
 }
