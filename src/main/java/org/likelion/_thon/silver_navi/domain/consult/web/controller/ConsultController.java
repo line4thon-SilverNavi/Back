@@ -2,12 +2,10 @@ package org.likelion._thon.silver_navi.domain.consult.web.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultCategory;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
 import org.likelion._thon.silver_navi.domain.consult.service.ConsultService;
-import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultApplyReq;
-import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultHistorySummaryRes;
-import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultManagementRes;
-import org.likelion._thon.silver_navi.domain.consult.web.dto.GeneralApplyReq;
+import org.likelion._thon.silver_navi.domain.consult.web.dto.*;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
@@ -71,5 +69,23 @@ public class ConsultController implements ConsultApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.from(consultManagementRes));
+    }
+
+    @Override
+    @GetMapping("/{consultId}/{category}")
+    public ResponseEntity<SuccessResponse<ConsultDetailInfoRes>> getConsult(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long consultId,
+            @PathVariable String category
+    ) {
+        ConsultCategory consultCategory = ConsultCategory.fromValue(category);
+
+        ConsultDetailInfoRes consultDetailInfoRes = consultService.getConsult(
+                managerPrincipal, consultId, consultCategory
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.from(consultDetailInfoRes));
     }
 }
