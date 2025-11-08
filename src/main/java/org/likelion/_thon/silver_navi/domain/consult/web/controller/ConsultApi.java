@@ -96,6 +96,116 @@ public interface ConsultApi {
     );
 
 
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "상담 상세 정보 조회 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "일반상담",
+                                            value = """
+                                                    {
+                                                         "isSuccess": true,
+                                                         "timestamp": "2025-11-09 00:46:55",
+                                                         "code": "GLOBAL_200",
+                                                         "httpStatus": 200,
+                                                         "message": "호출에 성공하였습니다.",
+                                                         "data": {
+                                                             "consultCategory": "일반상담",
+                                                             "status": "대기중",
+                                                             "appliedAt": "2025-11-08T17:17:22.870649",
+                                                             "name": "홍길동",
+                                                             "phone": "01012345678",
+                                                             "birthDate": "1965-04-15",
+                                                             "age": 60,
+                                                             "grade": "4등급",
+                                                             "careName": null,
+                                                             "carePhone": null,
+                                                             "hopeDate": null,
+                                                             "hopeTime": null,
+                                                             "consultType": null,
+                                                             "inquiryType": "시설 이용 문의",
+                                                             "inquiryContent": "요양 서비스 이용 절차가 궁금합니다."
+                                                         }
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "시설상담",
+                                            value = """
+                                                    {
+                                                        "isSuccess": true,
+                                                        "timestamp": "2025-11-09 00:47:31",
+                                                        "code": "GLOBAL_200",
+                                                        "httpStatus": 200,
+                                                        "message": "호출에 성공하였습니다.",
+                                                        "data": {
+                                                            "consultCategory": "시설상담",
+                                                            "status": "대기중",
+                                                            "appliedAt": "2025-11-08T17:18:56.489802",
+                                                            "name": "김민지",
+                                                            "phone": "01098765432",
+                                                            "birthDate": "1965-04-15",
+                                                            "age": 60,
+                                                            "grade": "4등급",
+                                                            "careName": null,
+                                                            "carePhone": null,
+                                                            "hopeDate": "2025-11-15",
+                                                            "hopeTime": "오후",
+                                                            "consultType": "대면",
+                                                            "inquiryType": null,
+                                                            "inquiryContent": "비대면 상담으로 진행하고 싶습니다."
+                                                        }
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "상담 카테고리값 유효 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-09 00:48:43",
+                                                "code": "CONSULT_400_2",
+                                                "httpStatus": 400,
+                                                "message": "유효하지 않은 카테고리 값입니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "상담 존재 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                 "isSuccess": false,
+                                                 "timestamp": "2025-11-09 00:48:19",
+                                                 "code": "CONSULT_404_1",
+                                                 "httpStatus": 404,
+                                                 "message": "해당 상담을 찾을 수 없습니다.",
+                                                 "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
     public ResponseEntity<SuccessResponse<ConsultDetailInfoRes>> getConsult(
             ManagerPrincipal managerPrincipal, Long consultId, String category
     );
