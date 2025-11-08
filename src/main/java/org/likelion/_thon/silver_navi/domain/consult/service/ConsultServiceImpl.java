@@ -2,7 +2,10 @@ package org.likelion._thon.silver_navi.domain.consult.service;
 
 import org.likelion._thon.silver_navi.domain.consult.entity.Consult;
 import org.likelion._thon.silver_navi.domain.consult.entity.GeneralConsult;
+import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultCategory;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
+import org.likelion._thon.silver_navi.domain.consult.exception.ConsultAccessDeniedException;
+import org.likelion._thon.silver_navi.domain.consult.exception.ConsultNotFoundException;
 import org.likelion._thon.silver_navi.domain.consult.repository.CombinedConsultDto;
 import org.likelion._thon.silver_navi.domain.consult.repository.ConsultRepository;
 import org.likelion._thon.silver_navi.domain.consult.repository.GeneralConsultRepository;
@@ -100,5 +103,36 @@ public class ConsultServiceImpl implements ConsultService {
                 consultInfoPage.getContent(),
                 pageInfo
         );
+    }
+
+    @Override
+    public ConsultDetailInfoRes getConsult(
+            ManagerPrincipal managerPrincipal, Long consultId, ConsultCategory consultCategory
+    ) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        ConsultDetailInfoRes consultDetailInfoRes;
+        if (consultCategory.equals(ConsultCategory.GRADE)) {    // 상담
+            Consult consult = consultRepository.findById(consultId)
+                    .orElseThrow(ConsultNotFoundException::new);
+
+            if (!consult.getFacility().getId().equals(nursingFacility.getId())) {
+                throw new ConsultAccessDeniedException();
+            }
+
+            consultDetailInfoRes = ConsultDetailInfoRes.from(consult);
+        } else {    // 일반 상담
+            GeneralConsult consult = generalConsultRepository.findById(consultId)
+                    .orElseThrow(ConsultNotFoundException::new);
+
+            if (!consult.getFacility().getId().equals(nursingFacility.getId())) {
+                throw new ConsultAccessDeniedException();
+            }
+
+            consultDetailInfoRes = ConsultDetailInfoRes.from(consult);
+        }
+
+        return consultDetailInfoRes;
     }
 }

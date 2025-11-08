@@ -1,10 +1,8 @@
 package org.likelion._thon.silver_navi.domain.consult.service;
 
+import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultCategory;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
-import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultApplyReq;
-import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultHistorySummaryRes;
-import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultManagementRes;
-import org.likelion._thon.silver_navi.domain.consult.web.dto.GeneralApplyReq;
+import org.likelion._thon.silver_navi.domain.consult.web.dto.*;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +18,7 @@ public interface ConsultService {
     ConsultManagementRes getConsultManagement(
             ManagerPrincipal managerPrincipal, ConsultStatus status, Pageable pageable
     );
+
+    // 상담 정보 상세 보기
+    ConsultDetailInfoRes getConsult(ManagerPrincipal managerPrincipal, Long consultId, ConsultCategory consultCategory);
 }

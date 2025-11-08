@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultDetailInfoRes;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultManagementRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
@@ -92,5 +93,10 @@ public interface ConsultApi {
     })
     public ResponseEntity<SuccessResponse<ConsultManagementRes>> getConsultManagement(
             ManagerPrincipal managerPrincipal, String statusStr, Pageable pageable
+    );
+
+
+    public ResponseEntity<SuccessResponse<ConsultDetailInfoRes>> getConsult(
+            ManagerPrincipal managerPrincipal, Long consultId, String category
     );
 }
