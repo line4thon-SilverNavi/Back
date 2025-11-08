@@ -64,6 +64,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/reviews/{reviewId}/reply").hasRole("ADMIN")
+                        // 상담
+                        .requestMatchers(HttpMethod.GET, "/api/consults/management").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                         .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
