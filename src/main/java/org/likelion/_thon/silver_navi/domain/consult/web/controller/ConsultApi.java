@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultConfirmReq;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultDetailInfoRes;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultManagementRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
@@ -208,5 +209,52 @@ public interface ConsultApi {
     })
     public ResponseEntity<SuccessResponse<ConsultDetailInfoRes>> getConsult(
             ManagerPrincipal managerPrincipal, Long consultId, String category
+    );
+
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "상담 확정 일/시간대 또는 상태 변경 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "timestamp": "2025-11-09 03:27:07",
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
+                                                "message": "변경이 성공적으로 되었습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "유효하지 않은 값",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-09 03:31:55",
+                                                "code": "GLOBAL_400_2",
+                                                "httpStatus": 400,
+                                                "message": "입력된 값이 유효하지 않습니다. Enum 타입의 철자나 대소문자를 다시 확인해주세요.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<?>> updateConsult(
+            ManagerPrincipal managerPrincipal, Long consultId, String category, ConsultConfirmReq consultConfirmReq
     );
 }

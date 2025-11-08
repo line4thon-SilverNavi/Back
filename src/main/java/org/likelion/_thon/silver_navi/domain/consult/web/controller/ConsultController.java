@@ -88,4 +88,22 @@ public class ConsultController implements ConsultApi {
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.from(consultDetailInfoRes));
     }
+
+    @PatchMapping("/{consultId}/{category}")
+    public ResponseEntity<SuccessResponse<?>> updateConsult(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @PathVariable Long consultId,
+            @PathVariable String category,
+            @RequestBody @Valid ConsultConfirmReq consultConfirmReq
+    ) {
+        ConsultCategory consultCategory = ConsultCategory.fromValue(category);
+
+        consultService.updateConsult(
+                managerPrincipal, consultId, consultCategory, consultConfirmReq
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.emptyCustom("변경이 성공적으로 되었습니다."));
+    }
 }
