@@ -3,6 +3,8 @@ package org.likelion._thon.silver_navi.domain.program.service;
 import lombok.RequiredArgsConstructor;
 
 import org.likelion._thon.silver_navi.domain.bookmark.repository.ProgramBookmarkRepository;
+import org.likelion._thon.silver_navi.domain.notification.entity.Notification;
+import org.likelion._thon.silver_navi.domain.notification.repository.NotificationRepository;
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
 import org.likelion._thon.silver_navi.domain.program.entity.ProgramApply;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
@@ -37,6 +39,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final ProgramBookmarkRepository programBookmarkRepository;
     private final ProgramApplyRepository programApplyRepository;
     private final ProgramRepository programRepository;
+    private final NotificationRepository notificationRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -93,6 +96,14 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         programApply.updateStatus(applicationStatusUpdateReq.getIsApproved(), applicationStatusUpdateReq.getReason());
+
+        // 알림 생성
+        Notification notification = Notification.createProgramStatusChanged(
+                programApply.getUser(),
+                programApply.getProgram().getId(),
+                applicationStatusUpdateReq.getIsApproved()
+        );
+        notificationRepository.save(notification);
     }
 
     @Override
