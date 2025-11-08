@@ -5,4 +5,6 @@ import org.likelion._thon.silver_navi.domain.user.entity.User;
 
 public interface NotificationService {
     CountRes getCount(User user);
+
+    void read(User user, Long notificationId);
 }

@@ -9,9 +9,7 @@ import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/notifications")
@@ -26,6 +24,16 @@ public class NotificationController {
     ){
         CountRes res = notificationService.getCount(userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(res));
+    }
+
+    // 알림 읽음 처리
+    @PostMapping("{notificationId}")
+    public ResponseEntity<SuccessResponse<?>> read(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long notificationId
+    ){
+        notificationService.read(userDetails.getUser(),notificationId);
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(null));
     }
 
 }
