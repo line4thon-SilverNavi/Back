@@ -47,5 +47,25 @@ public class Notification extends BaseEntity {
                 .build();
     }
 
+    //상담 상태 변경 시
+    public static Notification createConsultStatusChanged(User user, Long consultId, boolean isApproved) {
+        return Notification.builder()
+                .user(user)
+                .type(NotificationType.CONSULT)
+                .status(isApproved ? NotificationStatus.APPROVED : NotificationStatus.REJECTED)
+                .referenceId(consultId)
+                .isRead(false)
+                .build();
+    }
 
+    //리뷰 답변 시
+    public static Notification createReviewReply(User user, Long reviewId) {
+        return Notification.builder()
+                .user(user)
+                .type(NotificationType.REVIEW_REPLY)
+                .status(null)
+                .referenceId(reviewId)
+                .isRead(false)
+                .build();
+    }
 }

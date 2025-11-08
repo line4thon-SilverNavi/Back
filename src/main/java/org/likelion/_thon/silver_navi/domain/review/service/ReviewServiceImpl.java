@@ -1,6 +1,8 @@
 package org.likelion._thon.silver_navi.domain.review.service;
 
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.notification.entity.Notification;
+import org.likelion._thon.silver_navi.domain.notification.repository.NotificationRepository;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
@@ -30,6 +32,7 @@ import java.util.List;
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final NursingFacilityRepository nursingFacilityRepository;
+    private final NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -128,5 +131,13 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewReply newReply = ReviewReply.create(reviewReplyCreateReq.getContent());
 
         review.setReply(newReply);
+
+        // 알림 생성 (리뷰 작성자에게)
+        Notification notification = Notification.createReviewReply(
+                review.getUser(),  // 알림 받을 사용자 (리뷰 작성자)
+                review.getId()
+        );
+
+        notificationRepository.save(notification);
     }
 }
