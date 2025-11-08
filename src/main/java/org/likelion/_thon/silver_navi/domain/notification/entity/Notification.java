@@ -68,4 +68,15 @@ public class Notification extends BaseEntity {
                 .isRead(false)
                 .build();
     }
+
+    //프로그램 일정 하루 남았을 때
+    public static Notification createProgramReminder(User user, Long programId) {
+        return Notification.builder()
+                .user(user)
+                .type(NotificationType.PROGRAM_REMINDER)
+                .status(null)
+                .referenceId(programId)
+                .isRead(false)
+                .build();
+    }
 }

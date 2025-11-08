@@ -1,14 +1,19 @@
 package org.likelion._thon.silver_navi.domain.program.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.likelion._thon.silver_navi.domain.bookmark.repository.ProgramBookmarkRepository;
+import org.likelion._thon.silver_navi.domain.notification.entity.Notification;
+import org.likelion._thon.silver_navi.domain.notification.repository.NotificationRepository;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
 import org.likelion._thon.silver_navi.domain.nursingfacility.repository.NursingFacilityRepository;
 import org.likelion._thon.silver_navi.domain.program.entity.Program;
+import org.likelion._thon.silver_navi.domain.program.entity.ProgramApply;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ProgramCategory;
 import org.likelion._thon.silver_navi.domain.program.exception.ProgramAccessDeniedException;
 import org.likelion._thon.silver_navi.domain.program.exception.ProgramNotFoundException;
+import org.likelion._thon.silver_navi.domain.program.repository.ProgramApplyRepository;
 import org.likelion._thon.silver_navi.domain.program.repository.ProgramRepository;
 import org.likelion._thon.silver_navi.domain.program.web.dto.*;
 import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramListRes.PageInfo;
@@ -19,11 +24,13 @@ import org.likelion._thon.silver_navi.global.util.geo.BoundingBox;
 import org.likelion._thon.silver_navi.global.util.geo.GeoUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,11 +38,14 @@ import static org.likelion._thon.silver_navi.global.util.s3.UpdateImagesUtils.up
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProgramServiceImpl implements ProgramService {
 
     private final ProgramRepository programRepository;
     private final NursingFacilityRepository nursingFacilityRepository;
     private final ProgramBookmarkRepository programBookmarkRepository;
+    private final ProgramApplyRepository programApplyRepository;
+    private final NotificationRepository notificationRepository;
 
     private final S3Service s3Service;
 
@@ -218,5 +228,30 @@ public class ProgramServiceImpl implements ProgramService {
                     return UserByProgramListRes.from(program, thumbnail, bookmarked);
                 })
                 .toList();
+    }
+
+    @Scheduled(cron = "0 0 5 * * *")  // 초 분 시 일 월 요일 (매일 05:00)
+    @Transactional
+    public void createProgramReminders() {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        List<Program> programs = programRepository.findAllByDate(tomorrow);
+
+        if (programs.isEmpty()) {
+            log.info("[Program Reminder] 내일 진행 예정인 프로그램 없습니다.");
+            return;
+        }
+
+        for (Program program : programs) {
+            // 해당 프로그램 신청자 목록 조회
+            List<ProgramApply> applies = programApplyRepository.findAllByProgram(program);
+
+            for (ProgramApply apply : applies) {
+                User user = apply.getUser();
+                Notification notification = Notification.createProgramReminder(user, program.getId());
+                notificationRepository.save(notification);
+            }
+        }
+
+        log.info("[Program Reminder] {}개의 프로그램에 대한 알림 생성 완료.", programs.size());
     }
 }
