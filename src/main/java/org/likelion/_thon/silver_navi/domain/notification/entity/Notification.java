@@ -53,12 +53,13 @@ public class Notification extends BaseEntity {
     }
 
     //상담 상태 변경 시
-    public static Notification createConsultStatusChanged(User user, Long consultId, boolean isApproved) {
+    public static Notification createConsultStatusChanged(User user, Long consultId, ConsultCategory category , boolean isApproved) {
         return Notification.builder()
                 .user(user)
                 .type(NotificationType.CONSULT)
                 .status(isApproved ? NotificationStatus.APPROVED : NotificationStatus.REJECTED)
                 .referenceId(consultId)
+                .consultCategory(category)
                 .isRead(false)
                 .build();
     }
