@@ -135,4 +135,33 @@ public class ConsultServiceImpl implements ConsultService {
 
         return consultDetailInfoRes;
     }
+
+    @Override
+    @Transactional
+    public void updateConsult(
+            ManagerPrincipal managerPrincipal, Long consultId, ConsultCategory consultCategory, ConsultConfirmReq consultConfirmReq
+    ) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        if (consultCategory.equals(ConsultCategory.GRADE)) { // 상담
+            Consult consult = consultRepository.findById(consultId)
+                    .orElseThrow(ConsultNotFoundException::new);
+
+            if (!consult.getFacility().getId().equals(nursingFacility.getId())) {
+                throw new ConsultAccessDeniedException();
+            }
+
+            consult.updateConfirmation(consultConfirmReq);
+        } else { // 일반 상담
+            GeneralConsult consult = generalConsultRepository.findById(consultId)
+                    .orElseThrow(ConsultNotFoundException::new);
+
+            if (!consult.getFacility().getId().equals(nursingFacility.getId())) {
+                throw new ConsultAccessDeniedException();
+            }
+
+            consult.updateConfirmation(consultConfirmReq);
+        }
+    }
 }

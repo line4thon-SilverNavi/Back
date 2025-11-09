@@ -3,11 +3,15 @@ package org.likelion._thon.silver_navi.domain.consult.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
+import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultTime;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.InquiryType;
+import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultConfirmReq;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.GeneralApplyReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -41,6 +45,13 @@ public class GeneralConsult extends BaseEntity {
     @Column(nullable = false, name = "consult_status")
     private ConsultStatus consultStatus;
 
+    @Column(name = "confirmed_date", nullable = true)
+    private LocalDate confirmedDate;        // 상담 확정일
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "confirmed_time", nullable = true)
+    private ConsultTime confirmedTime;      // 상담 확정 시간
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -60,5 +71,17 @@ public class GeneralConsult extends BaseEntity {
                 .user(user)
                 .facility(facility)
                 .build();
+    }
+
+    public void updateConfirmation(ConsultConfirmReq req) {
+        if (req.getConfirmedDate() != null) {
+            this.confirmedDate = req.getConfirmedDate();
+        }
+        if (req.getConfirmedTime() != null) {
+            this.confirmedTime = req.getConfirmedTime();
+        }
+        if (req.getConsultStatus() != null) {
+            this.consultStatus = req.getConsultStatus();
+        }
     }
 }
