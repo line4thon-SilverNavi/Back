@@ -179,5 +179,6 @@ public class ConsultServiceImpl implements ConsultService {
                 isApproved
         );
         notificationRepository.save(notification);
+        }
     }
 }
