@@ -13,6 +13,8 @@ import org.likelion._thon.silver_navi.domain.consult.web.dto.*;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultManagementRes.ConsultSummaryInfoRes;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultManagementRes.ConsultInfoRes;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultManagementRes.PageInfo;
+import org.likelion._thon.silver_navi.domain.notification.entity.Notification;
+import org.likelion._thon.silver_navi.domain.notification.repository.NotificationRepository;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
@@ -35,6 +37,7 @@ public class ConsultServiceImpl implements ConsultService {
     private final NursingFacilityRepository nursingFacilityRepository;
     private final GeneralConsultRepository generalConsultRepository;
     private final ConsultRepository consultRepository;
+    private final NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -144,6 +147,9 @@ public class ConsultServiceImpl implements ConsultService {
         NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
                 .orElseThrow(FacilityNotFoundException::new);
 
+        User user;
+        boolean isApproved = consultConfirmReq.getConsultStatus() == ConsultStatus.CONFIRMED;
+
         if (consultCategory.equals(ConsultCategory.GRADE)) { // 상담
             Consult consult = consultRepository.findById(consultId)
                     .orElseThrow(ConsultNotFoundException::new);
@@ -153,6 +159,7 @@ public class ConsultServiceImpl implements ConsultService {
             }
 
             consult.updateConfirmation(consultConfirmReq);
+            user = consult.getUser();
         } else { // 일반 상담
             GeneralConsult consult = generalConsultRepository.findById(consultId)
                     .orElseThrow(ConsultNotFoundException::new);
@@ -162,6 +169,15 @@ public class ConsultServiceImpl implements ConsultService {
             }
 
             consult.updateConfirmation(consultConfirmReq);
+            user = consult.getUser();
         }
+
+        Notification notification = Notification.createConsultStatusChanged(
+                user,
+                consultId,
+                consultCategory,
+                isApproved
+        );
+        notificationRepository.save(notification);
     }
 }

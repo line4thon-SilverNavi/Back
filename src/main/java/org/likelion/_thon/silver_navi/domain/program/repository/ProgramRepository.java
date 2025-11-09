@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -42,4 +43,7 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
     );
     @Query("SELECT p.id FROM Program p WHERE p.nursingFacility.id = :facilityId")
     List<Long> findIdsByNursingFacilityId(@Param("facilityId") Long facilityId);
+
+    @Query("SELECT p FROM Program p WHERE p.date IN :dates")
+    List<Program> findAllByDateIn(@Param("dates") List<LocalDate> dates);
 }

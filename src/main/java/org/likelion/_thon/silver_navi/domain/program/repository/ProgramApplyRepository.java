@@ -13,13 +13,18 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProgramApplyRepository extends JpaRepository<ProgramApply, Long> {
     boolean existsByUserAndProgram(User user, Program program);
     
     List<ProgramApply> findByUser(User user);
-
+    
+    List<ProgramApply> findAllByProgram(Program program);
+    
+    Optional<ProgramApply> findByUserAndProgram(User user, Program program);
+    
     // 이번 달 상태별 신청 건수
     long countByProgramIdInAndStatusAndCreatedAtBetween(
             List<Long> programIds, ApplicationStatus status, LocalDateTime start, LocalDateTime end);
