@@ -39,8 +39,8 @@ public class CareTarget extends BaseEntity {
     @Column(name = "care_grade")
     private CareGrade careGrade;
 
-    @Column(name = "care_number", unique = true)
-    private String careNumber;
+    @Column(unique = true)
+    private String phoneNumber;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -57,8 +57,7 @@ public class CareTarget extends BaseEntity {
         if (dto.getCareTargetName() != null) this.name = dto.getCareTargetName();
         if (dto.getCareTargetBirth() != null) this.birthDate = dto.getCareTargetBirth();
         if (dto.getCareTargetGender() != null) this.gender = dto.getCareTargetGender();
-        if (dto.getAddress() != null) this.address = dto.getAddress();
-        if (dto.getCareNumber() != null) this.careNumber = dto.getCareNumber();
+        if (dto.getCareTargetPhone() != null) this.phoneNumber = dto.getCareTargetPhone();
         if (dto.getCareGrade() != null) this.careGrade = dto.getCareGrade();
     }
 }

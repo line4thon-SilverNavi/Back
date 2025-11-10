@@ -9,7 +9,7 @@ public interface UserService {
 
      SignInRes signIn(SignInReq signInReq);
 
-     UserDetailsRes userDetails(User user);
+    UserInfoRes userDetails(User user);
 
      void updateUser(User user, UserUpdateReq dto);
 

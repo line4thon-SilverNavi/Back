@@ -1,13 +1,19 @@
 package org.likelion._thon.silver_navi.domain.user.web.dto;
 
 import org.likelion._thon.silver_navi.domain.caretarget.entity.CareTarget;
+import org.likelion._thon.silver_navi.domain.caretarget.entity.enums.Gender;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.domain.user.entity.enums.RelationRole;
 
+import java.time.LocalDate;
+
 public record UserMypageInfoRes(
-        String name,
+        String guardianName,
         RelationRole relation,
-        String phone,
+        String guardianPhone,
+        String careTargetName,
+        LocalDate careTargetBirth,
+        Gender careTargetGender,
         int bookmarkCount,
         int consultCount,
         int reviewCount,
@@ -18,16 +24,23 @@ public record UserMypageInfoRes(
         int consultCount = user.getConsults().size() + user.getGeneralConsults().size();
         int reviewCount = user.getReviews().size();
 
+        String careTargetName = null;
+        LocalDate careTargetBirth = null;
+        Gender careTargetGender = null;
         boolean hasCompleteCareTarget = false;
         CareTarget careTarget = user.getCareTarget();
         //모든 정보가 있는지 확인
         if (careTarget != null) {
+            careTargetName = careTarget.getName();
+            careTargetBirth = careTarget.getBirthDate();
+            careTargetGender = careTarget.getGender();
+
             boolean allFilled =
                     careTarget.getName() != null &&
                             careTarget.getBirthDate() != null &&
                             careTarget.getGender() != null &&
                             careTarget.getCareGrade() != null &&
-                            careTarget.getCareNumber() != null;
+                            careTarget.getPhoneNumber() != null;
             hasCompleteCareTarget = allFilled;
         }
 
@@ -35,6 +48,9 @@ public record UserMypageInfoRes(
                 user.getName(),
                 user.getRelation(),
                 user.getPhone(),
+                careTargetName,
+                careTargetBirth,
+                careTargetGender,
                 bookmarkCount,
                 consultCount,
                 reviewCount,

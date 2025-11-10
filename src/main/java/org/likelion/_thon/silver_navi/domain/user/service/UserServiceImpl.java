@@ -65,8 +65,8 @@ public class UserServiceImpl implements UserService {
 
     //유저 상세 정보 반환
     @Override
-    public UserDetailsRes userDetails(User user) {
-        UserDetailsRes res = UserDetailsRes.from(user);
+    public UserInfoRes userDetails(User user) {
+        UserInfoRes res = UserInfoRes.from(user);
         return res;
     }
 

@@ -36,10 +36,10 @@ public class UserController implements UserApi {
 
     //유저 상세 정보 반환
     @GetMapping("/details")
-    public ResponseEntity<SuccessResponse<UserDetailsRes>> userDetails(
+    public ResponseEntity<SuccessResponse<UserInfoRes>> userDetails(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        UserDetailsRes detailsRes = userService.userDetails(userDetails.getUser());
+        UserInfoRes detailsRes = userService.userDetails(userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(detailsRes));
     }
 
@@ -47,7 +47,7 @@ public class UserController implements UserApi {
     @PatchMapping
     public ResponseEntity<SuccessResponse<?>> updateUser(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody UserUpdateReq userUpdateReq
+            @RequestBody @Valid UserUpdateReq userUpdateReq
     ){
         userService.updateUser(userDetails.getUser(),userUpdateReq);
         return ResponseEntity.status(HttpStatus.OK).body(SuccessResponse.from(null));

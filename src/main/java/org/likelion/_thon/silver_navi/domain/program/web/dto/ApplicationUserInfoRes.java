@@ -38,7 +38,7 @@ public record ApplicationUserInfoRes(
             applicantPhone = user.getPhone();
         } else {
             applicantName = careTarget.getName();
-            applicantPhone = careTarget.getCareNumber();
+            applicantPhone = careTarget.getPhoneNumber();
             careName = user.getName();
             carePhone = user.getPhone();
         }
