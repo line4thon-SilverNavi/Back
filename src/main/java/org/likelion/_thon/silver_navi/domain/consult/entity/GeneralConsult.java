@@ -31,9 +31,6 @@ public class GeneralConsult extends BaseEntity {
     @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = true)
-    private String email;
-
     @Column(nullable = false, name = "inquiry_type")
     @Enumerated(EnumType.STRING)
     private InquiryType inquiryType;
@@ -64,7 +61,6 @@ public class GeneralConsult extends BaseEntity {
         return GeneralConsult.builder()
                 .name(req.getName())
                 .phone(req.getPhone())
-                .email(req.getEmail())           // null 가능
                 .inquiryType(req.getInquiryType())
                 .consultStatus(ConsultStatus.WAITING)
                 .content(req.getContent())       // null 가능
