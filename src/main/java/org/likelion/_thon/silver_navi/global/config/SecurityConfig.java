@@ -67,6 +67,8 @@ public class SecurityConfig {
                         // 상담
                         .requestMatchers(HttpMethod.GET, "/api/consults/management").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/consults/{consultId}/{category}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/consults/{consultId}/{category}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/consults/reply").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                         .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)

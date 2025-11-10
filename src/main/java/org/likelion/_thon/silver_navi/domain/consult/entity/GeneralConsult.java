@@ -57,6 +57,9 @@ public class GeneralConsult extends BaseEntity {
     @JoinColumn(name = "facility_id")
     private NursingFacility facility;
 
+    @OneToOne(mappedBy = "generalConsult", cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
+    private ConsultReply consultReply;
+
     public static GeneralConsult toEntity(GeneralApplyReq req, User user, NursingFacility facility) {
         return GeneralConsult.builder()
                 .name(req.getName())
@@ -78,6 +81,15 @@ public class GeneralConsult extends BaseEntity {
         }
         if (req.getConsultStatus() != null) {
             this.consultStatus = req.getConsultStatus();
+        }
+    }
+
+    // 연관관계 편의 메서드
+    public void consultReply(ConsultReply consultReply) {
+        this.consultReply = consultReply;
+
+        if (consultReply != null) {
+            consultReply.setGeneralConsult(this);
         }
     }
 }
