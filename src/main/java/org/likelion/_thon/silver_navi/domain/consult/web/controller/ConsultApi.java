@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultConfirmReq;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultDetailInfoRes;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultManagementRes;
+import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultReplyCreateReq;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.data.domain.Pageable;
@@ -256,5 +257,71 @@ public interface ConsultApi {
     })
     public ResponseEntity<SuccessResponse<?>> updateConsult(
             ManagerPrincipal managerPrincipal, Long consultId, String category, ConsultConfirmReq consultConfirmReq
+    );
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "상담 답변 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "timestamp": "2025-11-10 16:50:59",
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
+                                                "message": "답변이 성공적으로 작성되었습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "상담 존재 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-10 16:48:08",
+                                                "code": "CONSULT_404_1",
+                                                "httpStatus": 404,
+                                                "message": "해당 상담을 찾을 수 없습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "상담 존재 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-10 16:50:19",
+                                                "code": "CONSULT_409_1",
+                                                "httpStatus": 409,
+                                                "message": "이미 해당 상담에 답변을 작성하였습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<?>> createConsultReply(
+            ManagerPrincipal managerPrincipal, ConsultReplyCreateReq consultReplyCreateReq
     );
 }

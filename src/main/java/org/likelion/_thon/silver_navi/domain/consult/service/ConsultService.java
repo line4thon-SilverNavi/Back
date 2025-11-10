@@ -1,5 +1,6 @@
 package org.likelion._thon.silver_navi.domain.consult.service;
 
+import jakarta.validation.Valid;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultCategory;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.*;
@@ -26,4 +27,7 @@ public interface ConsultService {
     void updateConsult(
             ManagerPrincipal managerPrincipal, Long consultId, ConsultCategory consultCategory, ConsultConfirmReq consultConfirmReq
     );
+
+    // 상담 답변 생성
+    void createConsultReply(ManagerPrincipal managerPrincipal, @Valid ConsultReplyCreateReq consultReplyCreateReq);
 }

@@ -1,12 +1,15 @@
 package org.likelion._thon.silver_navi.domain.consult.service;
 
 import org.likelion._thon.silver_navi.domain.consult.entity.Consult;
+import org.likelion._thon.silver_navi.domain.consult.entity.ConsultReply;
 import org.likelion._thon.silver_navi.domain.consult.entity.GeneralConsult;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultCategory;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
 import org.likelion._thon.silver_navi.domain.consult.exception.ConsultAccessDeniedException;
 import org.likelion._thon.silver_navi.domain.consult.exception.ConsultNotFoundException;
+import org.likelion._thon.silver_navi.domain.consult.exception.ConsultReplyAlreadyExistsException;
 import org.likelion._thon.silver_navi.domain.consult.repository.CombinedConsultDto;
+import org.likelion._thon.silver_navi.domain.consult.repository.ConsultReplyRepository;
 import org.likelion._thon.silver_navi.domain.consult.repository.ConsultRepository;
 import org.likelion._thon.silver_navi.domain.consult.repository.GeneralConsultRepository;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.*;
@@ -37,6 +40,7 @@ public class ConsultServiceImpl implements ConsultService {
     private final NursingFacilityRepository nursingFacilityRepository;
     private final GeneralConsultRepository generalConsultRepository;
     private final ConsultRepository consultRepository;
+    private final ConsultReplyRepository consultReplyRepository;
     private final NotificationRepository notificationRepository;
 
     @Override
@@ -150,7 +154,7 @@ public class ConsultServiceImpl implements ConsultService {
         User user;
         boolean isApproved = consultConfirmReq.getConsultStatus() == ConsultStatus.CONFIRMED;
 
-        if (consultCategory.equals(ConsultCategory.GRADE)) { // 상담
+        if (consultCategory.equals(ConsultCategory.GRADE)) { // 시설상담
             Consult consult = consultRepository.findById(consultId)
                     .orElseThrow(ConsultNotFoundException::new);
 
@@ -179,5 +183,44 @@ public class ConsultServiceImpl implements ConsultService {
                 isApproved
         );
         notificationRepository.save(notification);
+    }
+
+    @Override
+    @Transactional
+    public void createConsultReply(ManagerPrincipal managerPrincipal, ConsultReplyCreateReq req) {
+        NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
+                .orElseThrow(FacilityNotFoundException::new);
+
+        if (req.getCategory().equals(ConsultCategory.GRADE)) {
+            Consult consult = consultRepository.findById(req.getConsultId())
+                    .orElseThrow(ConsultNotFoundException::new);
+
+            if (!consult.getFacility().getId().equals(nursingFacility.getId())) {
+                throw new ConsultAccessDeniedException();
+            }
+
+            if (consultReplyRepository.existsByConsult_Id(req.getConsultId())) {
+                throw new ConsultReplyAlreadyExistsException();
+            }
+
+            ConsultReply reply = ConsultReply.toEntity(req.getContent(), consult, null);
+
+            consult.setConsultReply(reply);
+        } else {
+            GeneralConsult consult = generalConsultRepository.findById(req.getConsultId())
+                    .orElseThrow(ConsultNotFoundException::new);
+
+            if (!consult.getFacility().getId().equals(nursingFacility.getId())) {
+                throw new ConsultAccessDeniedException();
+            }
+
+            if (consultReplyRepository.existsByGeneralConsult_Id(req.getConsultId())) {
+                throw new ConsultReplyAlreadyExistsException();
+            }
+
+            ConsultReply reply = ConsultReply.toEntity(req.getContent(), null, consult);
+
+            consult.setConsultReply(reply);
+        }
     }
 }

@@ -89,6 +89,7 @@ public class ConsultController implements ConsultApi {
                 .body(SuccessResponse.from(consultDetailInfoRes));
     }
 
+    @Override
     @PatchMapping("/{consultId}/{category}")
     public ResponseEntity<SuccessResponse<?>> updateConsult(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
@@ -106,4 +107,18 @@ public class ConsultController implements ConsultApi {
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.emptyCustom("변경이 성공적으로 되었습니다."));
     }
+
+    @Override
+    @PostMapping("/reply")
+    public ResponseEntity<SuccessResponse<?>> createConsultReply(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @RequestBody @Valid ConsultReplyCreateReq consultReplyCreateReq
+    ) {
+        consultService.createConsultReply(managerPrincipal, consultReplyCreateReq);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.emptyCustom("답변이 성공적으로 작성되었습니다."));
+    }
+
 }
