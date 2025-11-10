@@ -74,7 +74,7 @@ public class OcrService {
     //ocr 전체 결과에서 인정 번호, 등급 추출
     private OcrRes parseOcrResult(OcrResult ocrResult) {
         if (ocrResult == null || ocrResult.images() == null || ocrResult.images().isEmpty()) {
-            return new OcrRes(null, null);
+            return new OcrRes(null);
         }
 
         // 모든 inferText를 공백으로 이어 붙이기
@@ -83,19 +83,19 @@ public class OcrService {
                 .collect(Collectors.joining(" "));
 
         // 패턴 매칭 (인정번호: 2024-123456 / 등급: 2등급)
-        Pattern numberPattern = Pattern.compile(
-                "(장기요양(?:인정번호)?|인정번호)\\s*[:：-]?\\s*([0-9]{4}\\s*[-–—]?\\s*[0-9]{6})"
-        );
+//        Pattern numberPattern = Pattern.compile(
+//                "(장기요양(?:인정번호)?|인정번호)\\s*[:：-]?\\s*([0-9]{4}\\s*[-–—]?\\s*[0-9]{6})"
+//        );
         Pattern gradePattern = Pattern.compile("장기요양등급\\s*([0-9]+등급)");
 
         //탐색
-        Matcher numberMatcher = numberPattern.matcher(fullText);
+        //Matcher numberMatcher = numberPattern.matcher(fullText);
         Matcher gradeMatcher = gradePattern.matcher(fullText);
 
         //결과 반환
-        String careNumber = numberMatcher.find() ? numberMatcher.group(2) : null;
+        //String careNumber = numberMatcher.find() ? numberMatcher.group(2) : null;
         String careGrade = gradeMatcher.find() ? gradeMatcher.group(1) : null;
 
-        return new OcrRes(careNumber, careGrade);
+        return new OcrRes(careGrade);
     }
 }
