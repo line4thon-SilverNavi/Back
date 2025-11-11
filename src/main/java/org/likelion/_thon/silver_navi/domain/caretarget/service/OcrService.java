@@ -65,8 +65,8 @@ public class OcrService {
 
            return parseOcrResult(response.getBody());
 
-       }catch (RestClientException e) {
-            log.error("[Clova OCR] 요청 실패 - {}", e.getMessage(), e);
+       }catch (Exception e) {
+           log.error("[Clova OCR] 요청 실패 (예외 타입: {}) - {}", e.getClass().getSimpleName(), e.getMessage(), e);
             throw  new OcrRequestFailedException();
         }
     }
