@@ -98,7 +98,7 @@ public class User extends BaseEntity {
     }
 
     public void updatePartial(UserUpdateReq dto) {
-        if (dto.getUserName() != null) this.name = dto.getUserName();
+        if (dto.getGuardianName() != null) this.name = dto.getGuardianName();
         if (dto.getRelationRole() != null) this.relation = dto.getRelationRole();
     }
 

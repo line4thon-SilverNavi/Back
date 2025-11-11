@@ -71,12 +71,6 @@ public record ConsultDetailInfoRes(
         User user = consult.getUser();
         CareTarget careTarget = user.getCareTarget();
 
-        String careName = null;
-        String carePhone = null;
-        if (!user.getRelation().equals(RelationRole.SELF)) {
-            careName = user.getName();
-            carePhone = user.getPhone();
-        }
 
         // 생년월일로 현재 나이 계산
         int age = Period.between(careTarget.getBirthDate(), LocalDate.now()).getYears();
@@ -90,8 +84,8 @@ public record ConsultDetailInfoRes(
                 careTarget.getBirthDate(),
                 age,
                 careTarget.getCareGrade(),
-                careName,
-                carePhone,
+                user.getName(),
+                user.getPhone(),
                 null,
                 null,
                 null,

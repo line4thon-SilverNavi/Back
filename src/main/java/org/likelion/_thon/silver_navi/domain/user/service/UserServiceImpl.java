@@ -2,6 +2,7 @@ package org.likelion._thon.silver_navi.domain.user.service;
 
 import org.likelion._thon.silver_navi.domain.caretarget.entity.enums.CareGrade;
 import org.likelion._thon.silver_navi.domain.caretarget.repository.CareTargetRepository;
+import org.likelion._thon.silver_navi.domain.user.entity.enums.RelationRole;
 import org.likelion._thon.silver_navi.domain.user.exception.UserNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,11 @@ public class UserServiceImpl implements UserService {
                 signUpReq.getName(), signUpReq.getPhone(), signUpReq.getRelation(),encoded);
 
         userRepository.save(user);
+
+        if (signUpReq.getRelation() == RelationRole.SELF) {
+            CareTarget careTarget = CareTarget.createForSelf(signUpReq, user);
+            careTargetRepository.save(careTarget);
+        }
     }
 
     //로그인
@@ -65,8 +71,8 @@ public class UserServiceImpl implements UserService {
 
     //유저 상세 정보 반환
     @Override
-    public UserDetailsRes userDetails(User user) {
-        UserDetailsRes res = UserDetailsRes.from(user);
+    public UserInfoRes userDetails(User user) {
+        UserInfoRes res = UserInfoRes.from(user);
         return res;
     }
 

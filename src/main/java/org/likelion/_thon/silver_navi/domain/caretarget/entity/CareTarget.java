@@ -5,6 +5,7 @@ import lombok.*;
 import org.likelion._thon.silver_navi.domain.caretarget.entity.enums.CareGrade;
 import org.likelion._thon.silver_navi.domain.caretarget.entity.enums.Gender;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
+import org.likelion._thon.silver_navi.domain.user.web.dto.SignUpReq;
 import org.likelion._thon.silver_navi.domain.user.web.dto.UserUpdateReq;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
@@ -32,15 +33,12 @@ public class CareTarget extends BaseEntity {
     @Column
     private Gender gender;
 
-    @Column
-    private String address;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "care_grade")
     private CareGrade careGrade;
 
-    @Column(name = "care_number", unique = true)
-    private String careNumber;
+    @Column(name = "phone_number",unique = true)
+    private String phoneNumber;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -57,8 +55,15 @@ public class CareTarget extends BaseEntity {
         if (dto.getCareTargetName() != null) this.name = dto.getCareTargetName();
         if (dto.getCareTargetBirth() != null) this.birthDate = dto.getCareTargetBirth();
         if (dto.getCareTargetGender() != null) this.gender = dto.getCareTargetGender();
-        if (dto.getAddress() != null) this.address = dto.getAddress();
-        if (dto.getCareNumber() != null) this.careNumber = dto.getCareNumber();
+        if (dto.getCareTargetPhone() != null) this.phoneNumber = dto.getCareTargetPhone();
         if (dto.getCareGrade() != null) this.careGrade = dto.getCareGrade();
+    }
+
+    public static CareTarget createForSelf(SignUpReq req, User user) {
+        CareTarget careTarget = new CareTarget();
+        careTarget.name = req.getName();
+        careTarget.phoneNumber = req.getPhone();
+        careTarget.user = user;
+        return careTarget;
     }
 }
