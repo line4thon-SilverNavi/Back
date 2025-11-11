@@ -152,11 +152,12 @@ public interface ManagerApi {
                                     value = """
                                             {
                                                 "isSuccess": true,
-                                                "timestamp": "2025-10-29 11:12:21",
+                                                "timestamp": "2025-11-11 12:27:24",
                                                 "code": "GLOBAL_200",
                                                 "httpStatus": 200,
                                                 "message": "호출에 성공하였습니다.",
                                                 "data": {
+                                                    "name": "성신노인요양원",
                                                     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE2Nzc2NTU2OTZ9.dummy-signature-string-for-example"
                                                 }
                                             }

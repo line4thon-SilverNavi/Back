@@ -79,6 +79,6 @@ public class ManagerServiceImpl implements ManagerService {
 
         String token = jwtTokenProvider.createToken(manager);
 
-        return new ManagerSignInRes(token);
+        return new ManagerSignInRes(manager.getNursingFacility().getName(), token);
     }
 }
