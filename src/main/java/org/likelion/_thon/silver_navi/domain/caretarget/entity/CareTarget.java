@@ -5,6 +5,7 @@ import lombok.*;
 import org.likelion._thon.silver_navi.domain.caretarget.entity.enums.CareGrade;
 import org.likelion._thon.silver_navi.domain.caretarget.entity.enums.Gender;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
+import org.likelion._thon.silver_navi.domain.user.web.dto.SignUpReq;
 import org.likelion._thon.silver_navi.domain.user.web.dto.UserUpdateReq;
 import org.likelion._thon.silver_navi.global.entity.BaseEntity;
 
@@ -32,14 +33,11 @@ public class CareTarget extends BaseEntity {
     @Column
     private Gender gender;
 
-    @Column
-    private String address;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "care_grade")
     private CareGrade careGrade;
 
-    @Column(unique = true)
+    @Column(name = "phone_number",unique = true)
     private String phoneNumber;
 
     @OneToOne
@@ -59,5 +57,13 @@ public class CareTarget extends BaseEntity {
         if (dto.getCareTargetGender() != null) this.gender = dto.getCareTargetGender();
         if (dto.getCareTargetPhone() != null) this.phoneNumber = dto.getCareTargetPhone();
         if (dto.getCareGrade() != null) this.careGrade = dto.getCareGrade();
+    }
+
+    public static CareTarget createForSelf(SignUpReq req, User user) {
+        CareTarget careTarget = new CareTarget();
+        careTarget.name = req.getName();
+        careTarget.phoneNumber = req.getPhone();
+        careTarget.user = user;
+        return careTarget;
     }
 }
