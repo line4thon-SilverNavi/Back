@@ -51,7 +51,7 @@ public class Consult extends BaseEntity {
     @Column(nullable = false, name = "consult_status")
     private ConsultStatus consultStatus;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String content;
 
     @Column(name = "confirmed_date", nullable = true)
@@ -81,7 +81,7 @@ public class Consult extends BaseEntity {
                 .hopeTime(req.getHopeTime())
                 .consultType(req.getConsultType())
                 .consultStatus(ConsultStatus.WAITING)
-                .content(req.getContent())
+                .content((req.getContent() == null || req.getContent().isBlank()) ? null : req.getContent())
                 .user(user)
                 .facility(facility)
                 .build();

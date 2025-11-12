@@ -37,6 +37,5 @@ public class ConsultApplyReq {
     @NotNull(message = "상담 종류는 필수 입력 항목입니다.")
     private ConsultType consultType;    // enum: FACE_TO_FACE / NON_FACE_TO_FACE
 
-    @NotBlank(message = "문의 내용은 필수 입력 항목입니다.")
     private String content;
 }
