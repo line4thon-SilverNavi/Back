@@ -50,22 +50,6 @@ public class ReviewServiceImpl implements ReviewService {
         updateFacilityReviewStats(facility, req.getRating());
     }
 
-    private void updateFacilityReviewStats(NursingFacility facility, Integer newRate) {
-        long oldCount = facility.getReviewCount() == null ? 0L : facility.getReviewCount();
-        BigDecimal oldAvg = facility.getAverageRating() == null ? BigDecimal.ZERO : facility.getAverageRating();
-
-        long newCount = oldCount + 1;
-
-        BigDecimal newTotal = oldAvg.multiply(BigDecimal.valueOf(oldCount))
-                .add(BigDecimal.valueOf(newRate));
-
-        BigDecimal newAvg = newTotal
-                .divide(BigDecimal.valueOf(newCount), 2, RoundingMode.HALF_UP);
-
-        facility.updateReviewStats(newCount, newAvg);
-        nursingFacilityRepository.save(facility);
-    }
-
     @Override
     @Transactional
     public ReviewPageRes getReviews(ManagerPrincipal managerPrincipal, Integer rating, Pageable pageable) {
@@ -105,9 +89,13 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(ReviewNotFoundException::new);
 
+        NursingFacility facility = review.getNursingFacility();
+
         if (!review.getNursingFacility().getId().equals(managerPrincipal.getFacilityId())) {
             throw new ReviewAccessDeniedException();
         }
+
+        updateFacilityReviewStatsAfterDelete(facility, review.getRating());
 
         reviewRepository.delete(review);
     }
@@ -139,5 +127,42 @@ public class ReviewServiceImpl implements ReviewService {
         );
 
         notificationRepository.save(notification);
+    }
+
+    // 리뷰 생성 시 평균 평점 재계산
+    private void updateFacilityReviewStats(NursingFacility facility, Integer newRate) {
+        long oldCount = facility.getReviewCount() == null ? 0L : facility.getReviewCount();
+        BigDecimal oldAvg = facility.getAverageRating() == null ? BigDecimal.ZERO : facility.getAverageRating();
+
+        long newCount = oldCount + 1;
+
+        BigDecimal newTotal = oldAvg.multiply(BigDecimal.valueOf(oldCount))
+                .add(BigDecimal.valueOf(newRate));
+
+        BigDecimal newAvg = newTotal
+                .divide(BigDecimal.valueOf(newCount), 2, RoundingMode.HALF_UP);
+
+        facility.updateReviewStats(newCount, newAvg);
+        nursingFacilityRepository.save(facility);
+    }
+
+    // 리뷰 삭제 시 평균 평점 재계산
+    private void updateFacilityReviewStatsAfterDelete(NursingFacility facility, Integer deletedRate) {
+        long oldCount = facility.getReviewCount() == null ? 0L : facility.getReviewCount();
+        BigDecimal oldAvg = facility.getAverageRating() == null ? BigDecimal.ZERO : facility.getAverageRating();
+
+        if (oldCount <= 1) {
+            // 리뷰가 하나뿐이었으면 모두 삭제 → 초기화
+            facility.updateReviewStats(0L, BigDecimal.ZERO);
+        } else {
+            BigDecimal oldTotal = oldAvg.multiply(BigDecimal.valueOf(oldCount));
+            BigDecimal newTotal = oldTotal.subtract(BigDecimal.valueOf(deletedRate));
+            long newCount = oldCount - 1;
+
+            BigDecimal newAvg = newTotal.divide(BigDecimal.valueOf(newCount), 2, RoundingMode.HALF_UP);
+            facility.updateReviewStats(newCount, newAvg);
+        }
+
+        nursingFacilityRepository.save(facility);
     }
 }
