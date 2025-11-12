@@ -12,6 +12,7 @@ public record UserMypageInfoRes(
         RelationRole relation,
         String guardianPhone,
         String careTargetName,
+        String careTargetPhone,
         LocalDate careTargetBirth,
         Gender careTargetGender,
         int bookmarkCount,
@@ -25,15 +26,18 @@ public record UserMypageInfoRes(
         int reviewCount = user.getReviews().size();
 
         String careTargetName = null;
+        String careTargetPhone = null;
         LocalDate careTargetBirth = null;
         Gender careTargetGender = null;
         boolean hasCompleteCareTarget = false;
         CareTarget careTarget = user.getCareTarget();
+
         //모든 정보가 있는지 확인
         if (careTarget != null) {
             careTargetName = careTarget.getName();
             careTargetBirth = careTarget.getBirthDate();
             careTargetGender = careTarget.getGender();
+            careTargetPhone = careTarget.getPhoneNumber();
 
             boolean allFilled =
                     careTarget.getName() != null &&
@@ -49,6 +53,7 @@ public record UserMypageInfoRes(
                 user.getRelation(),
                 user.getPhone(),
                 careTargetName,
+                careTargetPhone,
                 careTargetBirth,
                 careTargetGender,
                 bookmarkCount,
