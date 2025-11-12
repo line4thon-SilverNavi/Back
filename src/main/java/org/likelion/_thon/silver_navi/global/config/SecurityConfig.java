@@ -43,6 +43,8 @@ public class SecurityConfig {
                         // --- USER ---
                         .requestMatchers(HttpMethod.GET, "/api/applications/list").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/api/programs/list").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/programs/{programId}").hasAnyRole("USER", "ADMIN")
+
 
                         // --- ADMIN ---
                         // 시설
@@ -51,7 +53,6 @@ public class SecurityConfig {
                         // 프로그램
                         .requestMatchers(HttpMethod.POST, "/api/programs").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/programs").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/programs/{programId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/programs/{programId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/programs/{programId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/programs/{programId}/applications").hasRole("ADMIN")
