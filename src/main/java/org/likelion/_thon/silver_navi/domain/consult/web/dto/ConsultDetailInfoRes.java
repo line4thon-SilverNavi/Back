@@ -35,7 +35,7 @@ public record ConsultDetailInfoRes(
         String inquiryContent,              // 문의 내용
 
         LocalDate confirmedDate,            // 확정 상담 일시
-        ConsultTime consultTime             // 확정 상담 시간 (오전, 오후, 저녁)
+        ConsultTime confirmedTime             // 확정 상담 시간 (오전, 오후, 저녁)
 ) {
     public static ConsultDetailInfoRes from(Consult consult) {
         User user = consult.getUser();
