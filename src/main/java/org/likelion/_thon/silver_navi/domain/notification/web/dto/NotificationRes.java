@@ -5,7 +5,9 @@ import org.likelion._thon.silver_navi.domain.notification.entity.enums.Notificat
 import org.likelion._thon.silver_navi.domain.notification.entity.enums.NotificationType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public record NotificationRes(
         Long notificationId,
@@ -14,7 +16,8 @@ public record NotificationRes(
         String targetName,
         String rejectReason,
         LocalDate programDate,      // 프로그램 일정
-        LocalTime programStartTime, // 프로그램 시작 시간 (
+        LocalTime programStartTime, // 프로그램 시작 시간
+        String createdAt,
         boolean isRead
 ) {
     public static NotificationRes from(
@@ -24,6 +27,8 @@ public record NotificationRes(
             LocalDate programDate,
             LocalTime programStartTime
     ) {
+        String formattedCreatedAt = formatCreatedAt(n.getCreatedAt());
+
         return new NotificationRes(
                 n.getId(),
                 n.getType(),
@@ -32,7 +37,21 @@ public record NotificationRes(
                 rejectReason,
                 programDate,
                 programStartTime,
+                formattedCreatedAt,
                 n.isRead()
         );
+    }
+
+    public static String formatCreatedAt(LocalDateTime createdAt) {
+        LocalDate today = LocalDate.now();
+        LocalDate createdDate = createdAt.toLocalDate();
+
+        long days = ChronoUnit.DAYS.between(createdDate, today);
+
+        if (days == 0) {
+            return "오늘";
+        } else {
+            return days + "일 전";
+        }
     }
 }
