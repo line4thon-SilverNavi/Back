@@ -14,6 +14,10 @@ import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Tag(name = "상담 API", description = "상담 관련 API")
 public interface ConsultApi {
@@ -323,5 +327,51 @@ public interface ConsultApi {
     })
     public ResponseEntity<SuccessResponse<?>> createConsultReply(
             ManagerPrincipal managerPrincipal, ConsultReplyCreateReq consultReplyCreateReq
+    );
+
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "상담 검색 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                 "isSuccess": true,
+                                                 "timestamp": "2025-11-13 22:07:29",
+                                                 "code": "GLOBAL_200",
+                                                 "httpStatus": 200,
+                                                 "message": "호출에 성공하였습니다.",
+                                                 "data": [
+                                                     {
+                                                         "consultId": 2,
+                                                         "consultDate": "2025-11-13",
+                                                         "consultCategory": "시설상담",
+                                                         "name": "김민지",
+                                                         "relationRole": "자녀",
+                                                         "phone": "01098765432",
+                                                         "status": "대기중"
+                                                     },
+                                                     {
+                                                         "consultId": 2,
+                                                         "consultDate": "2025-11-13",
+                                                         "consultCategory": "일반상담",
+                                                         "name": "홍길동",
+                                                         "relationRole": null,
+                                                         "phone": "01012345678",
+                                                         "status": "대기중"
+                                                     }
+                                                 ]
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<List<ConsultManagementRes.ConsultInfoRes>>> searchConsults(
+            ManagerPrincipal managerPrincipal, String keyword
     );
 }

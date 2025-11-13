@@ -14,6 +14,8 @@ import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 @Tag(name = "신청 관리 API", description = "프로그램 신청 관련 API")
 public interface ApplicationApi {
 
@@ -234,5 +236,40 @@ public interface ApplicationApi {
     })
     public ResponseEntity<SuccessResponse<?>> updateApplicationInfo(
             ManagerPrincipal managerPrincipal, Long applicationId, ApplicationStatusUpdateReq applicationStatusUpdateReq
+    );
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "신청 검색 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "timestamp": "2025-11-13 21:18:50",
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
+                                                "message": "호출에 성공하였습니다.",
+                                                "data": [
+                                                    {
+                                                        "applicationId": 1,
+                                                        "applicationDate": "2025-11-13",
+                                                        "programName": "활기찬 아침 체조",
+                                                        "applicantName": "김보호",
+                                                        "phone": "01011112222",
+                                                        "status": "대기중"
+                                                    }
+                                                ]
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<List<ApplicationManagementRes.ApplicationInfoRes>>> searchApplications(
+            ManagerPrincipal managerPrincipal, String keyword
     );
 }

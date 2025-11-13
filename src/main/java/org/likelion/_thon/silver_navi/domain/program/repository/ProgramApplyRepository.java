@@ -24,7 +24,9 @@ public interface ProgramApplyRepository extends JpaRepository<ProgramApply, Long
     List<ProgramApply> findAllByProgram(Program program);
     
     Optional<ProgramApply> findByUserAndProgram(User user, Program program);
-    
+
+    List<ProgramApply> findByProgram_NursingFacility_IdAndProgram_NameContaining(Long facilityId, String programName);
+
     // 이번 달 상태별 신청 건수
     long countByProgramIdInAndStatusAndCreatedAtBetween(
             List<Long> programIds, ApplicationStatus status, LocalDateTime start, LocalDateTime end);

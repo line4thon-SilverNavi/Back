@@ -107,6 +107,16 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public List<ApplicationInfoRes> searchApplications(ManagerPrincipal managerPrincipal, String keyword) {
+        List<ProgramApply> applies = programApplyRepository
+                .findByProgram_NursingFacility_IdAndProgram_NameContaining(managerPrincipal.getFacilityId(), keyword);
+
+        return applies.stream()
+                .map(ApplicationInfoRes::from)
+                .toList();
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public ApplicationSummaryRes getUserByApplications(User user) {
         // 사용자가 신청한 프로그램 목록 조회

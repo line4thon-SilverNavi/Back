@@ -9,6 +9,8 @@ import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface ApplicationService {
     // 신청 목록 보기
     ApplicationManagementRes getApplications(
@@ -20,6 +22,8 @@ public interface ApplicationService {
     // 신청자 상태 업데이트
     void updateApplicationStatus(
             ManagerPrincipal managerPrincipal, Long applicationId, ApplicationStatusUpdateReq applicationStatusUpdateReq);
+    // 신청 검색
+    List<ApplicationManagementRes.ApplicationInfoRes> searchApplications(ManagerPrincipal managerPrincipal, String keyword);
 
     ApplicationSummaryRes getUserByApplications(User user);
 }

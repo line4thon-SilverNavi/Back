@@ -53,11 +53,13 @@ public class SecurityConfig {
                         // 프로그램
                         .requestMatchers(HttpMethod.POST, "/api/programs").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/programs").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/programs/search").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/programs/{programId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/programs/{programId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/programs/{programId}/applications").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/programs/{programId}/applications").hasRole("ADMIN")
                         // 프로그램 신청
+                        .requestMatchers(HttpMethod.GET, "/api/programs/search").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/applications/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/applications/{applications}").hasRole("ADMIN")
                         // 리뷰
@@ -66,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/reviews/{reviewId}/reply").hasRole("ADMIN")
                         // 상담
+                        .requestMatchers(HttpMethod.GET, "/api/consults/search").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/consults/management").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/consults/{consultId}/{category}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/consults/{consultId}/{category}").hasRole("ADMIN")

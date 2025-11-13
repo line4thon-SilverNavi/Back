@@ -1,6 +1,7 @@
 package org.likelion._thon.silver_navi.domain.program.web.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
 import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.UserByFacilityInfoRes;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -114,6 +116,7 @@ public class ProgramController implements ProgramApi {
                 .body(SuccessResponse.from(res));
     }
 
+    @Override
     @PatchMapping("/{programId}/applications")
     public ResponseEntity<SuccessResponse<?>> updateAttendanceStatus(
             @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
@@ -125,6 +128,19 @@ public class ProgramController implements ProgramApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.emptyCustom("출결이 성공적으로 변경되었습니다."));
+    }
+
+    @Override
+    @GetMapping("/search")
+    public ResponseEntity<SuccessResponse<List<ProgramSummaryInfoRes>>> searchPrograms(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @RequestParam String keyword
+    ) {
+        List<ProgramSummaryInfoRes> programSummaryInfoResList = programService.searchPrograms(managerPrincipal, keyword);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.from(programSummaryInfoResList));
     }
 
 
