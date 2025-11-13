@@ -59,6 +59,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/programs/{programId}/applications").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/programs/{programId}/applications").hasRole("ADMIN")
                         // 프로그램 신청
+                        .requestMatchers(HttpMethod.GET, "/api/programs/search").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/applications/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/applications/{applications}").hasRole("ADMIN")
                         // 리뷰

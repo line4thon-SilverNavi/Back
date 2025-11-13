@@ -1,11 +1,10 @@
 package org.likelion._thon.silver_navi.domain.program.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.likelion._thon.silver_navi.domain.bookmark.web.dto.BookmarkSummaryRes;
-import org.likelion._thon.silver_navi.domain.nursingfacility.web.dto.NearbyFacilityRes;
 import org.likelion._thon.silver_navi.domain.program.entity.enums.ApplicationStatus;
 import org.likelion._thon.silver_navi.domain.program.service.ApplicationService;
 import org.likelion._thon.silver_navi.domain.program.web.dto.*;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ApplicationManagementRes.ApplicationInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
@@ -71,6 +70,19 @@ public class ApplicationController implements ApplicationApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.emptyCustom("신청 상태가 변경되었습니다."));
+    }
+
+    @Override
+    @GetMapping("/search")
+    public ResponseEntity<SuccessResponse<List<ApplicationInfoRes>>> searchApplications(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @RequestParam String keyword
+    ) {
+        List<ApplicationInfoRes> applicationInfoResList = applicationService.searchApplications(managerPrincipal, keyword);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.from(applicationInfoResList));
     }
 
     @GetMapping("/list")

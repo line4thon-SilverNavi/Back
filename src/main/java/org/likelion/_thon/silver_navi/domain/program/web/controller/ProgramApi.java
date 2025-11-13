@@ -410,7 +410,7 @@ public interface ProgramApi {
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "출결 상태 변경 성공",
+                    description = "프로그램 검색 성공",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = SuccessResponse.class),
