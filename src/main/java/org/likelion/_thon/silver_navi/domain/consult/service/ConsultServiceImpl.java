@@ -204,6 +204,7 @@ public class ConsultServiceImpl implements ConsultService {
             }
 
             ConsultReply reply = ConsultReply.toEntity(req.getContent(), consult, null);
+            consult.setConsultStatus(ConsultStatus.COMPLETED);
 
             consult.setConsultReply(reply);
         } else {
@@ -219,6 +220,7 @@ public class ConsultServiceImpl implements ConsultService {
             }
 
             ConsultReply reply = ConsultReply.toEntity(req.getContent(), null, consult);
+            consult.setConsultStatus(ConsultStatus.COMPLETED);
 
             consult.setConsultReply(reply);
         }

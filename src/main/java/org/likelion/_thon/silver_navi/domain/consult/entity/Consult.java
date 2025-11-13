@@ -5,6 +5,7 @@ import lombok.*;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultTime;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultType;
+import org.likelion._thon.silver_navi.domain.consult.exception.ConsultModifyNotAllowedException;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultApplyReq;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultConfirmReq;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
@@ -88,6 +89,10 @@ public class Consult extends BaseEntity {
     }
 
     public void updateConfirmation(ConsultConfirmReq req) {
+        if (this.consultReply != null) {
+            throw new ConsultModifyNotAllowedException();
+        }
+
         if (req.getConfirmedDate() != null) {
             this.confirmedDate = req.getConfirmedDate();
         }
