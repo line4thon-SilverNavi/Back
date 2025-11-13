@@ -1,8 +1,10 @@
 package org.likelion._thon.silver_navi.domain.notification.service;
 
 import lombok.RequiredArgsConstructor;
+import org.likelion._thon.silver_navi.domain.consult.entity.ConsultReply;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultCategory;
 import org.likelion._thon.silver_navi.domain.consult.exception.ConsultNotFoundException;
+import org.likelion._thon.silver_navi.domain.consult.repository.ConsultReplyRepository;
 import org.likelion._thon.silver_navi.domain.consult.repository.ConsultRepository;
 import org.likelion._thon.silver_navi.domain.consult.repository.GeneralConsultRepository;
 import org.likelion._thon.silver_navi.domain.notification.entity.Notification;
@@ -40,6 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final ConsultRepository consultRepository;
     private final GeneralConsultRepository generalConsultRepository;
     private final ReviewRepository reviewRepository;
+    private final ConsultReplyRepository  consultReplyRepository;
 
     @Override
     public CountRes getCount(User user) {
@@ -92,10 +95,16 @@ public class NotificationServiceImpl implements NotificationService {
                                 targetName = consultRepository.findById(n.getReferenceId())
                                         .map(c -> c.getFacility().getName())
                                         .orElseThrow(ConsultNotFoundException::new);
+                                rejectReason = consultReplyRepository.findByConsult_Id(n.getReferenceId())
+                                        .map(ConsultReply::getContent)
+                                        .orElse(null);
                             } else {
                                 targetName = generalConsultRepository.findById(n.getReferenceId())
                                         .map(c -> c.getFacility().getName())
                                         .orElseThrow(ConsultNotFoundException::new);
+                                rejectReason = consultReplyRepository.findByGeneralConsult_Id(n.getReferenceId())
+                                        .map(ConsultReply::getContent)
+                                        .orElse(null);
                             }
                         }
                         case PROGRAM_REMINDER -> {
