@@ -20,6 +20,7 @@ import org.likelion._thon.silver_navi.domain.notification.entity.Notification;
 import org.likelion._thon.silver_navi.domain.notification.repository.NotificationRepository;
 import org.likelion._thon.silver_navi.domain.nursingfacility.entity.NursingFacility;
 import org.likelion._thon.silver_navi.domain.nursingfacility.exception.nursingfacility.FacilityNotFoundException;
+import org.likelion._thon.silver_navi.domain.program.web.dto.ProgramSummaryInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -222,5 +223,15 @@ public class ConsultServiceImpl implements ConsultService {
 
             consult.setConsultReply(reply);
         }
+    }
+
+    @Override
+    public List<ConsultInfoRes> searchConsults(ManagerPrincipal managerPrincipal, String keyword) {
+        List<CombinedConsultDto> combinedConsults = consultRepository
+                .findCombinedConsultList(managerPrincipal.getFacilityId(), keyword);
+
+        return combinedConsults.stream()
+                .map(ConsultInfoRes::from)
+                .toList();
     }
 }

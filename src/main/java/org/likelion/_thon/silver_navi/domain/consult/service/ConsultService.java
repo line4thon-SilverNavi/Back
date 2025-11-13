@@ -4,9 +4,12 @@ import jakarta.validation.Valid;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultCategory;
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.*;
+import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultManagementRes.ConsultInfoRes;
 import org.likelion._thon.silver_navi.domain.user.entity.User;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface ConsultService {
     void applyGeneral(User user, GeneralApplyReq req);
@@ -30,4 +33,7 @@ public interface ConsultService {
 
     // 상담 답변 생성
     void createConsultReply(ManagerPrincipal managerPrincipal, @Valid ConsultReplyCreateReq consultReplyCreateReq);
+
+    // 상담 검색
+    List<ConsultInfoRes> searchConsults(ManagerPrincipal managerPrincipal, String keyword);
 }

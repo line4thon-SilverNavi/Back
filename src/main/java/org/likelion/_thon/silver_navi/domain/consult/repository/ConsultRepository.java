@@ -59,4 +59,39 @@ public interface ConsultRepository extends JpaRepository<Consult, Long> {
             @Param("status") ConsultStatus status,
             Pageable pageable
     );
+
+
+    @Query(
+            value = "SELECT " +
+                    "    CONCAT('GENERAL_', id) AS compositeId, " +
+                    "    created_at AS createdAt, " +
+                    "    'GENERAL' AS consultCategory, " +
+                    "    name AS name, " +
+                    "    NULL AS relationRole, " +
+                    "    phone AS phone, " +
+                    "    consult_status AS status, " +
+                    "    id AS originalId " +
+                    "FROM general_consultation " +
+                    "WHERE facility_id = :facilityId " +
+                    "  AND (:keyword IS NULL OR name LIKE CONCAT('%', :keyword, '%') OR phone LIKE CONCAT('%', :keyword, '%')) " +
+                    "UNION ALL " +
+                    "SELECT " +
+                    "    CONCAT('GRADE_', id) AS compositeId, " +
+                    "    created_at AS createdAt, " +
+                    "    'GRADE' AS consultCategory, " +
+                    "    name AS name, " +
+                    "    relation_role AS relationRole, " +
+                    "    phone AS phone, " +
+                    "    consult_status AS status, " +
+                    "    id AS originalId " +
+                    "FROM consultation " +
+                    "WHERE facility_id = :facilityId " +
+                    "  AND (:keyword IS NULL OR name LIKE CONCAT('%', :keyword, '%') OR phone LIKE CONCAT('%', :keyword, '%')) " +
+                    "ORDER BY createdAt DESC",
+            nativeQuery = true
+    )
+    List<CombinedConsultDto> findCombinedConsultList(
+            @Param("facilityId") Long facilityId,
+            @Param("keyword") String keyword
+    );
 }

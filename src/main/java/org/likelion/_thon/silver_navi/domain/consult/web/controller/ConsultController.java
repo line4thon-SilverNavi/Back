@@ -6,6 +6,7 @@ import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultCategor
 import org.likelion._thon.silver_navi.domain.consult.entity.enums.ConsultStatus;
 import org.likelion._thon.silver_navi.domain.consult.service.ConsultService;
 import org.likelion._thon.silver_navi.domain.consult.web.dto.*;
+import org.likelion._thon.silver_navi.domain.consult.web.dto.ConsultManagementRes.ConsultInfoRes;
 import org.likelion._thon.silver_navi.global.auth.jwt.ManagerPrincipal;
 import org.likelion._thon.silver_navi.global.auth.security.CustomUserDetails;
 import org.likelion._thon.silver_navi.global.response.SuccessResponse;
@@ -16,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/consults")
@@ -121,4 +124,15 @@ public class ConsultController implements ConsultApi {
                 .body(SuccessResponse.emptyCustom("답변이 성공적으로 작성되었습니다."));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<SuccessResponse<List<ConsultInfoRes>>> searchConsults(
+            @AuthenticationPrincipal ManagerPrincipal managerPrincipal,
+            @RequestParam String keyword
+    ) {
+        List<ConsultInfoRes> consultInfoResList = consultService.searchConsults(managerPrincipal, keyword);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.from(consultInfoResList));
+    }
 }

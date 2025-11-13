@@ -68,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/reviews/{reviewId}/reply").hasRole("ADMIN")
                         // 상담
+                        .requestMatchers(HttpMethod.GET, "/api/consults/search").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/consults/management").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/consults/{consultId}/{category}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/consults/{consultId}/{category}").hasRole("ADMIN")
