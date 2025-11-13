@@ -80,7 +80,9 @@ public class GeneralConsult extends BaseEntity {
             this.confirmedTime = req.getConfirmedTime();
         }
         if (req.getConsultStatus() != null) {
-            this.consultStatus = req.getConsultStatus();
+            if (req.getConsultStatus().equals(ConsultStatus.REJECTED)) {
+                this.consultStatus = ConsultStatus.COMPLETED;
+            } else this.consultStatus = req.getConsultStatus();
         }
     }
 
