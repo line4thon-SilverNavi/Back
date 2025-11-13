@@ -29,7 +29,7 @@ public interface ConsultRepository extends JpaRepository<Consult, Long> {
                     "    phone AS phone, " +
                     "    consult_status AS status, " +
                     "    id AS originalId " +
-                    "FROM GENERAL_CONSULTATION " +
+                    "FROM general_consultation " +
                     "WHERE facility_id = :facilityId AND (:status IS NULL OR consult_status = :status) " +
                     "UNION ALL " +
                     "SELECT " +
@@ -41,14 +41,14 @@ public interface ConsultRepository extends JpaRepository<Consult, Long> {
                     "    phone AS phone, " +
                     "    consult_status AS status, " +
                     "    id AS originalId " +
-                    "FROM CONSULTATION " +
+                    "FROM consultation " +
                     "WHERE facility_id = :facilityId AND (:status IS NULL OR consult_status = :status) ",
 
             countQuery = "SELECT COUNT(*) FROM (" +
-                    "   SELECT id FROM GENERAL_CONSULTATION " +
+                    "   SELECT id FROM general_consultation " +
                     "   WHERE facility_id = :facilityId AND (:status IS NULL OR consult_status = :status) " +
                     "   UNION ALL " +
-                    "   SELECT id FROM CONSULTATION " +
+                    "   SELECT id FROM consultation " +
                     "   WHERE facility_id = :facilityId AND (:status IS NULL OR consult_status = :status) " +
                     ") AS combined_count",
 
