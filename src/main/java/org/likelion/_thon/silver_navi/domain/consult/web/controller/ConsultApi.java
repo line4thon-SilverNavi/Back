@@ -258,6 +258,26 @@ public interface ConsultApi {
                             )
                     )
             ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "상담 답변 존재할 때, 수정 X",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": false,
+                                                "timestamp": "2025-11-14 01:26:52",
+                                                "code": "CONSULT_409_2",
+                                                "httpStatus": 409,
+                                                "message": "답변이 등록된 상담은 정보를 변경할 수 없습니다.",
+                                                "data": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
     })
     public ResponseEntity<SuccessResponse<?>> updateConsult(
             ManagerPrincipal managerPrincipal, Long consultId, String category, ConsultConfirmReq consultConfirmReq
@@ -305,8 +325,8 @@ public interface ConsultApi {
                     )
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "상담 존재 X",
+                    responseCode = "409",
+                    description = "상담 답변 이미 존재",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = SuccessResponse.class),
