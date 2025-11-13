@@ -189,6 +189,16 @@ public class ProgramServiceImpl implements ProgramService {
     }
 
     @Override
+    public List<ProgramSummaryInfoRes> searchPrograms(ManagerPrincipal managerPrincipal, String keyword) {
+        List<Program> programs = programRepository
+                .findByNursingFacility_IdAndNameContaining(managerPrincipal.getFacilityId(), keyword);
+
+        return programs.stream()
+                .map(ProgramSummaryInfoRes::from)
+                .toList();
+    }
+
+    @Override
     public UserByProgramInfoRes programDetails(User user, Long programId) {
         Program program = programRepository.findById(programId)
                 .orElseThrow(ProgramNotFoundException::new);

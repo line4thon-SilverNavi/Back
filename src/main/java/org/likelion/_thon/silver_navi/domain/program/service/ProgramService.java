@@ -19,6 +19,8 @@ public interface ProgramService {
     ProgramDetailInfoRes modifyProgram(ManagerPrincipal managerPrincipal, Long programId, ProgramModifyReq programModifyReq);
     // 프로그램 삭제
     void deleteProgram(ManagerPrincipal managerPrincipal, Long programId);
+    // 프로그램 검색
+    List<ProgramSummaryInfoRes> searchPrograms(ManagerPrincipal managerPrincipal, String keyword);
 
     UserByProgramInfoRes programDetails(User user, Long programId);
 

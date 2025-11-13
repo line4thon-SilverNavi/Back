@@ -12,6 +12,8 @@ import org.likelion._thon.silver_navi.global.response.SuccessResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 @Tag(name = "프로그램 API", description = "프로그램 관련 API")
 public interface ProgramApi {
 
@@ -402,6 +404,61 @@ public interface ProgramApi {
     })
     public ResponseEntity<SuccessResponse<?>> updateAttendanceStatus(
             ManagerPrincipal managerPrincipal, Long programId, AttendanceUpdateReq attendanceUpdateReq
+    );
+
+
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "출결 상태 변경 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SuccessResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "isSuccess": true,
+                                                "timestamp": "2025-11-13 18:32:14",
+                                                "code": "GLOBAL_200",
+                                                "httpStatus": 200,
+                                                "message": "호출에 성공하였습니다.",
+                                                "data": [
+                                                    {
+                                                        "programId": 2,
+                                                        "programName": "수채화 그리기",
+                                                        "location": "미술실",
+                                                        "category": "문화",
+                                                        "date": "2025-11-24",
+                                                        "dayOfWeek": "월",
+                                                        "startTime": "14:00",
+                                                        "endTime": "15:30",
+                                                        "currentApplicants": 0,
+                                                        "capacity": 15,
+                                                        "fee": "재료비 5,000원"
+                                                    },
+                                                    {
+                                                        "programId": 5,
+                                                        "programName": "추억의 영화 상영",
+                                                        "location": "시청각실",
+                                                        "category": "문화",
+                                                        "date": "2025-11-27",
+                                                        "dayOfWeek": "목",
+                                                        "startTime": "14:00",
+                                                        "endTime": "16:00",
+                                                        "currentApplicants": 0,
+                                                        "capacity": 30,
+                                                        "fee": "무료"
+                                                    }
+                                                ]
+                                            }
+                                            """
+                            )
+                    )
+            ),
+    })
+    public ResponseEntity<SuccessResponse<List<ProgramSummaryInfoRes>>> searchPrograms(
+            ManagerPrincipal managerPrincipal,
+            String keyword
     );
 
     // -------------------------------------------------- 사용자 API --------------------------------------------------

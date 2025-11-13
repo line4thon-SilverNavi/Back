@@ -21,6 +21,8 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
             NursingFacility nursingFacility, ProgramCategory category, Pageable pageable
     );
 
+    List<Program> findByNursingFacility_IdAndNameContaining(Long facilityId, String name);
+
     List<Program> findByNameContaining(String name);
 
     @Query(value = """
