@@ -204,4 +204,11 @@ public class Program extends BaseEntity {
 
         return this;
     }
+
+    public void increaseCurrentParticipant() {
+        this.currentParticipant++;
+    }
+    public void decreaseCurrentParticipant() {
+        this.currentParticipant--;
+    }
 }
