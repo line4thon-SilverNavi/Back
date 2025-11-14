@@ -31,9 +31,9 @@ public class ProgramInitializer implements CommandLineRunner {
         if (programRepository.count() == 0) {
 
             // 1. 대상 시설을 ID로 찾습니다. (2L, 8L, 10L)
+            NursingFacility facility6 = nursingFacilityRepository.findById(6L).orElse(null);
             NursingFacility facility2 = nursingFacilityRepository.findById(2L).orElse(null);
             NursingFacility facility8 = nursingFacilityRepository.findById(8L).orElse(null);
-            NursingFacility facility10 = nursingFacilityRepository.findById(10L).orElse(null);
 
             // S3에 업로드되었다고 가정한 프로그램 이미지 URL 5개
             List<String> programImageUrls = List.of(
@@ -44,8 +44,8 @@ public class ProgramInitializer implements CommandLineRunner {
                     "https://silvernavi-s3-bucket.s3.ap-northeast-2.amazonaws.com/program_5.png"
             );
 
-            // 2. facility2 (ID: 2L) 프로그램 5개 생성 및 즉시 저장
-            if (facility2 != null) {
+            // 2. facility6 (ID: 6L) 프로그램 5개 생성 및 즉시 저장
+            if (facility6 != null) {
                 Program p1 = Program.builder()
                         .name("활기찬 아침 체조")
                         .category(ProgramCategory.HEALTH)
@@ -61,7 +61,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("편한 복장", "물통"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(0)))
-                        .nursingFacility(facility2)
+                        .nursingFacility(facility6)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -82,7 +82,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("앞치마"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(1)))
-                        .nursingFacility(facility2)
+                        .nursingFacility(facility6)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -103,7 +103,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of())
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(2)))
-                        .nursingFacility(facility2)
+                        .nursingFacility(facility6)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -124,7 +124,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("요가매트"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(3)))
-                        .nursingFacility(facility2)
+                        .nursingFacility(facility6)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -145,7 +145,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("간식"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(4)))
-                        .nursingFacility(facility2)
+                        .nursingFacility(facility6)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -154,8 +154,8 @@ public class ProgramInitializer implements CommandLineRunner {
                 System.out.println("ProgramInitializer: Facility ID 2L을(를) 찾을 수 없어 프로그램을 생성하지 못했습니다.");
             }
 
-            // 3. facility8 (ID: 8L) 프로그램 5개 생성 및 즉시 저장
-            if (facility8 != null) {
+            // 3. facility2 (ID: 2L) 프로그램 5개 생성 및 즉시 저장
+            if (facility2 != null) {
                 Program p6 = Program.builder()
                         .name("웃음 치료 교실")
                         .category(ProgramCategory.TREATMENT)
@@ -171,7 +171,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of())
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(0)))
-                        .nursingFacility(facility8)
+                        .nursingFacility(facility2)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -192,7 +192,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("필기구"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(1)))
-                        .nursingFacility(facility8)
+                        .nursingFacility(facility2)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -213,7 +213,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("개인 물"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(2)))
-                        .nursingFacility(facility8)
+                        .nursingFacility(facility2)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -234,7 +234,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("장갑", "모자"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(3)))
-                        .nursingFacility(facility8)
+                        .nursingFacility(facility2)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -255,7 +255,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of())
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(4)))
-                        .nursingFacility(facility8)
+                        .nursingFacility(facility2)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -264,8 +264,8 @@ public class ProgramInitializer implements CommandLineRunner {
                 System.out.println("ProgramInitializer: Facility ID 8L을(를) 찾을 수 없어 프로그램을 생성하지 못했습니다.");
             }
 
-            // 4. facility10 (ID: 10L) 프로그램 5개 생성 및 즉시 저장
-            if (facility10 != null) {
+            // 4. facility8 (ID: 8L) 프로그램 5개 생성 및 즉시 저장
+            if (facility8 != null) {
                 Program p11 = Program.builder()
                         .name("도자기 공예")
                         .category(ProgramCategory.CULTURE)
@@ -281,7 +281,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("앞치마", "작업복"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(0)))
-                        .nursingFacility(facility10)
+                        .nursingFacility(facility8)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -302,7 +302,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("편한 복장"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(1)))
-                        .nursingFacility(facility10)
+                        .nursingFacility(facility8)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -323,7 +323,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("운동화"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(2)))
-                        .nursingFacility(facility10)
+                        .nursingFacility(facility8)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -344,7 +344,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("먹물", "붓"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(3)))
-                        .nursingFacility(facility10)
+                        .nursingFacility(facility8)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();
@@ -365,7 +365,7 @@ public class ProgramInitializer implements CommandLineRunner {
                         .supplies(List.of("개인 스마트폰", "충전기"))
                         .proposalUrl(null)
                         .imageUrls(List.of(programImageUrls.get(4)))
-                        .nursingFacility(facility10)
+                        .nursingFacility(facility8)
                         .currentParticipant(0)
                         .status(ProgramStatus.RECRUITING)
                         .build();

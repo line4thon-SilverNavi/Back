@@ -25,6 +25,28 @@ public class ManagerInitializer implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
         if (managerRepository.count() == 0) {
+            // ----------
+
+            NursingFacility facility6 = nursingFacilityRepository.findById(6L)
+                    .orElse(null);
+
+            if (facility6 != null) {
+                String loginId = "demo6";
+                String password = "demo6!";
+                String encodedPassword = passwordEncoder.encode(password);
+
+                Manager adminManager = Manager.builder()
+                        .loginId(loginId)
+                        .password(encodedPassword)
+                        .nursingFacility(facility6)
+                        .role(UserRole.ADMIN)
+                        .build();
+
+                managerRepository.save(adminManager);
+            }
+
+            // ----------
+
             NursingFacility facility2 = nursingFacilityRepository.findById(2L)
                     .orElse(null);
 
@@ -65,18 +87,38 @@ public class ManagerInitializer implements CommandLineRunner {
 
             // ----------
 
-            NursingFacility facility10 = nursingFacilityRepository.findById(10L)
+            NursingFacility facility4 = nursingFacilityRepository.findById(4L)
                     .orElse(null);
 
-            if (facility10 != null) {
-                String loginId = "demo10";
-                String password = "demo10!";
+            if (facility4 != null) {
+                String loginId = "demo4";
+                String password = "demo4!";
                 String encodedPassword = passwordEncoder.encode(password);
 
                 Manager adminManager = Manager.builder()
                         .loginId(loginId)
                         .password(encodedPassword)
-                        .nursingFacility(facility10)
+                        .nursingFacility(facility4)
+                        .role(UserRole.ADMIN)
+                        .build();
+
+                managerRepository.save(adminManager);
+            }
+
+            // ----------
+
+            NursingFacility facility3 = nursingFacilityRepository.findById(3L)
+                    .orElse(null);
+
+            if (facility3 != null) {
+                String loginId = "demo3";
+                String password = "demo3!";
+                String encodedPassword = passwordEncoder.encode(password);
+
+                Manager adminManager = Manager.builder()
+                        .loginId(loginId)
+                        .password(encodedPassword)
+                        .nursingFacility(facility3)
                         .role(UserRole.ADMIN)
                         .build();
 
