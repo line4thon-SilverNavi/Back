@@ -57,7 +57,7 @@ public class ProgramApply extends BaseEntity {
         if (isApproved) {
             this.status = ApplicationStatus.APPROVED;
             this.attendanceStatus = AttendanceStatus.ABSENT;
-
+            this.program.increaseCurrentParticipant();
         } else {
             if (!StringUtils.hasText(reason)) {
                 throw new ApplicationReasonRequiredException();
