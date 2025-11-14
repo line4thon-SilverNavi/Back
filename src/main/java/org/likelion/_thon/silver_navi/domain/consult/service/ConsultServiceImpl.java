@@ -205,9 +205,13 @@ public class ConsultServiceImpl implements ConsultService {
             }
 
             ConsultReply reply = ConsultReply.toEntity(req.getContent(), consult, null);
-            consult.setConsultStatus(ConsultStatus.COMPLETED);
 
-            consult.setConsultReply(reply);
+            ConsultConfirmReq confirmReq = ConsultConfirmReq.builder()
+                    .confirmedDate(req.getConfirmedDate())
+                    .confirmedTime(req.getConfirmedTime())
+                    .consultStatus(ConsultStatus.COMPLETED)
+                    .build();
+            consult.updateConfirmation(confirmReq);
         } else {
             GeneralConsult consult = generalConsultRepository.findById(req.getConsultId())
                     .orElseThrow(ConsultNotFoundException::new);
@@ -221,9 +225,15 @@ public class ConsultServiceImpl implements ConsultService {
             }
 
             ConsultReply reply = ConsultReply.toEntity(req.getContent(), null, consult);
-            consult.setConsultStatus(ConsultStatus.COMPLETED);
 
-            consult.setConsultReply(reply);
+            ConsultConfirmReq confirmReq = ConsultConfirmReq.builder()
+                    .confirmedDate(req.getConfirmedDate())
+                    .confirmedTime(req.getConfirmedTime())
+                    .consultStatus(ConsultStatus.COMPLETED)
+                    .build();
+            consult.updateConfirmation(confirmReq);
+
+            consult.consultReply(reply);
         }
     }
 
