@@ -117,7 +117,3 @@ src/main/java/org/likelion/_thon/silver_navi
 - **review**: 리뷰 조회/삭제/답글(관리자)
 - **bookmark**: 시설/프로그램 즐겨찾기
 - **caretarget**: 보호 대상자 정보
-
-
-### 라이선스
-내부 프로젝트로 별도 라이선스 명시가 없다면 사내 정책을 따릅니다.
