@@ -35,7 +35,9 @@ public record ConsultDetailInfoRes(
         String inquiryContent,              // 문의 내용
 
         LocalDate confirmedDate,            // 확정 상담 일시
-        ConsultTime confirmedTime             // 확정 상담 시간 (오전, 오후, 저녁)
+        ConsultTime confirmedTime,          // 확정 상담 시간 (오전, 오후, 저녁)
+
+        String reply                        // 상담 답변
 ) {
     public static ConsultDetailInfoRes from(Consult consult) {
         User user = consult.getUser();
@@ -68,7 +70,8 @@ public record ConsultDetailInfoRes(
                 null,
                 consult.getContent(),
                 consult.getConfirmedDate(),
-                consult.getConfirmedTime()
+                consult.getConfirmedTime(),
+                consult.getConsultReply() != null ? consult.getConsultReply().getContent() : null
         );
     }
 
@@ -97,7 +100,8 @@ public record ConsultDetailInfoRes(
                 consult.getInquiryType(),
                 consult.getContent(),
                 consult.getConfirmedDate(),
-                consult.getConfirmedTime()
+                consult.getConfirmedTime(),
+                consult.getConsultReply() != null ? consult.getConsultReply().getContent() : null
         );
     }
 }
