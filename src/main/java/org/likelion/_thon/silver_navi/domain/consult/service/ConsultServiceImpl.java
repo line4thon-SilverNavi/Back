@@ -195,6 +195,7 @@ public class ConsultServiceImpl implements ConsultService {
         User user;
         Long consultId;
         ConsultCategory consultCategory;
+        boolean isApproved = req.getConsultStatus() == ConsultStatus.COMPLETED;
 
         if (req.getCategory().equals(ConsultCategory.GRADE)) {
             Consult consult = consultRepository.findById(req.getConsultId())
@@ -216,7 +217,7 @@ public class ConsultServiceImpl implements ConsultService {
             ConsultConfirmReq confirmReq = ConsultConfirmReq.builder()
                     .confirmedDate(req.getConfirmedDate())
                     .confirmedTime(req.getConfirmedTime())
-                    .consultStatus(ConsultStatus.COMPLETED)
+                    .consultStatus(req.getConsultStatus())
                     .build();
             consult.updateConfirmation(confirmReq);
         } else {
@@ -236,7 +237,7 @@ public class ConsultServiceImpl implements ConsultService {
             ConsultConfirmReq confirmReq = ConsultConfirmReq.builder()
                     .confirmedDate(req.getConfirmedDate())
                     .confirmedTime(req.getConfirmedTime())
-                    .consultStatus(ConsultStatus.COMPLETED)
+                    .consultStatus(req.getConsultStatus())
                     .build();
             consult.updateConfirmation(confirmReq);
 
@@ -250,7 +251,7 @@ public class ConsultServiceImpl implements ConsultService {
                 user,
                 consultId,
                 consultCategory,
-                true
+                isApproved
         );
         notificationRepository.save(notification);
     }
