@@ -192,6 +192,10 @@ public class ConsultServiceImpl implements ConsultService {
         NursingFacility nursingFacility = nursingFacilityRepository.findById(managerPrincipal.getFacilityId())
                 .orElseThrow(FacilityNotFoundException::new);
 
+        User user;
+        Long consultId;
+        ConsultCategory consultCategory;
+
         if (req.getCategory().equals(ConsultCategory.GRADE)) {
             Consult consult = consultRepository.findById(req.getConsultId())
                     .orElseThrow(ConsultNotFoundException::new);
@@ -203,6 +207,9 @@ public class ConsultServiceImpl implements ConsultService {
             if (consultReplyRepository.existsByConsult_Id(req.getConsultId())) {
                 throw new ConsultReplyAlreadyExistsException();
             }
+            user = consult.getUser();
+            consultId = consult.getId();
+            consultCategory = ConsultCategory.GRADE;
 
             ConsultReply reply = ConsultReply.toEntity(req.getContent(), consult, null);
 
@@ -234,7 +241,18 @@ public class ConsultServiceImpl implements ConsultService {
             consult.updateConfirmation(confirmReq);
 
             consult.consultReply(reply);
+
+            user = consult.getUser();
+            consultId = consult.getId();
+            consultCategory = ConsultCategory.GENERAL;
         }
+        Notification notification = Notification.createConsultStatusChanged(
+                user,
+                consultId,
+                consultCategory,
+                true
+        );
+        notificationRepository.save(notification);
     }
 
     @Override
