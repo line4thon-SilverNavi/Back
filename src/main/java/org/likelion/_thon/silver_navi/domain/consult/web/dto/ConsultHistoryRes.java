@@ -19,7 +19,7 @@ public record ConsultHistoryRes(
 ) {
     public static ConsultHistoryRes fromGeneral(GeneralConsult consult) {
         return new ConsultHistoryRes(
-                consult.getId(),
+                consult.getFacility().getId(),
                 consult.getFacility().getName(),
                 ConsultCategory.GENERAL.getValue(),
                 null,
@@ -31,7 +31,7 @@ public record ConsultHistoryRes(
 
     public static ConsultHistoryRes from(Consult consult) {
         return new ConsultHistoryRes(
-                consult.getId(),
+                consult.getFacility().getId(),
                 consult.getFacility().getName(),
                 ConsultCategory.GRADE.getValue(),
                 consult.getConsultType().getValue(),
