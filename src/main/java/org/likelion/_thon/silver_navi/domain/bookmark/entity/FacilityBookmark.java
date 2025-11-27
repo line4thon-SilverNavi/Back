@@ -8,6 +8,7 @@ import org.likelion._thon.silver_navi.domain.user.entity.User;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
