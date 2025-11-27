@@ -208,9 +208,6 @@ public class ConsultServiceImpl implements ConsultService {
             if (consultReplyRepository.existsByConsult_Id(req.getConsultId())) {
                 throw new ConsultReplyAlreadyExistsException();
             }
-            user = consult.getUser();
-            consultId = consult.getId();
-            consultCategory = ConsultCategory.GRADE;
 
             ConsultReply reply = ConsultReply.toEntity(req.getContent(), consult, null);
 
@@ -220,6 +217,12 @@ public class ConsultServiceImpl implements ConsultService {
                     .consultStatus(req.getConsultStatus())
                     .build();
             consult.updateConfirmation(confirmReq);
+
+            consult.consultReply(reply);
+
+            user = consult.getUser();
+            consultId = consult.getId();
+            consultCategory = ConsultCategory.GRADE;
         } else {
             GeneralConsult consult = generalConsultRepository.findById(req.getConsultId())
                     .orElseThrow(ConsultNotFoundException::new);

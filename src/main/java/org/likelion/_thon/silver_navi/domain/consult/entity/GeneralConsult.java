@@ -77,16 +77,20 @@ public class GeneralConsult extends BaseEntity {
             throw new ConsultModifyNotAllowedException();
         }
 
-        if (req.getConfirmedDate() != null) {
-            this.confirmedDate = req.getConfirmedDate();
-        }
-        if (req.getConfirmedTime() != null) {
-            this.confirmedTime = req.getConfirmedTime();
-        }
-        if (req.getConsultStatus() != null) {
-            if (req.getConsultStatus().equals(ConsultStatus.REJECTED)) {
-                this.consultStatus = ConsultStatus.COMPLETED;
-            } else this.consultStatus = req.getConsultStatus();
+        if (req.getConsultStatus().equals(ConsultStatus.REJECTED)) {
+            this.confirmedDate = null;
+            this.confirmedTime = null;
+            this.consultStatus = ConsultStatus.COMPLETED;
+        } else {
+            if (req.getConfirmedDate() != null) {
+                this.confirmedDate = req.getConfirmedDate();
+            }
+            if (req.getConfirmedTime() != null) {
+                this.confirmedTime = req.getConfirmedTime();
+            }
+            if (req.getConsultStatus() != null) {
+                this.consultStatus = req.getConsultStatus();
+            }
         }
     }
 
