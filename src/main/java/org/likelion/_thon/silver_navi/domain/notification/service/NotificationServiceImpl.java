@@ -84,10 +84,7 @@ public class NotificationServiceImpl implements NotificationService {
 
                             // 거부된 경우 거부 사유
                             if (n.getStatus() == NotificationStatus.REJECTED) {
-                                rejectReason = programApplyRepository.findByUserAndProgram(user,
-                                                programRepository.findById(n.getReferenceId()).orElse(null))
-                                        .map(ProgramApply::getRejectReason)
-                                        .orElse(null);
+                                rejectReason = apply.getRejectReason();
                             }
                         }
                         case CONSULT -> {
