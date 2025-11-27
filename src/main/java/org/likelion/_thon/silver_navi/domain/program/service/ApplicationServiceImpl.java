@@ -120,7 +120,9 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Transactional(readOnly = true)
     public ApplicationSummaryRes getUserByApplications(User user) {
         // 사용자가 신청한 프로그램 목록 조회
-        List<ProgramApply> applies = programApplyRepository.findByUser(user);
+        List<ProgramApply> applies = programApplyRepository.findByUser(user).stream()
+                .filter(apply -> apply.getStatus() != ApplicationStatus.REJECTED)
+                .toList();
 
         // 각 ProgramApply에서 Program 꺼내오기
         List<Program> programs = applies.stream()
